@@ -1,0 +1,47 @@
+<root xmlns:xi="http://www.w3.org/2001/XInclude" 
+  xmlns:gazebo="http://playerstage.sourceforge.net/gazebo/xmlschema/#gz" 
+  xmlns:model="http://playerstage.sourceforge.net/gazebo/xmlschema/#model" 
+  xmlns:sensor="http://playerstage.sourceforge.net/gazebo/xmlschema/#sensor" 
+  xmlns:body="http://playerstage.sourceforge.net/gazebo/xmlschema/#body" 
+  xmlns:geom="http://playerstage.sourceforge.net/gazebo/xmlschema/#geom" 
+  xmlns:joint="http://playerstage.sourceforge.net/gazebo/xmlschema/#joint" 
+  xmlns:controller="http://playerstage.sourceforge.net/gazebo/xmlschema/#controller" 
+  xmlns:interface="http://playerstage.sourceforge.net/gazebo/xmlschema/#interface" 
+  xmlns:rendering="http://playerstage.sourceforge.net/gazebo/xmlschema/#rendering" 
+  xmlns:renderable="http://playerstage.sourceforge.net/gazebo/xmlschema/#renderable" 
+  xmlns:physics="http://playerstage.sourceforge.net/gazebo/xmlschema/#physics" 
+  xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+<material name="black">
+  <color rgba="0.0 0.0 0.0 1.0"/>
+</material>
+
+<material name="blue">
+  <color rgba="0.0 0.0 0.8 1.0"/>
+</material>
+
+<material name="green">
+  <color rgba="0.0 0.8 0.0 1.0"/>
+</material>
+
+<material name="grey">
+  <color rgba="0.2 0.2 0.2 1.0"/>
+</material>
+
+<material name="orange">
+  <color rgba="${255/255} ${108/255} ${10/255} 1.0"/>
+</material>
+
+<material name="brown">
+  <color rgba="${222/255} ${207/255} ${195/255} 1.0"/>
+</material>
+
+<material name="red">
+  <color rgba="0.8 0.0 0.0 1.0"/>
+</material>
+
+<material name="white">
+  <color rgba="1.0 1.0 1.0 1.0"/>
+</material>
+
+</root>

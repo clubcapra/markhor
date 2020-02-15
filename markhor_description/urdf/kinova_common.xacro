@@ -1,0 +1,111 @@
+<?xml version="1.0"?>
+<!-- Adapted from the kinova-ros pkg for use by Club Capra on the markhor robotic platform -->
+
+<root xmlns:xi="http://www.w3.org/2001/XInclude" 
+  xmlns:gazebo="http://playerstage.sourceforge.net/gazebo/xmlschema/#gz" 
+  xmlns:model="http://playerstage.sourceforge.net/gazebo/xmlschema/#model" 
+  xmlns:sensor="http://playerstage.sourceforge.net/gazebo/xmlschema/#sensor" 
+  xmlns:body="http://playerstage.sourceforge.net/gazebo/xmlschema/#body" 
+  xmlns:geom="http://playerstage.sourceforge.net/gazebo/xmlschema/#geom" 
+  xmlns:joint="http://playerstage.sourceforge.net/gazebo/xmlschema/#joint" 
+  xmlns:controller="http://playerstage.sourceforge.net/gazebo/xmlschema/#controller" 
+  xmlns:interface="http://playerstage.sourceforge.net/gazebo/xmlschema/#interface" 
+  xmlns:rendering="http://playerstage.sourceforge.net/gazebo/xmlschema/#rendering" 
+  xmlns:renderable="http://playerstage.sourceforge.net/gazebo/xmlschema/#renderable" 
+  xmlns:physics="http://playerstage.sourceforge.net/gazebo/xmlschema/#physics" 
+  xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:include filename="$(find markhor_description)/urdf/markhor_inertial.xacro" />
+  <xacro:include filename="$(find markhor_description)/urdf/materials.xacro"/>
+
+  <xacro:macro name="kinova_link" params="link_name link_mesh link_origin_xyz:='0 0 0' link_origin_rpy:='0 0 0' link_material:='red' has_collision_mesh:=false">
+    <link name="${link_name}">
+      <visual>
+        <geometry>
+          <mesh filename="package://markhor_description/meshes/visual/${link_mesh}.stl"/>
+        </geometry>
+        <origin xyz="${link_origin_xyz}" rpy="${link_origin_rpy}"/>
+        <material name="${link_material}"/>
+      </visual>
+      <collision>
+        <geometry>
+          <xacro:if value="${has_collision_mesh}">
+            <mesh filename="package://markhor_description/meshes/collision/${link_mesh}.stl"/>
+          </xacro:if>
+          <xacro:unless value="${has_collision_mesh}">
+            <mesh filename="package://markhor_description/meshes/visual/${link_mesh}.stl"/>
+          </xacro:unless>
+        </geometry>
+        <origin xyz="${link_origin_xyz}" rpy="${link_origin_rpy}"/>
+      </collision>
+      <xacro:markhor_inertial link_name="${link_name}"/>
+    </link>
+  </xacro:macro>
+
+  <xacro:macro name="kinova_joint" params="joint_name type parent child joint_axis_xyz joint_origin_xyz joint_origin_rpy joint_lower_limit joint_upper_limit joint_velocity_limit joint_torque_limit fixed:=false">
+    <joint name="${joint_name}" type="${type}">
+      <parent link="${parent}"/>
+      <child link="${child}"/>
+      <axis xyz="${joint_axis_xyz}"/>
+      <limit effort="${joint_torque_limit}" velocity="${joint_velocity_limit}" lower="${joint_lower_limit}" upper="${joint_upper_limit}"/>
+      <origin xyz="${joint_origin_xyz}" rpy="${joint_origin_rpy}"/>
+      <dynamics damping="0.0" friction="0.0"/>
+    </joint>
+    <xacro:unless value="${fixed}">
+      <transmission name="${joint_name}_trans">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="${joint_name}">
+          <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="${joint_name}_actuator">
+          <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+          <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+      </transmission>
+      <!--For torque sensing in simulation-->
+      <!-- <gazebo reference="${joint_name}">
+        <provideFeedback>true</provideFeedback>
+      </gazebo>
+      <gazebo>
+        <plugin name="ft_sensor" filename="libgazebo_ros_ft_sensor.so">
+          <updateRate>30.0</updateRate>
+          <topicName>${joint_name}_ft_sensor_topic</topicName>
+          <jointName>${joint_name}</jointName>
+        </plugin>
+      </gazebo> -->
+    </xacro:unless>
+  </xacro:macro>
+
+
+  <xacro:macro name="kinova_virtual_link" params="link_name">
+    <link name="${link_name}"/>
+  </xacro:macro>
+
+  <xacro:macro name="kinova_virtual_joint" params="joint_name type parent child joint_axis_xyz joint_origin_xyz joint_origin_rpy joint_lower_limit joint_upper_limit">
+    <joint name="${joint_name}" type="${type}">
+      <parent link="${parent}"/>
+      <child link="${child}"/>
+      <axis xyz="${joint_axis_xyz}"/>
+      <limit effort="2000" velocity="1" lower="${joint_lower_limit}" upper="${joint_upper_limit}"/>
+      <origin xyz="${joint_origin_xyz}" rpy="${joint_origin_rpy}"/>
+    </joint>
+  </xacro:macro>
+
+  <xacro:macro name="sim_wheel" params="wheel_name wheel_rad wheel_width wheel_parent">
+    <link name="${wheel_name}_link">
+      <visual>
+        <geometry>
+          <cylinder length="${wheel_width}" radius="${wheel_rad}"/>
+        </geometry>
+        <origin xyz="0 0 0" rpy="0 ${pi/2} 0"/>
+        <material name="white"/>
+      </visual>
+    </link>
+    <joint name="${wheel_name}_joint" type="continuous">
+      <parent link="${wheel_parent}"/>
+      <child link="${wheel_name}_link"/>
+      <axis xyz="1 0 0"/>
+    </joint>
+  </xacro:macro>
+
+</root>

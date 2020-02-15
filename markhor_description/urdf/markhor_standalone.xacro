@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="markhor">
+  <!-- Include markhor robot -->
+  <xacro:include filename="$(find markhor_description)/urdf/markhor.xacro"/>
+
+  <link name="markhor_root"/>
+  <xacro:property name="robot_root" value="markhor_root" />
+  <xacro:markhor base_parent="${robot_root}"/>
+
+</robot>

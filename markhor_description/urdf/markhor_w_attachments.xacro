@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="markhor">
+  <!-- Include markhor robot -->
+  <xacro:include filename="$(find markhor_description)/urdf/markhor.xacro"/>
+
+  <link name="markhor_root"/>
+  <xacro:property name="robot_root" value="markhor_root" />
+  <xacro:markhor base_parent="${robot_root}"/>
+
+  <!-- Robotic Arm -->
+  <!-- Include ovis 6DOF robotic arm -->
+  <xacro:include filename="$(find ovis_description)/urdf/ovis_standalone.xacro"/>
+  <xacro:property name="joint_fix_arm" value="fix_arm" />
+  <xacro:property name="joint_fix_arm_type" value="fixed" />
+  <xacro:property name="joint_fix_arm_axis_xyz" value="0 0 0" />
+  <xacro:property name="joint_fix_arm_origin_xyz" value="0 0 0" />
+  <xacro:property name="joint_fix_arm_origin_rpy" value="0 0 ${pi}" />
+  
+  <xacro:kinova_virtual_joint joint_name="markhor_joint_fix_arm" type="${joint_fix_arm_type}" parent="markhor_link_arm_root" child="ovis_root" joint_axis_xyz="${joint_fix_arm_axis_xyz}" joint_origin_xyz="${joint_fix_arm_origin_xyz}" joint_origin_rpy="${joint_fix_arm_origin_rpy}" joint_lower_limit="0" joint_upper_limit="0"/>
+
+  <!-- LiDAR -->
+  <!-- Include Sick TIM LiDAR-->
+  <xacro:include filename="$(find sick_tim)/urdf/sick_tim.urdf.xacro"/>
+  <xacro:sick_tim551 name="laser" ros_topic="scan"/>
+  <xacro:property name="joint_fix_lidar" value="fix_lidar" />
+  <xacro:property name="joint_fix_lidar_type" value="fixed" />
+  <xacro:property name="joint_fix_lidar_axis_xyz" value="0 0 0" />
+  <xacro:property name="joint_fix_lidar_origin_xyz" value="0 0 0" />
+  <xacro:property name="joint_fix_lidar_origin_rpy" value="0 0 0" />
+
+  <xacro:kinova_virtual_joint joint_name="markhor_joint_fix_lidar" type="${joint_fix_lidar_type}" parent="markhor_link_lidar" child="laser_mount_link" joint_axis_xyz="${joint_fix_lidar_axis_xyz}" joint_origin_xyz="${joint_fix_lidar_origin_xyz}" joint_origin_rpy="${joint_fix_lidar_origin_rpy}" joint_lower_limit="0" joint_upper_limit="0"/>
+
+</robot>

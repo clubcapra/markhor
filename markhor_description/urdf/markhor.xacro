@@ -1,0 +1,232 @@
+<?xml version="1.0"?>
+<root xmlns:xi="http://www.w3.org/2001/XInclude" 
+    xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <xacro:include filename="$(find markhor_description)/urdf/kinova_common.xacro" />
+
+    <xacro:property name="link_base_mesh" value="mk_link_base"/>
+    <xacro:property name="link_base_origin_rpy" value="0 0 0"/>
+    <xacro:property name="link_gb_fl_mesh" value="mk_gb_fl"/>
+    <xacro:property name="link_gb_fr_mesh" value="mk_gb_fr"/>
+    <xacro:property name="link_gb_fr_origin_rpy" value="0 0 0"/>
+    <xacro:property name="link_gb_rl_mesh" value="mk_gb_fr"/>
+    <xacro:property name="link_gb_rr_mesh" value="mk_gb_fl"/>
+    <xacro:property name="link_gb_material" value="grey"/>
+    <xacro:property name="link_flip_fl_mesh" value="mk_flip"/>
+    <xacro:property name="link_flip_fr_mesh" value="mk_flip"/>
+    <xacro:property name="link_flip_rl_mesh" value="mk_flip"/>
+    <xacro:property name="link_flip_rr_mesh" value="mk_flip"/>
+    <xacro:property name="link_flip_material" value="black"/>
+
+    <xacro:property name="joint_base" value="joint_base"/>
+    <xacro:property name="joint_base_type" value="fixed"/>
+    <xacro:property name="joint_base_axis_xyz" value="0 0 0" />
+    <xacro:property name="joint_base_origin_xyz" value="0 0 0" />
+    <xacro:property name="joint_base_origin_rpy" value="${pi} 0 0" />
+
+    <xacro:property name="joint_gb_fl" value="joint_gb_fl"/>
+    <xacro:property name="joint_gb_fl_type" value="fixed"/>
+    <xacro:property name="joint_gb_fl_axis_xyz" value="0 0 0" />
+    <xacro:property name="joint_gb_fl_origin_xyz" value="0.31115000 -0.07620000 -0.05318760" />
+    <xacro:property name="joint_gb_fl_origin_rpy" value="0 0 ${-pi/2}" />
+
+    <xacro:property name="joint_gb_fr" value="joint_gb_fr"/>
+    <xacro:property name="joint_gb_fr_type" value="fixed"/>
+    <xacro:property name="joint_gb_fr_axis_xyz" value="0 0 0" />
+    <xacro:property name="joint_gb_fr_origin_xyz" value="0.31115000 0.07620000 -0.05318760" />
+    <xacro:property name="joint_gb_fr_origin_rpy" value="0 0 ${-pi/2}" />
+
+    <xacro:property name="joint_gb_rl" value="joint_gb_rl"/>
+    <xacro:property name="joint_gb_rl_type" value="fixed"/>
+    <xacro:property name="joint_gb_rl_axis_xyz" value="0 0 0" />
+    <xacro:property name="joint_gb_rl_origin_xyz" value="-0.31115000 -0.07620000 -0.05318760" />
+    <xacro:property name="joint_gb_rl_origin_rpy" value="0 0 ${pi/2}" />
+
+    <xacro:property name="joint_gb_rr" value="joint_gb_rr"/>
+    <xacro:property name="joint_gb_rr_type" value="fixed"/>
+    <xacro:property name="joint_gb_rr_axis_xyz" value="0 0 0" />
+    <xacro:property name="joint_gb_rr_origin_xyz" value="-0.31115000 0.07620000 -0.05318760" />
+    <xacro:property name="joint_gb_rr_origin_rpy" value="0 0 ${pi/2}" />
+
+    <xacro:property name="joint_flip_fl" value="joint_flip_fl" />
+    <xacro:property name="joint_flip_fl_type" value="revolute" />
+    <xacro:property name="joint_flip_fl_axis_xyz" value="1 0 0" />
+    <xacro:property name="joint_flip_fl_origin_xyz" value="0.1468283 0 0" />
+    <xacro:property name="joint_flip_fl_origin_rpy" value="0 0 0" />
+    <xacro:property name="joint_flip_fl_lower_limit" value="${-pi/2}"/>
+    <xacro:property name="joint_flip_fl_upper_limit" value="${pi/2}" />
+    <xacro:property name="joint_flip_fl_velocity_limit" value="16.75" />
+    <xacro:property name="joint_flip_fl_torque_limit" value="184" />
+
+    <xacro:property name="joint_flip_fr" value="joint_flip_fr" />
+    <xacro:property name="joint_flip_fr_type" value="revolute" />
+    <xacro:property name="joint_flip_fr_axis_xyz" value="1 0 0" />
+    <xacro:property name="joint_flip_fr_origin_xyz" value="-0.1468283 0 0" />
+    <xacro:property name="joint_flip_fr_origin_rpy" value="0 0 0" />
+    <xacro:property name="joint_flip_fr_lower_limit" value="${-pi/2}" />
+    <xacro:property name="joint_flip_fr_upper_limit" value="${pi/2}" />
+    <xacro:property name="joint_flip_fr_velocity_limit" value="16.75" />
+    <xacro:property name="joint_flip_fr_torque_limit" value="184" />
+
+    <xacro:property name="joint_flip_rl" value="joint_flip_rl" />
+    <xacro:property name="joint_flip_rl_type" value="revolute" />
+    <xacro:property name="joint_flip_rl_axis_xyz" value="1 0 0" />
+    <xacro:property name="joint_flip_rl_origin_xyz" value="-0.1468283 0 0" />
+    <xacro:property name="joint_flip_rl_origin_rpy" value="0 0 0" />
+    <xacro:property name="joint_flip_rl_lower_limit" value="${-pi/2}" />
+    <xacro:property name="joint_flip_rl_upper_limit" value="${pi/2}" />
+    <xacro:property name="joint_flip_rl_velocity_limit" value="16.75" />
+    <xacro:property name="joint_flip_rl_torque_limit" value="184" />
+
+    <xacro:property name="joint_flip_rr" value="joint_flip_rr" />
+    <xacro:property name="joint_flip_rr_type" value="revolute" />
+    <xacro:property name="joint_flip_rr_axis_xyz" value="1 0 0" />
+    <xacro:property name="joint_flip_rr_origin_xyz" value="0.1468283 0 0" />
+    <xacro:property name="joint_flip_rr_origin_rpy" value="0 0 0" />
+    <xacro:property name="joint_flip_rr_lower_limit" value="${-pi/2}" />
+    <xacro:property name="joint_flip_rr_upper_limit" value="${pi/2}" />
+    <xacro:property name="joint_flip_rr_velocity_limit" value="16.75" />
+    <xacro:property name="joint_flip_rr_torque_limit" value="184" />
+
+    <xacro:property name="joint_track_fl" value="joint_track_fl" />
+    <xacro:property name="joint_track_fl_type" value="continuous" />
+    <xacro:property name="joint_track_fl_axis_xyz" value="0 0 0" />
+    <xacro:property name="joint_track_fl_origin_xyz" value="0 0 0" />
+    <xacro:property name="joint_track_fl_origin_rpy" value="${pi/2} ${pi/2} 0" />
+    <xacro:property name="joint_track_fl_velocity_limit" value="5.34" />
+    <xacro:property name="joint_track_fl_torque_limit" value="94.5" />
+
+    <xacro:property name="joint_track_fr" value="joint_track_fr" />
+    <xacro:property name="joint_track_fr_type" value="continuous" />
+    <xacro:property name="joint_track_fr_axis_xyz" value="0 0 0" />
+    <xacro:property name="joint_track_fr_origin_xyz" value="0 0 0" />
+    <xacro:property name="joint_track_fr_origin_rpy" value="${pi/2} ${pi/2} 0" />
+    <xacro:property name="joint_track_fr_velocity_limit" value="5.34" />
+    <xacro:property name="joint_track_fr_torque_limit" value="94.5" />
+
+    <xacro:property name="joint_track_rl" value="joint_track_rl" />
+    <xacro:property name="joint_track_rl_type" value="continuous" />
+    <xacro:property name="joint_track_rl_axis_xyz" value="0 0 0" />
+    <xacro:property name="joint_track_rl_origin_xyz" value="0 0 0" />
+    <xacro:property name="joint_track_rl_origin_rpy" value="${pi/2} ${pi/2} 0" />
+    <xacro:property name="joint_track_rl_velocity_limit" value="5.34" />
+    <xacro:property name="joint_track_rl_torque_limit" value="94.5" />
+
+    <xacro:property name="joint_track_rr" value="joint_track_rr" />
+    <xacro:property name="joint_track_rr_type" value="continuous" />
+    <xacro:property name="joint_track_rr_axis_xyz" value="0 0 0" />
+    <xacro:property name="joint_track_rr_origin_xyz" value="0 0 0" />
+    <xacro:property name="joint_track_rr_origin_rpy" value="${pi/2} ${pi/2} 0" />
+    <xacro:property name="joint_track_rr_velocity_limit" value="5.34" />
+    <xacro:property name="joint_track_rr_torque_limit" value="94.5" />
+
+    <!-- Front Camera -->
+    <xacro:property name="joint_front_cam" value="front_cam" />
+    <xacro:property name="joint_front_cam_type" value="fixed" />
+    <xacro:property name="joint_front_cam_axis_xyz" value="0 0 0" />
+    <xacro:property name="joint_front_cam_origin_xyz" value="0.35864800 0 -0.03810000" />
+    <xacro:property name="joint_front_cam_origin_rpy" value="0 ${pi/2} 0" />
+
+    <!-- Rear Camera -->
+    <xacro:property name="joint_rear_cam" value="rear_cam" />
+    <xacro:property name="joint_rear_cam_type" value="fixed" />
+    <xacro:property name="joint_rear_cam_axis_xyz" value="0 0 0" />
+    <xacro:property name="joint_rear_cam_origin_xyz" value="-0.35864800 0 -0.03810000" />
+    <xacro:property name="joint_rear_cam_origin_rpy" value="0 ${-pi/2} 0" />
+
+    <!-- Anchor for a robotic arm -->
+    <xacro:property name="joint_arm_root" value="arm_root" />
+    <xacro:property name="joint_arm_root_type" value="fixed" />
+    <xacro:property name="joint_arm_root_axis_xyz" value="0 0 0" />
+    <xacro:property name="joint_arm_root_origin_xyz" value="0.17394875 0 -0.12291060" />
+    <xacro:property name="joint_arm_root_origin_rpy" value="${pi} 0 0" />
+
+    <!-- LiDAR -->
+    <xacro:property name="joint_lidar" value="lidar" />
+    <xacro:property name="joint_lidar_type" value="fixed" />
+    <xacro:property name="joint_lidar_axis_xyz" value="0 0 0" />
+    <xacro:property name="joint_lidar_origin_xyz" value="0.32034017 0 -0.1393156" />
+    <xacro:property name="joint_lidar_origin_rpy" value="${pi} 0 0" />
+
+    <!-- FL Wheel -->
+    <xacro:property name="fl_wheel_name" value="fl_wheel"/>
+    <xacro:property name="fl_wheel_rad" value="0.1318"/>
+    <xacro:property name="fl_wheel_width" value="0.12065"/>
+
+    <!-- FR Wheel -->
+    <xacro:property name="fr_wheel_name" value="fr_wheel"/>
+    <xacro:property name="fr_wheel_rad" value="0.1318"/>
+    <xacro:property name="fr_wheel_width" value="0.12065"/>
+
+    <!-- RL Wheel -->
+    <xacro:property name="rl_wheel_name" value="rl_wheel"/>
+    <xacro:property name="rl_wheel_rad" value="0.1318"/>
+    <xacro:property name="rl_wheel_width" value="0.12065"/>
+
+    <!-- RR Wheel -->
+    <xacro:property name="rr_wheel_name" value="rr_wheel"/>
+    <xacro:property name="rr_wheel_rad" value="0.1318"/>
+    <xacro:property name="rr_wheel_width" value="0.12065"/>
+
+
+    <xacro:macro name="markhor" params="base_parent prefix:=markhor">
+
+        <xacro:kinova_link link_name="${prefix}_link_base" link_mesh="${link_base_mesh}" link_origin_rpy="${link_base_origin_rpy}"/>
+        <xacro:kinova_joint joint_name="${prefix}_joint_base" type="${joint_base_type}" parent="${base_parent}" child="${prefix}_link_base" joint_axis_xyz="${joint_base_axis_xyz}" joint_origin_xyz="${joint_base_origin_xyz}" joint_origin_rpy="${joint_base_origin_rpy}" joint_lower_limit="0" joint_upper_limit="0" joint_velocity_limit="0" joint_torque_limit="0" fixed="true"/>
+
+        <xacro:kinova_link link_name="${prefix}_link_gb_fl" link_mesh="${link_gb_fl_mesh}" link_material="${link_gb_material}"/>
+        <xacro:kinova_joint joint_name="${prefix}_joint_gb_fl" type="${joint_gb_fl_type}" parent="${prefix}_link_base" child="${prefix}_link_gb_fl" joint_axis_xyz="${joint_gb_fl_axis_xyz}" joint_origin_xyz="${joint_gb_fl_origin_xyz}" joint_origin_rpy="${joint_gb_fl_origin_rpy}" joint_lower_limit="0" joint_upper_limit="0" joint_velocity_limit="0" joint_torque_limit="0" fixed="true"/>
+
+        <xacro:kinova_link link_name="${prefix}_link_gb_fr" link_mesh="${link_gb_fr_mesh}" link_origin_rpy="${link_gb_fr_origin_rpy}" link_material="${link_gb_material}"/>
+        <xacro:kinova_joint joint_name="${prefix}_joint_gb_fr" type="${joint_gb_fr_type}" parent="${prefix}_link_base" child="${prefix}_link_gb_fr" joint_axis_xyz="${joint_gb_fr_axis_xyz}" joint_origin_xyz="${joint_gb_fr_origin_xyz}" joint_origin_rpy="${joint_gb_fr_origin_rpy}" joint_lower_limit="0" joint_upper_limit="0" joint_velocity_limit="0" joint_torque_limit="0" fixed="true"/>
+
+        <xacro:kinova_link link_name="${prefix}_link_gb_rl" link_mesh="${link_gb_rl_mesh}" link_material="${link_gb_material}"/>
+        <xacro:kinova_joint joint_name="${prefix}_joint_gb_rl" type="${joint_gb_rl_type}" parent="${prefix}_link_base" child="${prefix}_link_gb_rl" joint_axis_xyz="${joint_gb_rl_axis_xyz}" joint_origin_xyz="${joint_gb_rl_origin_xyz}" joint_origin_rpy="${joint_gb_rl_origin_rpy}" joint_lower_limit="0" joint_upper_limit="0" joint_velocity_limit="0" joint_torque_limit="0" fixed="true"/>
+
+        <xacro:kinova_link link_name="${prefix}_link_gb_rr" link_mesh="${link_gb_rr_mesh}" link_material="${link_gb_material}"/>
+        <xacro:kinova_joint joint_name="${prefix}_joint_gb_rr" type="${joint_gb_rr_type}" parent="${prefix}_link_base" child="${prefix}_link_gb_rr" joint_axis_xyz="${joint_gb_rr_axis_xyz}" joint_origin_xyz="${joint_gb_rr_origin_xyz}" joint_origin_rpy="${joint_gb_rr_origin_rpy}" joint_lower_limit="0" joint_upper_limit="0" joint_velocity_limit="0" joint_torque_limit="0" fixed="true"/>
+
+        <!-- flipper angle frame -->
+        <xacro:kinova_link link_name="${prefix}_link_flip_fl" link_mesh="${link_flip_fl_mesh}" link_material="${link_flip_material}"/>
+        <xacro:kinova_joint joint_name="${prefix}_joint_flip_fl" type="${joint_flip_fl_type}" parent="${prefix}_link_gb_fl" child="${prefix}_link_flip_fl" joint_axis_xyz="${joint_flip_fl_axis_xyz}" joint_origin_xyz="${joint_flip_fl_origin_xyz}" joint_origin_rpy="${joint_flip_fl_origin_rpy}" joint_lower_limit="${joint_flip_fl_lower_limit}" joint_upper_limit="${joint_flip_fl_upper_limit}" joint_velocity_limit="${joint_flip_fl_velocity_limit}" joint_torque_limit="${joint_flip_fl_torque_limit}"/>
+
+        <xacro:kinova_link link_name="${prefix}_link_flip_fr" link_mesh="${link_flip_fr_mesh}" link_material="${link_flip_material}"/>
+        <xacro:kinova_joint joint_name="${prefix}_joint_flip_fr" type="${joint_flip_fr_type}" parent="${prefix}_link_gb_fr" child="${prefix}_link_flip_fr" joint_axis_xyz="${joint_flip_fr_axis_xyz}" joint_origin_xyz="${joint_flip_fr_origin_xyz}" joint_origin_rpy="${joint_flip_fr_origin_rpy}" joint_lower_limit="${joint_flip_fr_lower_limit}" joint_upper_limit="${joint_flip_fr_upper_limit}" joint_velocity_limit="${joint_flip_fr_velocity_limit}" joint_torque_limit="${joint_flip_fr_torque_limit}"/>
+
+        <xacro:kinova_link link_name="${prefix}_link_flip_rl" link_mesh="${link_flip_rl_mesh}" link_material="${link_flip_material}"/>
+        <xacro:kinova_joint joint_name="${prefix}_joint_flip_rl" type="${joint_flip_rl_type}" parent="${prefix}_link_gb_rl" child="${prefix}_link_flip_rl" joint_axis_xyz="${joint_flip_rl_axis_xyz}" joint_origin_xyz="${joint_flip_rl_origin_xyz}" joint_origin_rpy="${joint_flip_rl_origin_rpy}" joint_lower_limit="${joint_flip_rl_lower_limit}" joint_upper_limit="${joint_flip_rl_upper_limit}" joint_velocity_limit="${joint_flip_rl_velocity_limit}" joint_torque_limit="${joint_flip_rl_torque_limit}"/>
+
+        <xacro:kinova_link link_name="${prefix}_link_flip_rr" link_mesh="${link_flip_rr_mesh}" link_material="${link_flip_material}"/>
+        <xacro:kinova_joint joint_name="${prefix}_joint_flip_rr" type="${joint_flip_rr_type}" parent="${prefix}_link_gb_rr" child="${prefix}_link_flip_rr" joint_axis_xyz="${joint_flip_rr_axis_xyz}" joint_origin_xyz="${joint_flip_rr_origin_xyz}" joint_origin_rpy="${joint_flip_rr_origin_rpy}" joint_lower_limit="${joint_flip_rr_lower_limit}" joint_upper_limit="${joint_flip_rr_upper_limit}" joint_velocity_limit="${joint_flip_rr_velocity_limit}" joint_torque_limit="${joint_flip_rr_torque_limit}"/>
+
+        <!-- Anchor for the front camera -->
+        <xacro:kinova_virtual_link link_name="${prefix}_link_front_cam"/>
+        <xacro:kinova_virtual_joint joint_name="${prefix}_joint_front_cam" type="${joint_front_cam_type}" parent="${prefix}_link_base" child="${prefix}_link_front_cam" joint_axis_xyz="${joint_front_cam_axis_xyz}" joint_origin_xyz="${joint_front_cam_origin_xyz}" joint_origin_rpy="${joint_front_cam_origin_rpy}" joint_lower_limit="0" joint_upper_limit="0"/>
+
+        <!-- Anchor for the rear camera -->
+        <xacro:kinova_virtual_link link_name="${prefix}_link_rear_cam"/>
+        <xacro:kinova_virtual_joint joint_name="${prefix}_joint_rear_cam" type="${joint_rear_cam_type}" parent="${prefix}_link_base" child="${prefix}_link_rear_cam" joint_axis_xyz="${joint_rear_cam_axis_xyz}" joint_origin_xyz="${joint_rear_cam_origin_xyz}" joint_origin_rpy="${joint_rear_cam_origin_rpy}" joint_lower_limit="0" joint_upper_limit="0"/>
+
+        <!-- Anchor for a robotic arm -->
+        <xacro:kinova_virtual_link link_name="${prefix}_link_arm_root"/>
+        <xacro:kinova_virtual_joint joint_name="${prefix}_joint_arm_root" type="${joint_arm_root_type}" parent="${prefix}_link_base" child="${prefix}_link_arm_root" joint_axis_xyz="${joint_arm_root_axis_xyz}" joint_origin_xyz="${joint_arm_root_origin_xyz}" joint_origin_rpy="${joint_arm_root_origin_rpy}" joint_lower_limit="0" joint_upper_limit="0"/>
+
+        <!-- Anchor for the LiDAR -->
+        <xacro:kinova_virtual_link link_name="${prefix}_link_lidar"/>
+        <xacro:kinova_virtual_joint joint_name="${prefix}_joint_lidar" type="${joint_lidar_type}" parent="${prefix}_link_base" child="${prefix}_link_lidar" joint_axis_xyz="${joint_lidar_axis_xyz}" joint_origin_xyz="${joint_lidar_origin_xyz}" joint_origin_rpy="${joint_lidar_origin_rpy}" joint_lower_limit="0" joint_upper_limit="0"/>
+
+        <!-- FL Wheel -->
+        <xacro:sim_wheel wheel_name="${fl_wheel_name}" wheel_rad="${fl_wheel_rad}" wheel_width="${fl_wheel_width}" wheel_parent="${prefix}_link_flip_fl"/>
+
+        <!-- FR Wheel -->
+        <xacro:sim_wheel wheel_name="${fr_wheel_name}" wheel_rad="${fr_wheel_rad}" wheel_width="${fr_wheel_width}" wheel_parent="${prefix}_link_flip_fr"/>
+
+        <!-- RL Wheel -->
+        <xacro:sim_wheel wheel_name="${rl_wheel_name}" wheel_rad="${rl_wheel_rad}" wheel_width="${rl_wheel_width}" wheel_parent="${prefix}_link_flip_rl"/>
+
+        <!-- RR Wheel -->
+        <xacro:sim_wheel wheel_name="${rr_wheel_name}" wheel_rad="${rr_wheel_rad}" wheel_width="${rr_wheel_width}" wheel_parent="${prefix}_link_flip_rr"/>
+
+    </xacro:macro>
+
+</root>
