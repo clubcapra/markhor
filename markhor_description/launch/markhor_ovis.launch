@@ -1,0 +1,4 @@
+<launch>
+	<param name="robot_description" command="xacro '$(find markhor_description)/urdf/markhor_w_attachments.xacro'" />
+</launch>
+

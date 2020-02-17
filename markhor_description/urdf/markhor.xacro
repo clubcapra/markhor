@@ -4,6 +4,8 @@
 
     <xacro:include filename="$(find markhor_description)/urdf/kinova_common.xacro" />
 
+    <xacro:arg name="robot_namespace" default="/" />
+
     <xacro:property name="link_base_mesh" value="mk_link_base"/>
     <xacro:property name="link_base_origin_rpy" value="0 0 0"/>
     <xacro:property name="link_gb_fl_mesh" value="mk_gb_fl"/>
@@ -198,7 +200,8 @@
 
         <xacro:kinova_link link_name="${prefix}_link_flip_rr" link_mesh="${link_flip_rr_mesh}" link_material="${link_flip_material}"/>
         <xacro:kinova_joint joint_name="${prefix}_joint_flip_rr" type="${joint_flip_rr_type}" parent="${prefix}_link_gb_rr" child="${prefix}_link_flip_rr" joint_axis_xyz="${joint_flip_rr_axis_xyz}" joint_origin_xyz="${joint_flip_rr_origin_xyz}" joint_origin_rpy="${joint_flip_rr_origin_rpy}" joint_lower_limit="${joint_flip_rr_lower_limit}" joint_upper_limit="${joint_flip_rr_upper_limit}" joint_velocity_limit="${joint_flip_rr_velocity_limit}" joint_torque_limit="${joint_flip_rr_torque_limit}"/>
-
+        
+        
         <!-- Anchor for the front camera -->
         <xacro:kinova_virtual_link link_name="${prefix}_link_front_cam"/>
         <xacro:kinova_virtual_joint joint_name="${prefix}_joint_front_cam" type="${joint_front_cam_type}" parent="${prefix}_link_base" child="${prefix}_link_front_cam" joint_axis_xyz="${joint_front_cam_axis_xyz}" joint_origin_xyz="${joint_front_cam_origin_xyz}" joint_origin_rpy="${joint_front_cam_origin_rpy}" joint_lower_limit="0" joint_upper_limit="0"/>
@@ -215,18 +218,27 @@
         <xacro:kinova_virtual_link link_name="${prefix}_link_lidar"/>
         <xacro:kinova_virtual_joint joint_name="${prefix}_joint_lidar" type="${joint_lidar_type}" parent="${prefix}_link_base" child="${prefix}_link_lidar" joint_axis_xyz="${joint_lidar_axis_xyz}" joint_origin_xyz="${joint_lidar_origin_xyz}" joint_origin_rpy="${joint_lidar_origin_rpy}" joint_lower_limit="0" joint_upper_limit="0"/>
 
-        <!-- FL Wheel -->
-        <xacro:sim_wheel wheel_name="${fl_wheel_name}" wheel_rad="${fl_wheel_rad}" wheel_width="${fl_wheel_width}" wheel_parent="${prefix}_link_flip_fl"/>
-
-        <!-- FR Wheel -->
-        <xacro:sim_wheel wheel_name="${fr_wheel_name}" wheel_rad="${fr_wheel_rad}" wheel_width="${fr_wheel_width}" wheel_parent="${prefix}_link_flip_fr"/>
-
-        <!-- RL Wheel -->
-        <xacro:sim_wheel wheel_name="${rl_wheel_name}" wheel_rad="${rl_wheel_rad}" wheel_width="${rl_wheel_width}" wheel_parent="${prefix}_link_flip_rl"/>
-
-        <!-- RR Wheel -->
-        <xacro:sim_wheel wheel_name="${rr_wheel_name}" wheel_rad="${rr_wheel_rad}" wheel_width="${rr_wheel_width}" wheel_parent="${prefix}_link_flip_rr"/>
-
     </xacro:macro>
+
+    <gazebo>
+      <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+        <robotNamespace>$(arg robot_namespace)</robotNamespace>
+      </plugin>
+    </gazebo>
+
+    <gazebo>
+      <plugin name="imu_controller" filename="libhector_gazebo_ros_imu.so">
+        <robotNamespace>$(arg robot_namespace)</robotNamespace>
+        <updateRate>50.0</updateRate>
+        <bodyName>base_link</bodyName>
+        <topicName>imu/data</topicName>
+        <accelDrift>0.005 0.005 0.005</accelDrift>
+        <accelGaussianNoise>0.005 0.005 0.005</accelGaussianNoise>
+        <rateDrift>0.005 0.005 0.005 </rateDrift>
+        <rateGaussianNoise>0.005 0.005 0.005 </rateGaussianNoise>
+        <headingDrift>0.005</headingDrift>
+        <headingGaussianNoise>0.005</headingGaussianNoise>
+      </plugin>
+    </gazebo>
 
 </root>
