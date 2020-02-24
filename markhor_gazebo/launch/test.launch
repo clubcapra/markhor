@@ -6,21 +6,25 @@
   <!-- <include file="$(find markhor_control)/launch/control.launch" /> -->
 
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
-    <arg name="world_name" value="$(find hector_nist_arena_worlds)/worlds/$(arg world)"/>
-    <arg name="paused" value="true"/>
+    <!-- <arg name="world_name" value="$(find hector_nist_arena_worlds)/worlds/$(arg world)"/> -->
+    <arg name="paused" value="false"/>
     <arg name="use_sim_time" value="true"/>
     <arg name="gui" value="true"/>
     <arg name="recording" value="false"/>
     <arg name="debug" value="false"/>
+    <arg name="verbose" value="true"/>
   </include>
-
 
   <param name="robot_description" command="xacro '$(find markhor_description)/urdf/markhor_standalone.xacro'" />
 
   <!-- convert joint states to TF transforms for rviz, etc -->
-  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+  <!-- <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" /> -->
 
   <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="
+    -param robot_description -urdf -model markhor -z 0.085"
+  />
+
+  <!-- <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="
     -param robot_description -urdf -model markhor
     -z 0.085
     -J ovis_joint_2 -1.57
@@ -29,6 +33,6 @@
     -J markhor_joint_flip_fr -180.0
     -J markhor_joint_flip_rl -180.0
     -J markhor_joint_flip_rr -180.0" 
-  />
+  /> -->
 
 </launch>

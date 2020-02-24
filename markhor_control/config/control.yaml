@@ -1,7 +1,7 @@
 markhor_velocity_controller:
   type: "diff_drive_controller/DiffDriveController"
-  left_wheel: ['markhor_joint_flip_fl', 'markhor_joint_flip_rl']
-  right_wheel: ['markhor_joint_flip_fr', 'markhor_joint_flip_rr']
+  left_wheel: ['markhor_joint_track_fl', 'markhor_joint_track_rl']
+  right_wheel: ['markhor_joint_track_fr', 'markhor_joint_track_rr']
   publish_rate: 50
   pose_covariance_diagonal: [0.001, 0.001, 0.001, 0.001, 0.001, 0.03]
   twist_covariance_diagonal: [0.001, 0.001, 0.001, 0.001, 0.001, 0.03]
@@ -12,7 +12,7 @@ markhor_velocity_controller:
   wheel_radius : 0.1318
 
   # Base frame_id
-  base_frame_id: base_link
+  base_frame_id: markhor_root
 
   # Odometry fused with IMU is published by robot_localization, so
   # no need to publish a TF based on encoders alone.
