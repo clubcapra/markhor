@@ -15,13 +15,13 @@
     <arg name="verbose" value="true"/>
   </include>
 
-  <param name="robot_description" command="xacro '$(find markhor_description)/urdf/markhor_standalone.xacro'" />
+  <param name="robot_description" command="xacro '$(find markhor_description)/urdf/markhor.urdf.xacro'" />
 
   <!-- convert joint states to TF transforms for rviz, etc -->
   <!-- <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" /> -->
 
   <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="
-    -param robot_description -urdf -model markhor -z 0.085"
+    -param robot_description -urdf -model markhor"
   />
 
   <!-- <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="

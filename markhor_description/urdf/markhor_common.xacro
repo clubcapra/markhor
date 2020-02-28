@@ -1,0 +1,122 @@
+<?xml version="1.0"?>
+<!-- Adapted from the kinova-ros pkg for use by Club Capra on the markhor robotic platform -->
+
+<root xmlns:xi="http://www.w3.org/2001/XInclude" 
+  xmlns:gazebo="http://playerstage.sourceforge.net/gazebo/xmlschema/#gz" 
+  xmlns:model="http://playerstage.sourceforge.net/gazebo/xmlschema/#model" 
+  xmlns:sensor="http://playerstage.sourceforge.net/gazebo/xmlschema/#sensor" 
+  xmlns:body="http://playerstage.sourceforge.net/gazebo/xmlschema/#body" 
+  xmlns:geom="http://playerstage.sourceforge.net/gazebo/xmlschema/#geom" 
+  xmlns:joint="http://playerstage.sourceforge.net/gazebo/xmlschema/#joint" 
+  xmlns:controller="http://playerstage.sourceforge.net/gazebo/xmlschema/#controller" 
+  xmlns:interface="http://playerstage.sourceforge.net/gazebo/xmlschema/#interface" 
+  xmlns:rendering="http://playerstage.sourceforge.net/gazebo/xmlschema/#rendering" 
+  xmlns:renderable="http://playerstage.sourceforge.net/gazebo/xmlschema/#renderable" 
+  xmlns:physics="http://playerstage.sourceforge.net/gazebo/xmlschema/#physics" 
+  xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:property name="flipper_lower_limit" value="${-pi/2}"/>
+  <xacro:property name="flipper_upper_limit" value="${pi/2}" />
+  <xacro:property name="flipper_velocity_limit" value="16.75" />
+  <xacro:property name="flipper_torque_limit" value="184" />
+
+  <xacro:property name="track_velocity_limit" value="5.34" />
+  <xacro:property name="track_torque_limit" value="94.5" />
+
+  <xacro:include filename="$(find markhor_description)/urdf/markhor_inertial.xacro" />
+
+  <xacro:macro name="flipper" params="flipper_name origin_xyz:='0 0 0' origin_rpy:='0 0 0'">
+    <link name="${flipper_prefix}">
+      <visual>
+        <geometry>
+          <mesh filename="package://markhor_description/meshes/mk_flip.stl"/>
+        </geometry>
+        <origin xyz="${origin_xyz}" rpy="${origin_rpy}"/>
+        <material name="${link_material}"/>
+      </visual>
+      <collision>
+        <geometry>
+          <mesh filename="package://markhor_description/meshes/mk_flip.stl"/>
+        </geometry>
+        <origin xyz="${origin_xyz}" rpy="${origin_rpy}"/>
+        <surface>
+          <friction>
+            <ode>
+              <mu>0.65</mu>
+              <mu2>0.85</mu2>
+              <fdir1>0 1 0</fdir1>
+            </ode>
+          </friction>
+          <contact>
+            <ode/>
+          </contact>
+        </surface>
+      </collision>
+      <max_contacts>20</max_contacts>
+      <xacro:markhor_inertial type="flipper"/>
+    </link>
+
+    <link name="${flipper_prefix}_motor">
+      <xacro:markhor_inertial type="motor"/>
+    </link>
+
+    <joint name="${flipper_prefix}_j" type="revolute">
+			<parent link="base_link"/>
+			<child link="${flipper_prefix}"/>
+			<axis xyz="0 1 0" rpy="0 0 0" />
+      <origin xyz="${origin_xyz}" rpy="${origin_rpy}"/>
+      <limit effort="${flipper_torque_limit}" velocity="${flipper_velocity_limit}" lower="${flipper_lower_limit}" upper="${flipper_upper_limit}"/>
+      <dynamics damping="0.0" friction="0.0"/>
+      <physics>
+        <ode>
+          <implicit_spring_damper>1</implicit_spring_damper>
+          <cfm_damping>1</cfm_damping>
+          <limit>
+            <cfm>0</cfm>
+            <erp>0.2</erp>
+          </limit>
+        </ode>
+      </physics>
+
+      <transmission name="${flipper_prefix}_trans">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="${flipper_prefix}_j">
+          <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="${flipper_prefix}_actuator">
+          <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+      </transmission>
+
+		</joint>
+
+    <joint name="${flipper_prefix}_motor_j" type="continuous">
+			<parent link="${flipper_prefix}"/>
+			<child link="${flipper_prefix}_motor"/>
+			<axis xyz="0 1 0" rpy="0 0 0" />
+      <limit effort="${track_torque_limit}" velocity="${track_velocity_limit}"/>
+      
+      <transmission name="${flipper_prefix}_track_trans" type="SimpleTransmission">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="${flipper_prefix}_motor_j">
+          <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="${flipper_prefix}_track_motor">
+          <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+      </transmission>
+
+		</joint>
+
+  </xacro:macro>
+
+  <xacro:macro name="virtual_anchor" params="anchor_name parent origin_xyz origin_rpy">
+    <link name="${anchor_name}"/>
+    <joint name="${anchor_name}_j" type="fixed">
+      <parent link="${parent}"/>
+      <child link="${anchor_name}"/>
+      <origin xyz="${origin_xyz}" rpy="${origin_rpy}"/>
+    </joint>
+  </xacro:macro>
+
+</root>

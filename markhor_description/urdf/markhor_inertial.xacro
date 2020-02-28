@@ -14,85 +14,39 @@
     xmlns:physics="http://playerstage.sourceforge.net/gazebo/xmlschema/#physics" 
     xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-    <xacro:macro name="markhor_inertial" params="link_name">
+    <xacro:macro name="markhor_inertial" params="type">
         <!-- frame -->
-        <xacro:if value="${link_name == 'markhor_link_base'}">
+        <xacro:if value="${type == 'body'}">
             <inertial>
-                <mass value="1.5" />
+                <mass value="26.111" />
                 <origin xyz="-0.00002529 0.00000008 -0.06049447" rpy="0 0 0"/>
-                <inertia ixx="0.385006414" ixy="0.0000696244868" ixz="-0.000181517937" iyy="0.624959190" iyz="0.000000162897534" izz="0.798949961"/>
-            </inertial>
-        </xacro:if>
-
-        <!-- FL Gearbox -->
-        <xacro:if value="${link_name == 'markhor_link_gb_fl'}">
-            <inertial>
-                <mass value="0.1"/>
-                <origin xyz="0.038 -0.038 0.014" rpy="0 0 0"/>
-                <inertia ixx="6.06448598e-2" ixy="1.93186915e-4" ixz="-1.57873663e-5" iyy="1.82869143e-2" iyz="2.81755463e-3" izz="5.13408129e-2"/>
-            </inertial>
-        </xacro:if>
-
-        <!-- FR Gearbox -->
-        <xacro:if value="${link_name == 'markhor_link_gb_fr'}">
-            <inertial>
-                <mass value="0.1"/>
-                <origin xyz="-0.038 -0.038 0.014" rpy="0 0 0"/>
-                <inertia ixx="6.06448598e-2" ixy="-1.93186915e-4" ixz="1.57873663e-5" iyy="1.82869143e-2" iyz="2.81755463e-3" izz="5.13408129e-2"/>
-            </inertial>
-        </xacro:if>
-
-        <!-- RL Gearbox -->
-        <xacro:if value="${link_name == 'markhor_link_gb_rl'}">
-            <inertial>
-                <mass value="0.1"/>
-                <origin xyz="-0.038 -0.038 0.014" rpy="0 0 0"/>
-                <inertia ixx="6.06448598e-2" ixy="-1.93186915e-4" ixz="1.57873663e-5" iyy="1.82869143e-2" iyz="2.81755463e-3" izz="5.13408129e-2"/>
-            </inertial>
-        </xacro:if>
-
-        <!-- RR Gearbox -->
-        <xacro:if value="${link_name == 'markhor_link_gb_rr'}">
-            <inertial>
-                <mass value="0.1"/>
-                <origin xyz="0.038 -0.038 0.014" rpy="0 0 0"/>
-                <inertia ixx="6.06448598e-2" ixy="1.93186915e-4" ixz="-1.57873663e-5" iyy="1.82869143e-2" iyz="2.81755463e-3" izz="5.13408129e-2"/>
+                <inertia 
+                    ixx="0.385006414" ixy="0.0000696244868" ixz="-0.000181517937" 
+                    iyy="0.624959190" iyz="0.000000162897534" 
+                    izz="0.798949961"/>
             </inertial>
         </xacro:if>
 
         <!-- FL Flipper -->
-        <xacro:if value="${link_name == 'markhor_link_flip_fl'}">
+        <xacro:if value="${type == 'flipper'}">
             <inertial>
-                <mass value="0.6"/>
+                <mass value="6.9"/>
                 <origin xyz="0 0.116 0" rpy="0 0 0"/>
-                <inertia ixx="0.268046334" ixy="0.000960466048" ixz="0.000262590776" iyy="0.0573569235" iyz="0.0000904647719" izz="0.232597105"/>
+                <inertia 
+                    ixx="0.268046334" ixy="0.000960466048" ixz="0.000262590776" 
+                    iyy="0.0573569235" iyz="0.0000904647719" 
+                    izz="0.232597105"/>
             </inertial>
         </xacro:if>
 
-        <!-- FR Flipper -->
-        <xacro:if value="${link_name == 'markhor_link_flip_fr'}">
+        <xacro:if value="${type == 'motor'}">
             <inertial>
-                <mass value="0.6"/>
+                <mass value="0.0001"/>
                 <origin xyz="0 0.116 0" rpy="0 0 0"/>
-                <inertia ixx="0.268046334" ixy="0.000960466048" ixz="0.000262590776" iyy="0.0573569235" iyz="0.0000904647719" izz="0.232597105"/>
-            </inertial>
-        </xacro:if>
-
-        <!-- RL Flipper -->
-        <xacro:if value="${link_name == 'markhor_link_flip_rl'}">
-            <inertial>
-                <mass value="0.6"/>
-                <origin xyz="0 0.116 0" rpy="0 0 0"/>
-                <inertia ixx="0.268046334" ixy="0.000960466048" ixz="0.000262590776" iyy="0.0573569235" iyz="0.0000904647719" izz="0.232597105"/>
-            </inertial>
-        </xacro:if>
-
-        <!-- RR Flipper -->
-        <xacro:if value="${link_name == 'markhor_link_flip_rr'}">
-            <inertial>
-                <mass value="0.6"/>
-                <origin xyz="0 0.116 0" rpy="0 0 0"/>
-                <inertia ixx="0.268046334" ixy="0.000960466048" ixz="0.000262590776" iyy="0.0573569235" iyz="0.0000904647719" izz="0.232597105"/>
+                <inertia 
+                    ixx="0.001" ixy="0" ixz="0" 
+                    iyy="0.001" iyz="0" 
+                    izz="0.001"/>
             </inertial>
         </xacro:if>
 
