@@ -6,7 +6,7 @@
   <!-- <include file="$(find markhor_control)/launch/control.launch" /> -->
 
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
-    <!-- <arg name="world_name" value="$(find hector_nist_arena_worlds)/worlds/$(arg world)"/> -->
+    <arg name="world_name" value="$(find markhor_gazebo)/worlds/simple.world"/>
     <arg name="paused" value="false"/>
     <arg name="use_sim_time" value="true"/>
     <arg name="gui" value="true"/>
