@@ -32,7 +32,6 @@
             <ode>
               <mu>0.65</mu>
               <mu2>0.85</mu2>
-              <fdir1>0 1 0</fdir1>
             </ode>
           </friction>
           <contact>
@@ -54,28 +53,11 @@
 			<axis xyz="1 0 0" rpy="0 0 0" />
       <origin xyz="${origin_xyz}" rpy="${origin_rpy}"/>
       <limit effort="${flipper_torque_limit}" velocity="${flipper_velocity_limit}" lower="${flipper_lower_limit}" upper="${flipper_upper_limit}"/>
-      <dynamics damping="0.0" friction="0.0"/>
       <physics>
         <ode>
-          <implicit_spring_damper>1</implicit_spring_damper>
-          <cfm_damping>1</cfm_damping>
-          <limit>
-            <cfm>0</cfm>
-            <erp>0.2</erp>
-          </limit>
+          
         </ode>
       </physics>
-
-      <transmission name="${flipper_name}_trans">
-        <type>transmission_interface/SimpleTransmission</type>
-        <joint name="${flipper_name}_j">
-          <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
-        </joint>
-        <actuator name="${flipper_name}_actuator">
-          <mechanicalReduction>1</mechanicalReduction>
-        </actuator>
-      </transmission>
-
 		</joint>
 
     <joint name="${flipper_name}_motor_j" type="continuous">
@@ -83,18 +65,27 @@
 			<child link="${flipper_name}_motor"/>
 			<axis xyz="1 0 0" rpy="0 0 0" />
       <limit effort="${track_torque_limit}" velocity="${track_velocity_limit}"/>
-      
-      <transmission name="${flipper_name}_track_trans" type="SimpleTransmission">
-        <type>transmission_interface/SimpleTransmission</type>
-        <joint name="${flipper_name}_motor_j">
-          <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
-        </joint>
-        <actuator name="${flipper_name}_track_motor">
-          <mechanicalReduction>1</mechanicalReduction>
-        </actuator>
-      </transmission>
-
 		</joint>
+
+    <transmission name="${flipper_name}_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="${flipper_name}_j">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="${flipper_name}_actuator">
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+    </transmission>
+          
+    <transmission name="${flipper_name}_track_trans" type="SimpleTransmission">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="${flipper_name}_motor_j">
+        <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="${flipper_name}_track_motor">
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+    </transmission>
 
   </xacro:macro>
 

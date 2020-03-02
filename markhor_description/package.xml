@@ -54,8 +54,6 @@
   <exec_depend>joint_state_publisher</exec_depend>
   <exec_depend>robot_state_publisher</exec_depend>
   <exec_depend>sick_tim</exec_depend>
-  <exec_depend>ovis_description</exec_depend>
-
 
   <!-- The export tag contains other, unspecified, tags -->
   <export>

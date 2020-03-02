@@ -4,7 +4,7 @@
 
 <xacro:include filename="$(find markhor_description)/urdf/markhor_common.xacro" />
 
-  <xacro:arg name="robot_namespace" default="/" />
+  <xacro:arg name="robot_namespace" default="/markhor" />
   
   <xacro:property name="tracks_shift_x" value="0.31115000" />
   <xacro:property name="tracks_shift_y" value="0.2230283" />
@@ -53,9 +53,9 @@
   <xacro:virtual_anchor anchor_name="lidar" parent="base_link" origin_xyz="0.32034017 0 -0.1393156" origin_rpy="${pi} 0 0"/>
 
   <gazebo>
-    <!-- <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
       <robotNamespace>$(arg robot_namespace)</robotNamespace>
-    </plugin> -->
+    </plugin>
 
     <!-- <plugin name="imu_controller" filename="libhector_gazebo_ros_imu.so">
       <robotNamespace>$(arg robot_namespace)</robotNamespace>
