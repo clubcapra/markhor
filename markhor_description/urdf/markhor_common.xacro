@@ -53,12 +53,10 @@
 			<axis xyz="1 0 0" rpy="0 0 0" />
       <origin xyz="${origin_xyz}" rpy="${origin_rpy}"/>
       <limit effort="${flipper_torque_limit}" velocity="${flipper_velocity_limit}" lower="${flipper_lower_limit}" upper="${flipper_upper_limit}"/>
-      <physics>
-        <ode>
-          
-        </ode>
-      </physics>
-		</joint>
+      <dynamics damping="150"/>
+    </joint>
+
+    
 
     <joint name="${flipper_name}_motor_j" type="continuous">
 			<parent link="${flipper_name}"/>
