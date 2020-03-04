@@ -56,8 +56,6 @@
       <dynamics damping="150"/>
     </joint>
 
-    
-
     <joint name="${flipper_name}_motor_j" type="continuous">
 			<parent link="${flipper_name}"/>
 			<child link="${flipper_name}_motor"/>
