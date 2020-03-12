@@ -9,7 +9,7 @@
   <xacro:property name="tracks_shift_x" value="0.31115000" />
   <xacro:property name="tracks_shift_y" value="0.2230283" />
   <xacro:property name="tracks_height" value="0.05318760" />
-  <xacro:property name="tracks_seperation" value="${tracks_shift_x} * 2" />
+  <xacro:property name="tracks_seperation" value="${tracks_shift_y} * 2" />
 
   <link name="base_footprint"/>
   <link name="base_link"/>

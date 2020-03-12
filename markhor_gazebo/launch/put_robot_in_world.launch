@@ -1,0 +1,10 @@
+<launch>
+  <param name="robot_description" command="xacro '$(find markhor_description)/urdf/markhor.urdf.xacro'" />
+
+  <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="
+    -param robot_description -urdf -model markhor"
+  />
+
+  <include file="$(find markhor_control)/launch/flipper_control.launch" />
+
+</launch>
