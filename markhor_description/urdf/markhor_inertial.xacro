@@ -28,10 +28,10 @@
             </inertial>
         </xacro:if>
 
-        <xacro:if value="${type == 'motor'}">
+        <xacro:if value="${type == 'virtual'}">
             <inertial>
                 <mass value="0.0001"/>
-                <origin xyz="0 0.116 0" rpy="0 0 0"/>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
                 <inertia 
                     ixx="0.001" ixy="0" ixz="0" 
                     iyy="0.001" iyz="0" 
