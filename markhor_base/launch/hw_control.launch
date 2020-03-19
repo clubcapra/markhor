@@ -1,0 +1,12 @@
+<launch>
+      <arg name="namespace" default="/markhor" />
+      <!-- Load robot model-->
+      <param name="robot_description" command="xacro '$(find markhor_description)/urdf/markhor.urdf.xacro' --inorder" />
+
+      <node name="markhor_base_node" pkg="markhor_base" type="markhor_base_node" />
+
+      <!-- Load controller config -->
+      <rosparam command="load" file="$(find markhor_control)/config/control.yaml" />
+
+      <node name="controller_spawner" pkg="controller_manager" type="spawner" output="screen" ns="$(arg namespace)" args="markhor_velocity_controller" />
+</launch>

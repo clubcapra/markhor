@@ -1,7 +1,7 @@
 markhor_velocity_controller:
   type: "diff_drive_controller/DiffDriveController"
-  left_wheel: ['markhor_joint_track_fl', 'markhor_joint_track_rl']
-  right_wheel: ['markhor_joint_track_fr', 'markhor_joint_track_rr']
+  left_wheel: ['flipper_fl', 'flipper_rl']
+  right_wheel: ['flipper_fr', 'flipper_rr']
   publish_rate: 50
   pose_covariance_diagonal: [0.001, 0.001, 0.001, 0.001, 0.001, 0.03]
   twist_covariance_diagonal: [0.001, 0.001, 0.001, 0.001, 0.001, 0.03]

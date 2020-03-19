@@ -3,7 +3,7 @@ markhor:
   joint_state_controller:
     type: joint_state_controller/JointStateController
     publish_rate: 50  
-    
+  
   # Position Controllers ---------------------------------------
   flipper_fl_position_controller:
     type: effort_controllers/JointPositionController
@@ -21,3 +21,13 @@ markhor:
     type: effort_controllers/JointPositionController
     joint: flipper_rr_j
     pid: {p: 100.0, i: 0.01, d: 10.0}
+
+  # Diff Drive Controllers
+  markhor_diff_drive_controller:
+    type: "diff_drive_controller/DiffDriveController"
+    left_wheel: ['markhor_joint_motor_fl', 'markhor_joint_motor_fr']
+    right_wheel: ['markhor_joint_motor_rl', 'markhor_joint_motor_rr']
+    pose_covariance_diagonal: [0.001, 0.001, 1000000.0, 1000000.0, 1000000.0, 1000.0]
+    twist_covariance_diagonal: [0.001, 0.001, 1000000.0, 1000000.0, 1000000.0, 1000.0]
+    publish_rate: 50
+    cmd_vel_timeout: 0.25
