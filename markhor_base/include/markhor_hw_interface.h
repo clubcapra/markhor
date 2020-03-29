@@ -33,22 +33,7 @@ private:
   double pos;
   double vel;
   double eff;
-
-  //   bool running_;
-  //   double _wheel_diameter;
-  //   double _max_speed;
-  //   double _wheel_angle[NUM_JOINTS];
-
   ros::Time curr_update_time, prev_update_time;
-
-  //   ros::Subscriber left_wheel_angle_sub_;
-  //   ros::Subscriber right_wheel_angle_sub_;
-  //   ros::Publisher left_wheel_vel_pub_;
-  //   ros::Publisher right_wheel_vel_pub_;
-
-  //   ros::ServiceServer start_srv_;
-  //   ros::ServiceServer stop_srv_;
-
 };  // class
 
 MarkhorHWInterface::MarkhorHWInterface() : private_nh("~")
