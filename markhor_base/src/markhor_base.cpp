@@ -5,7 +5,7 @@
 #include <chrono>
 #include "markhor_hw_interface.h"
 
-void controlLoop(Capra_Control &hw, controller_manager::ControllerManager &cm,
+void controlLoop(MarkhorHWInterface &hw, controller_manager::ControllerManager &cm,
                  std::chrono::system_clock::time_point &last_time)
 {
   std::chrono::system_clock::time_point current_time = std::chrono::system_clock::now();
@@ -20,9 +20,9 @@ void controlLoop(Capra_Control &hw, controller_manager::ControllerManager &cm,
 
 int main(int argc, char **argv)
 {
-  ros::init(argc, argv, "capra_control");
+  ros::init(argc, argv, "markhor_base_node");
 
-  Capra_Control hw;
+  MarkhorHWInterface hw;
   controller_manager::ControllerManager cm(&hw, hw.nh);
 
   double control_frequency;

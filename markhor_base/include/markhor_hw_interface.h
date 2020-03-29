@@ -8,19 +8,16 @@
 #include <hardware_interface/joint_state_interface.h>
 #include <hardware_interface/robot_hw.h>
 
-class Capra_Control : public hardware_interface::RobotHW
+class MarkhorHWInterface : public hardware_interface::RobotHW
 {
 public:
-  Capra_Control();
+  MarkhorHWInterface();
 
   void write()
   {
     ROS_INFO("TEST WRITE");
   }
 
-  /**
-   * Reading encoder values and setting position and velocity of enconders
-   */
   void read(const ros::Duration& period)
   {
     ROS_INFO("TEST WRITE");
@@ -54,7 +51,7 @@ private:
 
 };  // class
 
-Capra_Control::Capra_Control() : private_nh("~")
+MarkhorHWInterface::MarkhorHWInterface() : private_nh("~")
 {
   hardware_interface::JointStateHandle state_handle("Test_CC", &pos, &vel, &eff);
   jnt_state_interface.registerHandle(state_handle);
