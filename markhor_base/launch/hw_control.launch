@@ -3,10 +3,10 @@
       <!-- Load robot model-->
       <param name="robot_description" command="xacro '$(find markhor_description)/urdf/markhor.urdf.xacro' --inorder" />
 
-      <node name="markhor_base_node" pkg="markhor_base" type="markhor_base_node" />
+      <node name="markhor_base_node" pkg="markhor_base" type="markhor_base_node" ns="$(arg namespace)"/>
 
       <!-- Load controller config -->
-      <rosparam command="load" file="$(find markhor_control)/config/control.yaml" />
+      <rosparam command="load" file="$(find markhor_control)/config/control.yaml" ns="$(arg namespace)"/>
 
-      <node name="controller_spawner" pkg="controller_manager" type="spawner" output="screen" ns="$(arg namespace)" args="markhor_velocity_controller" />
+      <node name="controller_spawner" pkg="controller_manager" type="spawner" output="screen" ns="$(arg namespace)" args="markhor_velocity_controller"/>
 </launch>
