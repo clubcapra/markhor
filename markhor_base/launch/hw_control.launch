@@ -1,7 +1,7 @@
 <launch>
       <arg name="namespace" default="/markhor" />
       <!-- Load robot model-->
-      <param name="robot_description" command="xacro '$(find markhor_description)/urdf/markhor.urdf.xacro' --inorder" />
+      <param name="robot_description" command="xacro '$(find markhor_description)/urdf/markhor.urdf.xacro'" />
 
       <node name="markhor_base_node" pkg="markhor_base" type="markhor_base_node" ns="$(arg namespace)"/>
 

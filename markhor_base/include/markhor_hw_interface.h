@@ -38,10 +38,10 @@ private:
 
 MarkhorHWInterface::MarkhorHWInterface() : private_nh("~")
 {
-  hardware_interface::JointStateHandle state_handle("Test_CC", &pos, &vel, &eff);
+  hardware_interface::JointStateHandle state_handle("Test_Markhor_Control", &pos, &vel, &eff);
   jnt_state_interface.registerHandle(state_handle);
 
-  hardware_interface::JointHandle vel_handle(jnt_state_interface.getHandle("Test_CC"), &cmd);
+  hardware_interface::JointHandle vel_handle(jnt_state_interface.getHandle("Test_Markhor_Control"), &cmd);
   jnt_vel_interface.registerHandle(vel_handle);
 
   registerInterface(&jnt_state_interface);
