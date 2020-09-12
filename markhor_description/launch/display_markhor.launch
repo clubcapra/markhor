@@ -1,5 +1,5 @@
 <launch>
-	<arg name="gui" default="false" />
+	<arg name="gui" default="true" />
 	<!-- load the urdf -->
 	<param name="robot_description" command="xacro '$(find markhor_description)/urdf/markhor.urdf.xacro'" />
 
