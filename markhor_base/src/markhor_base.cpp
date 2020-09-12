@@ -5,8 +5,8 @@
 #include <chrono>
 #include "markhor_hw_interface.h"
 
-void controlLoop(MarkhorHWInterface &hw, controller_manager::ControllerManager &cm,
-                 std::chrono::system_clock::time_point &last_time)
+void controlLoop(MarkhorHWInterface& hw, controller_manager::ControllerManager& cm,
+                 std::chrono::system_clock::time_point& last_time)
 {
   std::chrono::system_clock::time_point current_time = std::chrono::system_clock::now();
   std::chrono::duration<double> elapsed_time = current_time - last_time;
@@ -18,7 +18,7 @@ void controlLoop(MarkhorHWInterface &hw, controller_manager::ControllerManager &
   hw.write();
 }
 
-int main(int argc, char **argv)
+int main(int argc, char** argv)
 {
   ros::init(argc, argv, "markhor_base_node");
 
