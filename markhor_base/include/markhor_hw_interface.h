@@ -20,7 +20,7 @@ public:
 
   void read(const ros::Duration& period)
   {
-    ROS_INFO("TEST WRITE");
+    ROS_INFO("TEST READ");
   }
 
   ros::NodeHandle nh;
