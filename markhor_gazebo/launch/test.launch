@@ -16,9 +16,9 @@
     <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="
     -param robot_description -urdf -model markhor" />
 
-    <include file="$(find markhor_control)/launch/flipper_control.launch" />
+    <!-- <include file="$(find markhor_control)/launch/flipper_control.launch" /> -->
 
-    <!-- <include file="$(find markhor_control)/launch/diff_drive_control.launch" /> -->
+    <include file="$(find markhor_control)/launch/diff_drive_control.launch" />
 
     <!-- <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="
     -param robot_description -urdf -model markhor
