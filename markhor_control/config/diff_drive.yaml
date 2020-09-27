@@ -41,10 +41,4 @@ markhor:
         max_velocity           : 2.0   # rad/s
         has_acceleration_limits: true
         max_acceleration       : 6.0   # rad/s^2
-  hardware_interface:
-   joints:
-      - flipper_fl_motor_j
-      - flipper_rl_motor_j
-      - flipper_fr_motor_j
-      - flipper_rr_motor_j
 
