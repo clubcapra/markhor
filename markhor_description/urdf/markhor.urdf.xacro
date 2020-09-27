@@ -2,34 +2,34 @@
 
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="markhor">
 
-<xacro:include filename="$(find sick_tim)/urdf/sick_tim.urdf.xacro"/>
+  <xacro:include filename="$(find sick_tim)/urdf/sick_tim.urdf.xacro" />
 
-<xacro:include filename="$(find markhor_description)/urdf/markhor_common.xacro" />
+  <xacro:include filename="$(find markhor_description)/urdf/markhor_common.xacro" />
 
   <xacro:arg name="robot_namespace" default="markhor" />
-  
+
   <xacro:property name="tracks_shift_x" value="0.31115000" />
   <xacro:property name="tracks_shift_y" value="0.2230283" />
   <xacro:property name="tracks_height" value="0.05318760" />
   <xacro:property name="tracks_seperation" value="${tracks_shift_y} * 2" />
 
-  <link name="base_footprint"/>
-  <link name="base_link"/>
+  <link name="base_footprint" />
+  <link name="base_link" />
 
   <link name="base_body">
     <visual>
       <geometry>
-        <mesh filename="package://markhor_description/meshes/mk_link_base.stl"/>
+        <mesh filename="package://markhor_description/meshes/mk_link_base.stl" />
       </geometry>
-      <origin xyz="0 0 0" rpy="0 ${pi} 0"/>
+      <origin xyz="0 0 0" rpy="0 ${pi} 0" />
     </visual>
     <collision>
       <geometry>
-        <mesh filename="package://markhor_description/meshes/mk_link_base.stl"/>
+        <mesh filename="package://markhor_description/meshes/mk_link_base.stl" />
       </geometry>
-      <origin xyz="0 0 0" rpy="0 ${pi} 0"/>
+      <origin xyz="0 0 0" rpy="0 ${pi} 0" />
     </collision>
-    <xacro:markhor_inertial type="body"/>
+    <xacro:markhor_inertial type="body" />
   </link>
 
   <joint name="base_link_j" type="fixed">
@@ -43,18 +43,18 @@
     <child link="base_body" />
   </joint>
 
-  <xacro:flipper flipper_name="flipper_fl" origin_xyz="${tracks_shift_x} ${tracks_shift_y} ${tracks_height}" origin_rpy="${pi/2} 0 ${-pi/2}"/>
-  <xacro:flipper flipper_name="flipper_fr" origin_xyz="${tracks_shift_x} -${tracks_shift_y} ${tracks_height}" origin_rpy="${pi/2} 0 ${-pi/2}"/>
-  <xacro:flipper flipper_name="flipper_rl" origin_xyz="-${tracks_shift_x} ${tracks_shift_y} ${tracks_height}" origin_rpy="${pi/2} 0 ${pi/2}"/>
-  <xacro:flipper flipper_name="flipper_rr" origin_xyz="-${tracks_shift_x} -${tracks_shift_y} ${tracks_height}" origin_rpy="${pi/2} 0 ${pi/2}"/>
+  <xacro:flipper flipper_name="flipper_fl" origin_xyz="${tracks_shift_x} ${tracks_shift_y} ${tracks_height}" origin_rpy="${pi/2} 0 ${-pi/2}" />
+  <xacro:flipper flipper_name="flipper_fr" origin_xyz="${tracks_shift_x} -${tracks_shift_y} ${tracks_height}" origin_rpy="${pi/2} 0 ${-pi/2}" />
+  <xacro:flipper flipper_name="flipper_rl" origin_xyz="-${tracks_shift_x} ${tracks_shift_y} ${tracks_height}" origin_rpy="${pi/2} 0 ${pi/2}" />
+  <xacro:flipper flipper_name="flipper_rr" origin_xyz="-${tracks_shift_x} -${tracks_shift_y} ${tracks_height}" origin_rpy="${pi/2} 0 ${pi/2}" />
 
-  <xacro:camera_link link_name="front_cam" camera_name="$(arg robot_namespace)/front_cam" frame_name="front_cam" parent="base_link" origin_xyz="0.35864800 0 0.03810000" origin_rpy="0 0 0"/>
-  <xacro:camera_link link_name="rear_cam" camera_name="$(arg robot_namespace)/rear_cam" frame_name="rear_cam" parent="base_link" origin_xyz="-0.35864800 0 0.03810000" origin_rpy="0 0 ${pi}"/>
-  
-  <xacro:virtual_anchor anchor_name="arm_root" parent="base_link" origin_xyz="0.17394875 0 0.12291060" origin_rpy="0 0 0"/>
-  
-  <xacro:sick_tim551 name="laser" ros_topic="scan"/>
-  <xacro:virtual_joint name="laser_mount_link" parent="base_link" origin_xyz="0.32034017 0 0.1393156" origin_rpy="0 0 0"/>
+  <xacro:camera_link link_name="front_cam" camera_name="$(arg robot_namespace)/front_cam" frame_name="front_cam" parent="base_link" origin_xyz="0.35864800 0 0.03810000" origin_rpy="0 0 0" />
+  <xacro:camera_link link_name="rear_cam" camera_name="$(arg robot_namespace)/rear_cam" frame_name="rear_cam" parent="base_link" origin_xyz="-0.35864800 0 0.03810000" origin_rpy="0 0 ${pi}" />
+
+  <xacro:virtual_anchor anchor_name="arm_root" parent="base_link" origin_xyz="0.17394875 0 0.12291060" origin_rpy="0 0 0" />
+
+  <xacro:sick_tim551 name="laser" ros_topic="scan" />
+  <xacro:virtual_joint name="laser_mount_link" parent="base_link" origin_xyz="0.32034017 0 0.1393156" origin_rpy="0 0 0" />
 
   <gazebo>
     <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
