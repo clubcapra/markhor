@@ -1,6 +1,6 @@
 markhor:
   # Diff drive controller
-  markhor_velocity_controller:
+  diff_drive_controller:
     type: "diff_drive_controller/DiffDriveController"
     left_wheel: ['flipper_fl_motor_j', 'flipper_rl_motor_j']
     right_wheel: ['flipper_fr_motor_j', 'flipper_rr_motor_j']
@@ -41,4 +41,3 @@ markhor:
         max_velocity           : 2.0   # rad/s
         has_acceleration_limits: true
         max_acceleration       : 6.0   # rad/s^2
-
