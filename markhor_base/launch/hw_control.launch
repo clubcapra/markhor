@@ -9,6 +9,7 @@
     <!-- Load controller config -->
     <rosparam command="load" file="$(find markhor_control)/config/diff_drive.yaml"/>
 
-    <!-- Load controller manager-->>
-    <node name="markhor_controller_spawner" pkg="controller_manager" type="spawner" output="screen" ns="$(arg namespace)" args="markhor_velocity_controller"/>
+    <!-- load the controllers -->
+    <node name="controller_spawner" pkg="controller_manager" type="spawner" output="screen" ns="$(arg namespace)" args="diff_drive_controller"/>
+
 </launch>
