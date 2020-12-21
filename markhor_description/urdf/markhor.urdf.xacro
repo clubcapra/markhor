@@ -86,10 +86,10 @@
             <robot_namespace>markhor</robot_namespace>
         </plugin>
 
-        <!-- <plugin filename="libKeysToCmdVelPlugin.so" name="keyboard_control">
+        <plugin filename="libKeysToCmdVelPlugin.so" name="keyboard_control">
             <publish_as_twist>true</publish_as_twist>
             <cmd_vel_topic>~/markhor/cmd_vel_twist</cmd_vel_topic>
-        </plugin> -->
+        </plugin>
     </gazebo>
 
 </robot>
