@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<launch>
+    <arg name="robot_namespace" default="/markhor"/>
+    <!-- Load robot model-->
+    <param name="robot_description" command="xacro '$(find markhor_description)/urdf/markhor.urdf.xacro'" />
+
+    <!-- Load controller config -->
+    <rosparam command="load" file="$(find markhor_control)/config/control_track.yaml"/>
+
+    <!-- load the controllers -->
+    <node name="controller_spawner" pkg="controller_manager" type="spawner" output="screen" ns="$(arg robot_namespace)" args="diff_drive_controller"/>
+
+</launch>
