@@ -1,0 +1,22 @@
+<launch>
+    <arg name="robot_namespace" default="marhkor"/>
+
+    <arg name="x" default="0.0"/>
+    <arg name="y" default="0.0"/>
+    <arg name="z" default="0.0"/>
+    <arg name="yaw" default="0.0"/>
+
+    <include file="$(find markhor_control)/launch/control_wheel.launch"/>
+
+    <!-- Spawn robot in gazebo -->
+    <node name="spawn_markhor_model" pkg="gazebo_ros" type="spawn_model" args="
+                -x $(arg x)
+                -y $(arg y)
+                -z $(arg z)
+                -Y $(arg yaw)
+                -unpause
+                -urdf
+                -param robot_description
+                -model $(arg robot_namespace)" />
+
+</launch>
