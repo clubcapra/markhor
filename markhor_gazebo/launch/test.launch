@@ -1,6 +1,6 @@
 <launch>
     <param name="/use_sim_time" value="true" />
-
+    <arg name="namespace" default="/markhor" />
     <include file="$(find gazebo_ros)/launch/empty_world.launch">
         <arg name="world_name" value="$(find markhor_gazebo)/worlds/simple.world" />
         <arg name="paused" value="false" />
@@ -16,9 +16,17 @@
     <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="
     -param robot_description -urdf -model markhor" />
 
-    <!-- <include file="$(find markhor_control)/launch/flipper_control.launch" /> -->
+    <include file="$(find markhor_control)/launch/flipper_control.launch" />
 
-    <include file="$(find markhor_control)/launch/diff_drive_control.launch" />
+    <rosparam file="$(find markhor_control)/config/diff_drive.yaml" command="load"/>
+
+    <!-- load the controllers -->
+    <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" ns="$(arg namespace)" args="joint_state_controller 
+                                                flipper_fl_position_controller 
+                                                flipper_fr_position_controller 
+                                                flipper_rl_position_controller
+                                                flipper_rr_position_controller
+                                                diff_drive_controller"/>
 
     <!-- <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="
     -param robot_description -urdf -model markhor
