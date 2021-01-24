@@ -12,6 +12,22 @@
 // ostringstream
 #include <sstream>
 #include <string>
+
+#include "ctre/Phoenix.h"
+#include "ctre/phoenix/unmanaged/Unmanaged.h"
+#include "Platform-linux-socket-can.h"
+#include "ctre/phoenix/MotorControl/CAN/TalonSRX.h"
+#include "geometry_msgs/Twist.h"
+#include "std_msgs/String.h"
+
+#include <string>
+#include <iostream>
+#include <chrono>
+#include <thread>
+#include <vector>
+#include <memory>
+#include <map>
+
 const unsigned int NUM_JOINTS = 4;
 
 class MarkhorHWInterface : public hardware_interface::RobotHW
