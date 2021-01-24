@@ -12,6 +12,7 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   roslaunch
   hardware_interface
+  std_msgs
 )
 
 ###################################
@@ -27,9 +28,9 @@ catkin_package(
   INCLUDE_DIRS include
 #  LIBRARIES markhor_base
   CATKIN_DEPENDS 
-  	controller_manager 
-  	roscpp 
-  	hardware_interface
+    controller_manager 
+    roscpp 
+    hardware_interface
 #  DEPENDS system_lib
 )
 
@@ -47,15 +48,40 @@ include_directories(
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-add_executable(${PROJECT_NAME}_node 
+add_executable(${PROJECT_NAME}
   src/markhor_base.cpp
 )
 
-target_link_libraries(${PROJECT_NAME}_node 
+target_link_libraries(${PROJECT_NAME} 
   ${catkin_LIBRARIES}
 )
 
-add_dependencies(${PROJECT_NAME}_node
+message("Your architecture is " ${CMAKE_LIBRARY_ARCHITECTURE})
+message("Your path " ${PROJECT_SOURCE_DIR}/src)
+if (${CMAKE_LIBRARY_ARCHITECTURE} STREQUAL "arm-linux-gnueabihf") # Jetson TK1 / Pi
+    message("Jetson TK1 / Pi")
+    target_link_libraries(${PROJECT_NAME} ${PROJECT_SOURCE_DIR}/include/lib/raspberry/libCTRE_Phoenix.a)
+    target_link_libraries(${PROJECT_NAME} ${PROJECT_SOURCE_DIR}/include/lib/raspberry/libCTRE_PhoenixCCI.a)
+    target_link_libraries(${PROJECT_NAME} ${PROJECT_SOURCE_DIR}/include/lib/raspberry/libCTRE_PhoenixPlatformLinuxSocketCan.a)
+    target_link_libraries(${PROJECT_NAME} ${PROJECT_SOURCE_DIR}/include/lib/raspberry/libCTRE_PhoenixCanutils.a)
+elseif(${CMAKE_LIBRARY_ARCHITECTURE} STREQUAL "aarch64-linux-gnu") # Jetson TX2
+    message("Jetson TX2")
+    target_link_libraries(${PROJECT_NAME} ${PROJECT_SOURCE_DIR}/include/lib/aarch64/libCTRE_Phoenix.a)
+    target_link_libraries(${PROJECT_NAME} ${PROJECT_SOURCE_DIR}/include/lib/aarch64/libCTRE_PhoenixCCI.a)
+    target_link_libraries(${PROJECT_NAME} ${PROJECT_SOURCE_DIR}/include/lib/aarch64/libCTRE_PhoenixPlatformLinuxSocketCan.a)
+    target_link_libraries(${PROJECT_NAME} ${PROJECT_SOURCE_DIR}/include/lib/aarch64/libCTRE_PhoenixCanutils.a)
+else()
+    message("x86-64")
+    target_link_libraries(${PROJECT_NAME} ${PROJECT_SOURCE_DIR}/include/lib/x86-64/libCTRE_Phoenix.a)
+    target_link_libraries(${PROJECT_NAME} ${PROJECT_SOURCE_DIR}/include/lib/x86-64/libCTRE_PhoenixCCI.a)
+    target_link_libraries(${PROJECT_NAME} ${PROJECT_SOURCE_DIR}/include/lib/x86-64/libCTRE_PhoenixPlatformLinuxSocketCan.a)
+    target_link_libraries(${PROJECT_NAME} ${PROJECT_SOURCE_DIR}/include/lib/x86-64/libCTRE_PhoenixCanutils.a)
+endif()
+
+# TODO be remove comment
+# target_link_libraries(${PROJECT_NAME} Threads::Threads)
+
+add_dependencies(${PROJECT_NAME}
   ${${PROJECT_NAME}_EXPORTED_TARGETS}
   ${catkin_EXPORTED_TARGETS}
 )
