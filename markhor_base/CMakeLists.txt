@@ -58,13 +58,7 @@ target_link_libraries(${PROJECT_NAME}
 
 message("Your architecture is " ${CMAKE_LIBRARY_ARCHITECTURE})
 message("Your path " ${PROJECT_SOURCE_DIR}/src)
-if (${CMAKE_LIBRARY_ARCHITECTURE} STREQUAL "arm-linux-gnueabihf") # Jetson TK1 / Pi
-    message("Jetson TK1 / Pi")
-    target_link_libraries(${PROJECT_NAME} ${PROJECT_SOURCE_DIR}/include/lib/raspberry/libCTRE_Phoenix.a)
-    target_link_libraries(${PROJECT_NAME} ${PROJECT_SOURCE_DIR}/include/lib/raspberry/libCTRE_PhoenixCCI.a)
-    target_link_libraries(${PROJECT_NAME} ${PROJECT_SOURCE_DIR}/include/lib/raspberry/libCTRE_PhoenixPlatformLinuxSocketCan.a)
-    target_link_libraries(${PROJECT_NAME} ${PROJECT_SOURCE_DIR}/include/lib/raspberry/libCTRE_PhoenixCanutils.a)
-elseif(${CMAKE_LIBRARY_ARCHITECTURE} STREQUAL "aarch64-linux-gnu") # Jetson TX2
+if(${CMAKE_LIBRARY_ARCHITECTURE} STREQUAL "aarch64-linux-gnu") # Jetson TX2
     message("Jetson TX2")
     target_link_libraries(${PROJECT_NAME} ${PROJECT_SOURCE_DIR}/include/lib/aarch64/libCTRE_Phoenix.a)
     target_link_libraries(${PROJECT_NAME} ${PROJECT_SOURCE_DIR}/include/lib/aarch64/libCTRE_PhoenixCCI.a)
