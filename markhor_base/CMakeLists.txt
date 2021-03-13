@@ -31,18 +31,15 @@ catkin_package(
 )
 include_directories(
     src
-  include
+    include
     include/lib
     include/ctre
-  ${catkin_INCLUDE_DIRS}
+    ${catkin_INCLUDE_DIRS}
 )
 
-## Declare a C++ executable
-## With catkin_make all packages are built within a single CMake context
-## The recommended prefix ensures that target names across packages don't collide
-add_executable(${PROJECT_NAME}
-  src/markhor_base.cpp
-)
+set(source src/markhor_base.cpp src/markhor_hw_interface.cpp)
+
+add_executable(${PROJECT_NAME} ${source})
 
 target_link_libraries(${PROJECT_NAME} 
   ${catkin_LIBRARIES}
