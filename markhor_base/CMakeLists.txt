@@ -30,7 +30,10 @@ catkin_package(
 #  DEPENDS system_lib
 )
 include_directories(
+    src
   include
+    include/lib
+    include/ctre
   ${catkin_INCLUDE_DIRS}
 )
 
