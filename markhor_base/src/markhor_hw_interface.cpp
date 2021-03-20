@@ -84,8 +84,11 @@ void MarkhorHWInterface::write()
   front_right_track_vel_msg.data = diff_ang_speed_front_right;
   rear_right_track_vel_msg.data = diff_ang_speed_rear_right;
 
-  // TODO
-  // write to the motor API
+  // Write to drive
+  front_left_drive->Set(ControlMode::PercentOutput, front_left_track_vel_msg.data);
+  front_right_drive->Set(ControlMode::PercentOutput, front_left_track_vel_msg.data);
+  rear_left_drive->Set(ControlMode::PercentOutput, front_left_track_vel_msg.data);
+  rear_right_drive->Set(ControlMode::PercentOutput, front_left_track_vel_msg.data);
 
   // Publish data
   front_left_track_vel_pub_.publish(front_left_track_vel_msg);
