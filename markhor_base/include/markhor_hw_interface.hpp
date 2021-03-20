@@ -75,5 +75,10 @@ private:
 
   ros::ServiceServer start_srv_;
   ros::ServiceServer stop_srv_;
+
+  TalonSRX* front_left_drive;
+  TalonSRX* front_right_drive;
+  TalonSRX* rear_left_drive;
+  TalonSRX* rear_right_drive;
 };
 #endif  // MARKHOR_HW_INTERFACE_H
