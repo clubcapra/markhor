@@ -1,0 +1,23 @@
+<launch>
+    <arg name="namespace" default="/markhor" />
+
+    <!-- <include file="$(find markhor_description)/launch/markhor_ovis.launch" /> -->
+
+    <!-- Load robot model-->
+    <param name="robot_description" command="xacro '$(find markhor_description)/urdf/markhor.urdf.xacro'" />
+
+    <!-- Load joint controller configurations from YAML file to parameter server -->
+    <rosparam file="$(find markhor_control)/config/flipper.yaml" command="load" />
+
+    <!-- load the controllers -->
+    <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" ns="$(arg namespace)" args="joint_state_controller 
+                                                flipper_fl_position_controller 
+                                                flipper_fr_position_controller 
+                                                flipper_rl_position_controller
+                                                flipper_rr_position_controller" />
+
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="false" output="screen">
+        <remap from="/joint_states" to="$(arg namespace)/joint_states" />
+    </node>
+
+</launch>

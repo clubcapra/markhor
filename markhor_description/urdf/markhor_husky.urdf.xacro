@@ -1,0 +1,119 @@
+<?xml version="1.0"?>
+
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="markhor">
+
+    <xacro:include filename="$(find sick_tim)/urdf/sick_tim.urdf.xacro" />
+
+    <xacro:include filename="$(find markhor_description)/urdf/markhor_common.xacro" />
+    <xacro:include filename="$(find markhor_description)/urdf/wheel.urdf.xacro" />
+
+    <xacro:arg name="robot_namespace" default="markhor" />
+
+    <xacro:property name="tracks_shift_x" value="0.31115000" />
+    <xacro:property name="tracks_shift_y" value="0.2230283" />
+    <xacro:property name="tracks_height" value="0.05318760" />
+    <xacro:property name="tracks_seperation" value="${tracks_shift_y} * 2" />
+
+    <xacro:property name="M_PI" value="3.14159"/>
+
+    <!-- Wheel Properties -->
+    <xacro:property name="wheel_length" value="0.1143" />
+    <xacro:property name="wheel_radius" value="0.1651" />
+
+    <!-- Wheel Mounting Positions -->
+    <xacro:property name="wheelbase" value="0.5120" />
+    <xacro:property name="track" value="0.5708" />
+    <xacro:property name="wheel_vertical_offset" value="0.03282" />
+
+    <link name="base_footprint" />
+    <link name="base_link" />
+
+    <link name="base_body">
+        <visual>
+            <geometry>
+                <mesh filename="package://markhor_description/meshes/mk_link_base.stl" />
+            </geometry>
+            <origin xyz="0 0 0" rpy="0 ${pi} 0" />
+        </visual>
+        <collision>
+            <geometry>
+                <mesh filename="package://markhor_description/meshes/mk_link_base.stl" />
+            </geometry>
+            <origin xyz="0 0 0" rpy="0 ${pi} 0" />
+        </collision>
+        <xacro:markhor_inertial type="body" />
+    </link>
+
+    <joint name="base_link_j" type="fixed">
+        <origin xyz="0 0 -0.085" rpy="0 0 0" />
+        <parent link="base_link" />
+        <child link="base_footprint" />
+    </joint>
+
+    <joint name="base_body_j" type="fixed">
+        <parent link="base_link" />
+        <child link="base_body" />
+    </joint>
+
+    <!-- <xacro:flipper flipper_name="flipper_fl" origin_xyz="${tracks_shift_x} ${tracks_shift_y} ${tracks_height}" origin_rpy="${pi/2} 0 ${-pi/2}" />
+    <xacro:flipper flipper_name="flipper_fr" origin_xyz="${tracks_shift_x} -${tracks_shift_y} ${tracks_height}" origin_rpy="${pi/2} 0 ${-pi/2}" />
+    <xacro:flipper flipper_name="flipper_rl" origin_xyz="-${tracks_shift_x} ${tracks_shift_y} ${tracks_height}" origin_rpy="${pi/2} 0 ${pi/2}" />
+    <xacro:flipper flipper_name="flipper_rr" origin_xyz="-${tracks_shift_x} -${tracks_shift_y} ${tracks_height}" origin_rpy="${pi/2} 0 ${pi/2}" /> -->
+    <xacro:wheel wheel_prefix="front_left">
+        <origin xyz="${wheelbase/2} ${track/2} ${wheel_vertical_offset}" rpy="0 0 0" />
+    </xacro:wheel>
+    <xacro:wheel wheel_prefix="front_right">
+        <origin xyz="${wheelbase/2} ${-track/2} ${wheel_vertical_offset}" rpy="0 0 0" />
+    </xacro:wheel>
+    <xacro:wheel wheel_prefix="rear_left">
+        <origin xyz="${-wheelbase/2} ${track/2} ${wheel_vertical_offset}" rpy="0 0 0" />
+    </xacro:wheel>
+    <xacro:wheel wheel_prefix="rear_right">
+        <origin xyz="${-wheelbase/2} ${-track/2} ${wheel_vertical_offset}" rpy="0 0 0" />
+    </xacro:wheel>
+
+    <xacro:camera_link link_name="front_cam" camera_name="$(arg robot_namespace)/front_cam" frame_name="front_cam" parent="base_link" origin_xyz="0.35864800 0 0.03810000" origin_rpy="0 0 0" />
+    <xacro:camera_link link_name="rear_cam" camera_name="$(arg robot_namespace)/rear_cam" frame_name="rear_cam" parent="base_link" origin_xyz="-0.35864800 0 0.03810000" origin_rpy="0 0 ${pi}" />
+
+    <xacro:virtual_anchor anchor_name="arm_root" parent="base_link" origin_xyz="0.17394875 0 0.12291060" origin_rpy="0 0 0" />
+
+    <xacro:sick_tim551 name="laser" ros_topic="scan" />
+    <xacro:virtual_joint name="laser_mount_link" parent="base_link" origin_xyz="0.32034017 0 0.1393156" origin_rpy="0 0 0" />
+
+    <gazebo>
+        <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+            <robotNamespace>/$(arg robot_namespace)</robotNamespace>
+        </plugin>
+
+        <!-- <plugin name="imu_controller" filename="libhector_gazebo_ros_imu.so">
+      <robotNamespace>$(arg robot_namespace)</robotNamespace>
+      <updateRate>50.0</updateRate>
+      <bodyName>${prefix}_link_base</bodyName>
+      <topicName>imu/data</topicName>
+      <accelDrift>0.005 0.005 0.005</accelDrift>
+      <accelGaussianNoise>0.005 0.005 0.005</accelGaussianNoise>
+      <rateDrift>0.005 0.005 0.005 </rateDrift>
+      <rateGaussianNoise>0.005 0.005 0.005 </rateGaussianNoise>
+      <headingDrift>0.005</headingDrift>
+      <headingGaussianNoise>0.005</headingGaussianNoise>
+    </plugin> -->
+
+        <plugin filename="libSimpleTrackedVehiclePlugin.so" name="simple_tracked_vehicle">
+            <body>base_link</body>
+            <left_track>flipper_fl</left_track>
+            <right_track>flipper_fr</right_track>
+            <left_flipper>flipper_rl</left_flipper>
+            <right_flipper>flipper_rr</right_flipper>
+            <track_mu>0.65</track_mu>
+            <track_mu2>0.85</track_mu2>
+            <tracks_separation>${tracks_seperation}</tracks_separation>
+            <robot_namespace>markhor</robot_namespace>
+        </plugin>
+
+        <plugin filename="libKeysToCmdVelPlugin.so" name="keyboard_control">
+            <publish_as_twist>true</publish_as_twist>
+            <cmd_vel_topic>~/markhor/cmd_vel_twist</cmd_vel_topic>
+        </plugin>
+    </gazebo>
+
+</robot>

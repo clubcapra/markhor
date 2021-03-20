@@ -1,0 +1,159 @@
+<?xml version="1.0"?>
+<!-- Adapted from the kinova-ros pkg for use by Club Capra on the markhor robotic platform -->
+
+<root xmlns:xi="http://www.w3.org/2001/XInclude"
+    xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <xacro:property name="flipper_lower_limit" value="${-pi}"/>
+    <xacro:property name="flipper_upper_limit" value="0" />
+    <xacro:property name="flipper_velocity_limit" value="16.75" />
+    <xacro:property name="flipper_torque_limit" value="184" />
+
+    <xacro:property name="track_velocity_limit" value="5.34" />
+    <xacro:property name="track_torque_limit" value="94.5" />
+
+    <xacro:include filename="$(find markhor_description)/urdf/markhor_inertial.xacro" />
+
+    <xacro:macro name="flipper" params="flipper_name origin_xyz:='0 0 0' origin_rpy:='0 0 0'">
+        <link name="${flipper_name}">
+            <visual>
+                <geometry>
+                    <mesh filename="package://markhor_description/meshes/mk_flip.stl"/>
+                </geometry>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+            </visual>
+            <collision>
+                <geometry>
+                    <mesh filename="package://markhor_description/meshes/mk_flip.stl"/>
+                </geometry>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <surface>
+                    <friction>
+                        <ode>
+                            <mu>0.65</mu>
+                            <mu2>0.85</mu2>
+                        </ode>
+                    </friction>
+                    <contact>
+                        <ode/>
+                    </contact>
+                </surface>
+            </collision>
+            <max_contacts>20</max_contacts>
+            <xacro:markhor_inertial type="flipper"/>
+        </link>
+
+        <link name="${flipper_name}_motor">
+            <xacro:markhor_inertial type="virtual"/>
+        </link>
+
+        <joint name="${flipper_name}_j" type="revolute">
+            <parent link="base_link"/>
+            <child link="${flipper_name}"/>
+            <axis xyz="1 0 0" rpy="0 0 0" />
+            <origin xyz="${origin_xyz}" rpy="${origin_rpy}"/>
+            <limit effort="${flipper_torque_limit}" velocity="${flipper_velocity_limit}" lower="${flipper_lower_limit}" upper="${flipper_upper_limit}"/>
+            <dynamics damping="150"/>
+        </joint>
+
+        <joint name="${flipper_name}_motor_j" type="continuous">
+            <parent link="${flipper_name}"/>
+            <child link="${flipper_name}_motor"/>
+            <axis xyz="1 0 0" rpy="0 0 0" />
+            <limit effort="${track_torque_limit}" velocity="${track_velocity_limit}"/>
+        </joint>
+
+        <transmission name="${flipper_name}_trans">
+            <type>transmission_interface/SimpleTransmission</type>
+            <joint name="${flipper_name}_j">
+                <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            </joint>
+            <actuator name="${flipper_name}_actuator">
+                <mechanicalReduction>1</mechanicalReduction>
+            </actuator>
+        </transmission>
+
+        <transmission name="${flipper_name}_track_trans" type="SimpleTransmission">
+            <type>transmission_interface/SimpleTransmission</type>
+            <joint name="${flipper_name}_motor_j">
+                <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+            </joint>
+            <actuator name="${flipper_name}_track_motor">
+                <mechanicalReduction>1</mechanicalReduction>
+            </actuator>
+        </transmission>
+
+    </xacro:macro>
+
+    <xacro:macro name="virtual_anchor" params="anchor_name parent origin_xyz origin_rpy">
+        <link name="${anchor_name}">
+            <xacro:markhor_inertial type="virtual"/>
+        </link>
+        <joint name="${anchor_name}_j" type="fixed">
+            <parent link="${parent}"/>
+            <child link="${anchor_name}"/>
+            <origin xyz="${origin_xyz}" rpy="${origin_rpy}"/>
+        </joint>
+    </xacro:macro>
+
+    <xacro:macro name="virtual_joint" params="name parent origin_xyz origin_rpy">
+        <joint name="${name}_j" type="fixed">
+            <parent link="${parent}"/>
+            <child link="${name}"/>
+            <origin xyz="${origin_xyz}" rpy="${origin_rpy}"/>
+        </joint>
+    </xacro:macro>
+
+    <xacro:macro name="camera_link" params="link_name camera_name frame_name parent origin_xyz origin_rpy">
+        <link name="${link_name}">
+            <xacro:markhor_inertial type="virtual"/>
+        </link>
+        <joint name="${link_name}_j" type="fixed">
+            <parent link="${parent}"/>
+            <child link="${link_name}"/>
+            <origin xyz="${origin_xyz}" rpy="${origin_rpy}"/>
+        </joint>
+        <gazebo reference="${link_name}">
+            <sensor name="${link_name}_camera" type="depth">
+                <update_rate>60</update_rate>
+                <camera>
+                    <horizontal_fov>1.047198</horizontal_fov>
+                    <image>
+                        <width>640</width>
+                        <height>400</height>
+                        <format>R8G8B8</format>
+                    </image>
+                    <clip>
+                        <near>0.25</near>
+                        <far>1.5</far>
+                    </clip>
+                </camera>
+                <plugin name="${link_name}_controller" filename="libgazebo_ros_openni_kinect.so">
+                    <baseline>0.2</baseline>
+                    <alwaysOn>true</alwaysOn>
+                    <updateRate>1.0</updateRate>
+                    <cameraName>${camera_name}_ir</cameraName>
+                    <imageTopicName>/${camera_name}/color/image_raw</imageTopicName>
+                    <cameraInfoTopicName>/${camera_name}/color/camera_info</cameraInfoTopicName>
+                    <depthImageTopicName>/${camera_name}/depth/image_raw</depthImageTopicName>
+                    <depthImageInfoTopicName>/${camera_name}/depth/camera_info</depthImageInfoTopicName>
+                    <pointCloudTopicName>/${camera_name}/depth/points</pointCloudTopicName>
+                    <frameName>${frame_name}</frameName>
+                    <pointCloudCutoff>0.5</pointCloudCutoff>
+                    <pointCloudCutoffMax>3.0</pointCloudCutoffMax>
+                    <distortionK1>0.00000001</distortionK1>
+                    <distortionK2>0.00000001</distortionK2>
+                    <distortionK3>0.00000001</distortionK3>
+                    <distortionT1>0.00000001</distortionT1>
+                    <distortionT2>0.00000001</distortionT2>
+                    <CxPrime>0</CxPrime>
+                    <Cx>0</Cx>
+                    <Cy>0</Cy>
+                    <focalLength>0</focalLength>
+                    <hackBaseline>0</hackBaseline>
+                </plugin>
+            </sensor>
+        </gazebo>
+    </xacro:macro>
+
+</root>
