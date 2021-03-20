@@ -52,6 +52,10 @@ private:
   void limitDifferentialSpeed(double& diff_speed_front_left, double& diff_speed_rear_left,
                               double& diff_speed_front_right, double& diff_speed_rear_right);
 
+  void setupPublisher();
+  void setupRosControl();
+  void setupCTREDrive();
+
   hardware_interface::JointStateInterface jnt_state_interface;
   hardware_interface::VelocityJointInterface jnt_vel_interface;
   double cmd[NUM_JOINTS];

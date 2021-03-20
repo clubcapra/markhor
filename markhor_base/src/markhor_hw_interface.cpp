@@ -1,5 +1,8 @@
 #include <markhor_hw_interface.hpp>
 
+std::string drives_name[NUM_JOINTS] = { "flipper_fr_motor_j", "flipper_rr_motor_j", "flipper_fl_motor_j",
+                                        "flipper_rl_motor_j" };
+
 MarkhorHWInterface::MarkhorHWInterface()
   : running_(true)
   , private_nh("~")
@@ -8,30 +11,63 @@ MarkhorHWInterface::MarkhorHWInterface()
 {
   private_nh.param<double>("max_speed", max_speed, 1.0);
 
-  std::fill_n(this->pos, NUM_JOINTS, 0.0);
-  std::fill_n(this->vel, NUM_JOINTS, 0.0);
-  std::fill_n(this->eff, NUM_JOINTS, 0.0);
-  std::fill_n(this->cmd, NUM_JOINTS, 0.0);
+  std::fill(pos, pos + NUM_JOINTS, 0.0);
+  std::fill(vel, vel + NUM_JOINTS, 0.0);
+  std::fill(eff, eff + NUM_JOINTS, 0.0);
+  std::fill(cmd, cmd + NUM_JOINTS, 0.0);
 
-  std::string tracks[NUM_JOINTS] = { "flipper_fr_motor_j", "flipper_rr_motor_j", "flipper_fl_motor_j",
-                                     "flipper_rl_motor_j" };
-  // connect and register the joint state and velocity interfaces
-  for (unsigned int i = 0; i < NUM_JOINTS; ++i)
-  {
-    hardware_interface::JointStateHandle state_handle(tracks[i], &pos[i], &vel[i], &eff[i]);
-    jnt_state_interface.registerHandle(state_handle);
+  setupRosControl();
+  setupCTREDrive();
+  setupPublisher();
+}
 
-    hardware_interface::JointHandle vel_handle(jnt_state_interface.getHandle(tracks[i]), &cmd[i]);
-    jnt_vel_interface.registerHandle(vel_handle);
-  }
-  registerInterface(&jnt_state_interface);
-  registerInterface(&jnt_vel_interface);
-
+void MarkhorHWInterface::setupPublisher()
+{
   // Initialize publishers and subscribers
   front_left_track_vel_pub_ = nh.advertise<std_msgs::Float32>("front_left_track_vel", 1);
   rear_left_track_vel_pub_ = nh.advertise<std_msgs::Float32>("rear_right_track_vel", 1);
   front_right_track_vel_pub_ = nh.advertise<std_msgs::Float32>("front_right_track_vel", 1);
   rear_right_track_vel_pub_ = nh.advertise<std_msgs::Float32>("rear_track_vel", 1);
+}
+
+void MarkhorHWInterface::setupRosControl()
+{
+  // connect and register the joint state and velocity interfaces
+  for (unsigned int i = 0; i < NUM_JOINTS; ++i)
+  {
+    hardware_interface::JointStateHandle state_handle(drives_name[i], &pos[i], &vel[i], &eff[i]);
+    jnt_state_interface.registerHandle(state_handle);
+
+    hardware_interface::JointHandle vel_handle(jnt_state_interface.getHandle(drives_name[i]), &cmd[i]);
+    jnt_vel_interface.registerHandle(vel_handle);
+  }
+
+  registerInterface(&jnt_state_interface);
+  registerInterface(&jnt_vel_interface);
+}
+
+void MarkhorHWInterface::setupCTREDrive()
+{
+  std::string interface = "can0";
+  ctre::phoenix::platform::can::SetCANInterface(interface.c_str());
+
+  static int FL, FR, RL, RR = 0;
+  if (nh.getParam("/markhor_base_node/front_left", FL))
+  {
+    front_left_drive = &TalonSRX(FL);
+  }
+  if (nh.getParam("/markhor_base_node/rear_left", RL))
+  {
+    rear_left_drive = &TalonSRX(RL);
+  }
+  if (nh.getParam("/markhor_base_node/front_right", FR))
+  {
+    front_right_drive = &TalonSRX(FR);
+  }
+  if (nh.getParam("/markhor_base_node/rear_right", RR))
+  {
+    rear_right_drive = &TalonSRX(RR);
+  }
 }
 
 void MarkhorHWInterface::write()
