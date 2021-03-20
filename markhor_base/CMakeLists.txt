@@ -46,8 +46,8 @@ set(source src/markhor_base.cpp src/markhor_hw_interface.cpp)
 add_executable(${PROJECT_NAME} ${source})
 
 target_link_libraries(${PROJECT_NAME} 
-  ${catkin_LIBRARIES}
-)
+    ${catkin_LIBRARIES}
+    )
 
 target_link_libraries(${PROJECT_NAME}
     Threads::Threads
