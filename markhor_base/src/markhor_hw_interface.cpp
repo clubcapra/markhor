@@ -51,22 +51,23 @@ void MarkhorHWInterface::setupCTREDrive()
   std::string interface = "can0";
   ctre::phoenix::platform::can::SetCANInterface(interface.c_str());
 
-  static int FL, FR, RL, RR = 0;
-  if (nh.getParam("/markhor_base_node/front_left", FL))
+  int drive_fl_id, drive_fr_id, drive_rl_id, drive_rr_id = 0;
+
+  if (nh.getParam("/markhor_base_node/front_left", drive_fl_id))
   {
-    front_left_drive = &TalonSRX(FL);
+    front_left_drive = std::make_unique<TalonSRX>(drive_fl_id);
   }
-  if (nh.getParam("/markhor_base_node/rear_left", RL))
+  if (nh.getParam("/markhor_base_node/rear_left", drive_rl_id))
   {
-    rear_left_drive = &TalonSRX(RL);
+    rear_left_drive = std::make_unique<TalonSRX>(drive_rl_id);
   }
-  if (nh.getParam("/markhor_base_node/front_right", FR))
+  if (nh.getParam("/markhor_base_node/front_right", drive_fr_id))
   {
-    front_right_drive = &TalonSRX(FR);
+    front_right_drive = std::make_unique<TalonSRX>(drive_fr_id);
   }
-  if (nh.getParam("/markhor_base_node/rear_right", RR))
+  if (nh.getParam("/markhor_base_node/rear_right", drive_rr_id))
   {
-    rear_right_drive = &TalonSRX(RR);
+    rear_right_drive = std::make_unique<TalonSRX>(drive_rr_id);
   }
 }
 
