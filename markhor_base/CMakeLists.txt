@@ -3,6 +3,11 @@ project(markhor_base LANGUAGES CXX)
 
 add_compile_options(-std=c++14)
 
+
+set(THREADS_PREFER_PTHREAD_FLAG ON)
+
+find_package (Threads REQUIRED)
+
 find_package(catkin REQUIRED COMPONENTS
   controller_manager
   roscpp
@@ -44,6 +49,10 @@ add_executable(${PROJECT_NAME} ${source})
 target_link_libraries(${PROJECT_NAME} 
   ${catkin_LIBRARIES}
 )
+
+target_link_libraries(${PROJECT_NAME}
+    Threads::Threads
+    )
 
 message("Your architecture is " ${CMAKE_LIBRARY_ARCHITECTURE})
 message("Your path " ${PROJECT_SOURCE_DIR}/src)
