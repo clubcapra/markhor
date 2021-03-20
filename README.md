@@ -20,10 +20,10 @@ This necessitates a workaround when testing the robot with the UI or with a joys
 `roslaunch markhor_gazebo test_world_husky.launch`
 
 ### Start sending cmd_vel command through a joystick 
-TODO
+
 
 ### Start sending cmd_vel command through the keyboard 
-`rosrun teleop_twist_keyboard teleop_twist_keyboard.py`
+`rosrun teleop_twist_keyboard teleop_twist_keyboard.py cmd_vel:=/markhor/diff_drive_controller/cmd_vel`
 
 ## Running the simulation with Markhor with tracks (keyboard without ROS)
 ### Start the simulation with tracks
