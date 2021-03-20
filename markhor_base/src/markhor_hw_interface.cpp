@@ -80,8 +80,8 @@ void MarkhorHWInterface::write()
                          diff_ang_speed_rear_right);
   // Set data
   front_left_track_vel_msg.data = diff_ang_speed_front_left;
-  rear_left_track_vel_msg.data = diff_ang_speed_rear_left;
   front_right_track_vel_msg.data = diff_ang_speed_front_right;
+  rear_left_track_vel_msg.data = diff_ang_speed_rear_left;
   rear_right_track_vel_msg.data = diff_ang_speed_rear_right;
 
   // Write to drive
@@ -92,8 +92,8 @@ void MarkhorHWInterface::write()
 
   // Publish data
   front_left_track_vel_pub_.publish(front_left_track_vel_msg);
-  rear_left_track_vel_pub_.publish(rear_left_track_vel_msg);
   front_right_track_vel_pub_.publish(front_right_track_vel_msg);
+  rear_left_track_vel_pub_.publish(rear_left_track_vel_msg);
   rear_right_track_vel_pub_.publish(rear_right_track_vel_msg);
 }
 
