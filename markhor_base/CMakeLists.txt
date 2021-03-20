@@ -32,7 +32,6 @@ catkin_package(
     controller_manager 
     roscpp 
     hardware_interface
-#  DEPENDS system_lib
 )
 include_directories(
     src
