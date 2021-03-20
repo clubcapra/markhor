@@ -96,6 +96,15 @@ void MarkhorHWInterface::write()
 
 void MarkhorHWInterface::read(const ros::Duration& period)
 {
+  // Read from the motor API?
+  // Probably going to read from the TalonSRX objects
+
+  // double ang_distance_left = _wheel_angle[0];
+  // double ang_distance_right = _wheel_angle[1];
+  // pos[0] += ang_distance_left;
+  // vel[0] += ang_distance_left / period.toSec();
+  // pos[1] += ang_distance_right;
+  // vel[1] += ang_distance_right / period.toSec();
 }
 
 ros::Time MarkhorHWInterface::get_time()
