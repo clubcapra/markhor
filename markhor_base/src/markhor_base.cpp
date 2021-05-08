@@ -4,6 +4,7 @@
 #include <ros/callback_queue.h>
 #include <chrono>
 #include "markhor_hw_interface.hpp"
+#include <ros/ros.h>
 
 void controlLoop(MarkhorHWInterface& hw, controller_manager::ControllerManager& cm,
                  std::chrono::system_clock::time_point& last_time)
