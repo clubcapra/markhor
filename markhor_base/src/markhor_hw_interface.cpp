@@ -100,15 +100,7 @@ void MarkhorHWInterface::write()
 
 void MarkhorHWInterface::read(const ros::Duration& period)
 {
-  // Read from the motor API?
-  // Probably going to read from the TalonSRX objects
-
-  // double ang_distance_left = _wheel_angle[0];
-  // double ang_distance_right = _wheel_angle[1];
-  // pos[0] += ang_distance_left;
-  // vel[0] += ang_distance_left / period.toSec();
-  // pos[1] += ang_distance_right;
-  // vel[1] += ang_distance_right / period.toSec();
+  // Read from the motor API, going to read from the TalonSRX objects
 }
 
 ros::Time MarkhorHWInterface::get_time()
@@ -123,13 +115,13 @@ ros::Duration MarkhorHWInterface::get_period()
   return curr_update_time - prev_update_time;
 }
 
-bool MarkhorHWInterface::start_callback(std_srvs::Empty::Request& /*req*/, std_srvs::Empty::Response& /*res*/)
+bool MarkhorHWInterface::start_callback(std_srvs::Empty::Request&, std_srvs::Empty::Response&)
 {
   running_ = true;
   return true;
 }
 
-bool MarkhorHWInterface::stop_callback(std_srvs::Empty::Request& /*req*/, std_srvs::Empty::Response& /*res*/)
+bool MarkhorHWInterface::stop_callback(std_srvs::Empty::Request&, std_srvs::Empty::Response&)
 {
   running_ = false;
   return true;
