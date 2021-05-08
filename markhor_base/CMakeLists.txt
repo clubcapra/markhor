@@ -1,12 +1,12 @@
 cmake_minimum_required(VERSION 3.9)
-project(markhor_base)
+project(markhor_base LANGUAGES CXX)
 
-## Compile as C++11, supported in ROS Kinetic and newer
-add_compile_options(-std=c++11)
+add_compile_options(-std=c++14)
 
-## Find catkin macros and libraries
-## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
-## is used, also find other catkin packages
+set(THREADS_PREFER_PTHREAD_FLAG ON)
+
+find_package (Threads REQUIRED)
+
 find_package(catkin REQUIRED COMPONENTS
   controller_manager
   roscpp
@@ -31,30 +31,26 @@ catkin_package(
     controller_manager 
     roscpp 
     hardware_interface
-#  DEPENDS system_lib
 )
-
-###########
-## Build ##
-###########
-
-## Specify additional locations of header files
-## Your package locations should be listed before other locations
 include_directories(
-  include
-  ${catkin_INCLUDE_DIRS}
+    src
+    include
+    include/lib
+    include/ctre
+    ${catkin_INCLUDE_DIRS}
 )
 
-## Declare a C++ executable
-## With catkin_make all packages are built within a single CMake context
-## The recommended prefix ensures that target names across packages don't collide
-add_executable(${PROJECT_NAME}
-  src/markhor_base.cpp
-)
+set(source src/markhor_base.cpp src/markhor_hw_interface.cpp)
+
+add_executable(${PROJECT_NAME} ${source})
 
 target_link_libraries(${PROJECT_NAME} 
-  ${catkin_LIBRARIES}
-)
+    ${catkin_LIBRARIES}
+    )
+
+target_link_libraries(${PROJECT_NAME}
+    Threads::Threads
+    )
 
 message("Your architecture is " ${CMAKE_LIBRARY_ARCHITECTURE})
 message("Your path " ${PROJECT_SOURCE_DIR}/src)
@@ -72,15 +68,7 @@ else()
     target_link_libraries(${PROJECT_NAME} ${PROJECT_SOURCE_DIR}/include/lib/x86-64/libCTRE_PhoenixCanutils.a)
 endif()
 
-# TODO be remove comment
-# target_link_libraries(${PROJECT_NAME} Threads::Threads)
-
 add_dependencies(${PROJECT_NAME}
   ${${PROJECT_NAME}_EXPORTED_TARGETS}
   ${catkin_EXPORTED_TARGETS}
 )
-
-# my_robot Hardware Interface
-# add_library(${PROJECT_NAME}_node
-#  src/markhor_hw_interface.cpp
-# )

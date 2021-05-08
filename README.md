@@ -20,7 +20,7 @@ This necessitates a workaround when testing the robot with the UI or with a joys
 `roslaunch markhor_gazebo test_world_husky.launch`
 
 ### Start sending cmd_vel command through a joystick 
-
+`roslaunch markhor_bringup teleop.launch`
 
 ### Start sending cmd_vel command through the keyboard 
 `rosrun teleop_twist_keyboard teleop_twist_keyboard.py cmd_vel:=/markhor/diff_drive_controller/cmd_vel`
