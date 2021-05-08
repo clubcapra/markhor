@@ -3,7 +3,6 @@ project(markhor_base LANGUAGES CXX)
 
 add_compile_options(-std=c++14)
 
-
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 
 find_package (Threads REQUIRED)
