@@ -1,0 +1,3 @@
+<launch>
+    <include file="$(find markhor_slam)/launch/hector_slam.launch" />
+</launch>
