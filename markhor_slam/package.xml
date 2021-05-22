@@ -10,15 +10,5 @@
 
   <buildtool_depend>catkin</buildtool_depend>
 
-  <exec_depend>sick_tim</exec_depend>
-  <exec_depend>hector_mapping</exec_depend>
-  <exec_depend>hector_map_server</exec_depend>
-  <exec_depend>hector_trajectory_server</exec_depend>
-  <exec_depend>hector_geotiff</exec_depend>
-  <exec_depend>hector_geotiff_plugins</exec_depend>
-  <exec_depend>rviz</exec_depend>
-  <exec_depend>tf</exec_depend>
-  <exec_depend>topic_tools</exec_depend>
-
   <export></export>
 </package>
