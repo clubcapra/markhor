@@ -48,25 +48,50 @@ void MarkhorHWInterface::setupRosControl()
 
 void MarkhorHWInterface::setupCTREDrive()
 {
+  ROS_INFO("TEST LUDO 0");
+
   std::string interface = "can0";
   ctre::phoenix::platform::can::SetCANInterface(interface.c_str());
 
+  // int test = 0;
+  // int test2 = 0;
+  // int test3 = 0;
+  // int test4 = 0;
   int drive_fl_id, drive_fr_id, drive_rl_id, drive_rr_id = 0;
 
-  if (nh.getParam("/markhor_base_node/front_left", drive_fl_id))
+  // ROS_INFO("TEST LUDO 0.5 drive_fr_id : %d", test);
+  // ROS_INFO("TEST LUDO 0.5 drive_fr_id : %d", test2);
+  // ROS_INFO("TEST LUDO 0.5 drive_fr_id : %d", test3);
+  // ROS_INFO("TEST LUDO 0.5 drive_fr_id : %d", test4);
+
+  // private_nh.param<int>("/markhor/markhor_base_node/front_right", test, -1);
+  // private_nh.getParam("/markhor/markhor_base_node/front_right", test2);
+  // nh.getParam("/markhor/markhor_base_node/front_right", test3);
+  // ros::param::param<int>("/markhor/markhor_base_node/front_right", test4, -1);
+
+  // ROS_INFO("TEST LUDO 0.5 drive_fr_id : %d", test);
+  // ROS_INFO("TEST LUDO 0.5 drive_fr_id : %d", test2);
+  // ROS_INFO("TEST LUDO 0.5 drive_fr_id : %d", test3);
+  // ROS_INFO("TEST LUDO 0.5 drive_fr_id : %d", test4);
+
+  if (nh.getParam("/markhor/markhor_base_node/front_left", drive_fl_id) == true)
   {
+    ROS_INFO("TEST LUDO FL");
     front_left_drive = std::make_unique<TalonSRX>(drive_fl_id);
   }
-  if (nh.getParam("/markhor_base_node/rear_left", drive_rl_id))
+  if (nh.getParam("/markhor/markhor_base_node/rear_left", drive_rl_id) == true)
   {
+    ROS_INFO("TEST LUDO RL");
     rear_left_drive = std::make_unique<TalonSRX>(drive_rl_id);
   }
-  if (nh.getParam("/markhor_base_node/front_right", drive_fr_id))
+  if (nh.getParam("/markhor/markhor_base_node/front_right", drive_fr_id) == true)
   {
+    ROS_INFO("TEST LUDO FR");
     front_right_drive = std::make_unique<TalonSRX>(drive_fr_id);
   }
-  if (nh.getParam("/markhor_base_node/rear_right", drive_rr_id))
+  if (nh.getParam("/markhor/markhor_base_node/rear_right", drive_rr_id) == true)
   {
+    ROS_INFO("TEST LUDO RR");
     rear_right_drive = std::make_unique<TalonSRX>(drive_rr_id);
   }
 }
@@ -77,6 +102,12 @@ void MarkhorHWInterface::write()
   double diff_ang_speed_rear_left = cmd[1];
   double diff_ang_speed_front_right = cmd[2];
   double diff_ang_speed_rear_right = cmd[3];
+
+  ROS_DEBUG("diff_speed_fl : %f", diff_ang_speed_front_left);
+  ROS_INFO("diff_speed_rl : %f", diff_ang_speed_rear_left);
+  ROS_INFO("diff_speed_fr : %f", diff_ang_speed_front_right);
+  ROS_INFO("diff_speed_rr : %f", diff_ang_speed_rear_right);
+
   limitDifferentialSpeed(diff_ang_speed_front_left, diff_ang_speed_rear_left, diff_ang_speed_front_right,
                          diff_ang_speed_rear_right);
   // Set data
@@ -101,6 +132,7 @@ void MarkhorHWInterface::write()
 void MarkhorHWInterface::read(const ros::Duration& period)
 {
   // Read from the motor API, going to read from the TalonSRX objects
+  // ROS_INFO("READ TEST period : %f", period.toSec());
 }
 
 ros::Time MarkhorHWInterface::get_time()

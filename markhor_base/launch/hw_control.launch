@@ -4,10 +4,10 @@
     <param name="robot_description" command="xacro '$(find markhor_description)/urdf/markhor.urdf.xacro'" />
 
     <!-- Load hardware interface-->>
-    <node name="markhor_base_node" pkg="markhor_base" type="markhor_base_node" ns="$(arg robot_namespace)">
-        <param name="front_left" type="int" value="11"/>
+    <node name="markhor_base_node" pkg="markhor_base" type="markhor_base_node" ns="$(arg robot_namespace)" output="screen">
+        <!-- <param name="front_left" type="int" value="11"/> -->
         <param name="front_right" type="int" value="12"/>
-        <param name="rear_left" type="int" value="61"/>
+        <!-- <param name="rear_left" type="int" value="61"/> -->
         <param name="rear_right" type="int" value="62"/>
     </node>
 
