@@ -24,8 +24,8 @@ MarkhorHWInterface::MarkhorHWInterface()
 void MarkhorHWInterface::setupPublisher()
 {
   // Initialize publishers and subscribers
-  front_left_track_vel_pub_ = nh.advertise<std_msgs::Float32>("front_left_track_vel", 1);
-  rear_left_track_vel_pub_ = nh.advertise<std_msgs::Float32>("rear_right_track_vel", 1);
+  // front_left_track_vel_pub_ = nh.advertise<std_msgs::Float32>("front_left_track_vel", 1);
+  // rear_left_track_vel_pub_ = nh.advertise<std_msgs::Float32>("rear_right_track_vel", 1);
   front_right_track_vel_pub_ = nh.advertise<std_msgs::Float32>("front_right_track_vel", 1);
   rear_right_track_vel_pub_ = nh.advertise<std_msgs::Float32>("rear_track_vel", 1);
 }
@@ -48,7 +48,7 @@ void MarkhorHWInterface::setupRosControl()
 
 void MarkhorHWInterface::setupCTREDrive()
 {
-  ROS_INFO("TEST LUDO 0");
+  // ROS_INFO("TEST LUDO 0");
 
   std::string interface = "can0";
   ctre::phoenix::platform::can::SetCANInterface(interface.c_str());
@@ -74,24 +74,24 @@ void MarkhorHWInterface::setupCTREDrive()
   // ROS_INFO("TEST LUDO 0.5 drive_fr_id : %d", test3);
   // ROS_INFO("TEST LUDO 0.5 drive_fr_id : %d", test4);
 
-  if (nh.getParam("/markhor/markhor_base_node/front_left", drive_fl_id) == true)
-  {
-    ROS_INFO("TEST LUDO FL");
-    front_left_drive = std::make_unique<TalonSRX>(drive_fl_id);
-  }
-  if (nh.getParam("/markhor/markhor_base_node/rear_left", drive_rl_id) == true)
-  {
-    ROS_INFO("TEST LUDO RL");
-    rear_left_drive = std::make_unique<TalonSRX>(drive_rl_id);
-  }
+  // if (nh.getParam("/markhor/markhor_base_node/front_left", drive_fl_id) == true)
+  // {
+  //   // ROS_INFO("TEST LUDO FL");
+  //   front_left_drive = std::make_unique<TalonSRX>(drive_fl_id);
+  // }
+  // if (nh.getParam("/markhor/markhor_base_node/rear_left", drive_rl_id) == true)
+  // {
+  //   // ROS_INFO("TEST LUDO RL");
+  //   rear_left_drive = std::make_unique<TalonSRX>(drive_rl_id);
+  // }
   if (nh.getParam("/markhor/markhor_base_node/front_right", drive_fr_id) == true)
   {
-    ROS_INFO("TEST LUDO FR");
+    // ROS_INFO("TEST LUDO FR");
     front_right_drive = std::make_unique<TalonSRX>(drive_fr_id);
   }
   if (nh.getParam("/markhor/markhor_base_node/rear_right", drive_rr_id) == true)
   {
-    ROS_INFO("TEST LUDO RR");
+    // ROS_INFO("TEST LUDO RR");
     rear_right_drive = std::make_unique<TalonSRX>(drive_rr_id);
   }
 }
@@ -103,29 +103,29 @@ void MarkhorHWInterface::write()
   double diff_ang_speed_front_right = cmd[2];
   double diff_ang_speed_rear_right = cmd[3];
 
-  ROS_DEBUG("diff_speed_fl : %f", diff_ang_speed_front_left);
-  ROS_INFO("diff_speed_rl : %f", diff_ang_speed_rear_left);
-  ROS_INFO("diff_speed_fr : %f", diff_ang_speed_front_right);
-  ROS_INFO("diff_speed_rr : %f", diff_ang_speed_rear_right);
+  // ROS_DEBUG("diff_speed_fl : %f", diff_ang_speed_front_left);
+  // ROS_INFO("diff_speed_rl : %f", diff_ang_speed_rear_left);
+  // ROS_INFO("diff_speed_fr : %f", diff_ang_speed_front_right);
+  // ROS_INFO("diff_speed_rr : %f", diff_ang_speed_rear_right);
 
   limitDifferentialSpeed(diff_ang_speed_front_left, diff_ang_speed_rear_left, diff_ang_speed_front_right,
                          diff_ang_speed_rear_right);
   // Set data
-  front_left_track_vel_msg.data = diff_ang_speed_front_left;
+  // front_left_track_vel_msg.data = diff_ang_speed_front_left;
   front_right_track_vel_msg.data = diff_ang_speed_front_right;
-  rear_left_track_vel_msg.data = diff_ang_speed_rear_left;
+  // rear_left_track_vel_msg.data = diff_ang_speed_rear_left;
   rear_right_track_vel_msg.data = diff_ang_speed_rear_right;
 
   // Write to drive
-  front_left_drive->Set(ControlMode::PercentOutput, front_left_track_vel_msg.data);
+  // front_left_drive->Set(ControlMode::PercentOutput, front_left_track_vel_msg.data);
   front_right_drive->Set(ControlMode::PercentOutput, front_left_track_vel_msg.data);
-  rear_left_drive->Set(ControlMode::PercentOutput, front_left_track_vel_msg.data);
+  // rear_left_drive->Set(ControlMode::PercentOutput, front_left_track_vel_msg.data);
   rear_right_drive->Set(ControlMode::PercentOutput, front_left_track_vel_msg.data);
 
   // Publish data
-  front_left_track_vel_pub_.publish(front_left_track_vel_msg);
+  // front_left_track_vel_pub_.publish(front_left_track_vel_msg);
   front_right_track_vel_pub_.publish(front_right_track_vel_msg);
-  rear_left_track_vel_pub_.publish(rear_left_track_vel_msg);
+  // rear_left_track_vel_pub_.publish(rear_left_track_vel_msg);
   rear_right_track_vel_pub_.publish(rear_right_track_vel_msg);
 }
 
