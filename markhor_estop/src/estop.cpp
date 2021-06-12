@@ -1,75 +1,51 @@
+#include "ros/ros.h"
+#include "std_srvs/Trigger.h"
+#include "JetsonXavierGPIO/jetsonGPIO.c"
 
-#include <iostream>
-// for delay function.
-#include <chrono>
-#include <thread>
-#include <map>
-#include <string>
-
-// for signal handling
-#include <signal.h>
-
-#include <JetsonGPIO.h>
-
-// using namespace GPIO;
- 
-
-// using namespace std;
-// const map<string, int> output_pins{{"JETSON_XAVIER", 18}, {"JETSON_NANO", 33}};
-
-// int get_output_pin()
-// {
-// 	if (output_pins.find(GPIO::model) == output_pins.end())
-// 	{
-// 		cerr << "PWM not supported on this board\n";
-// 		terminate();
-// 	}
-
-// 	return output_pins.at(GPIO::model);
-// }
-
-// inline void delay(int s)
-// {
-// 	this_thread::sleep_for(chrono::seconds(s));
-// }
-
-// static bool end_this_program = false;
-
-// void signalHandler(int s)
-// {
-// 	end_this_program = true;
-// }
+bool estop_value = true; //default value for the Estop.
+const jetsonXavierGPIONumber ESTOP_PIN = jetsonXavierGPIONumber::gpio428;
 
 
+/**
+ * Call back function for to toggle the Estop pin. This will change the electric output on the pin and enable or disable
+ * the estop.
+ */
+bool toggleEstopEnable(std_srvs::Trigger::Request &req, std_srvs::Trigger::Response &res) {
+    res.message = "successfully toggle estop to on";
+    gpioSetValue(ESTOP_PIN, 1);
+    res.success = static_cast<unsigned char>(true);
+    return true;
+}
 
-int main()
-{
-// 	// Pin Definitions
-// 	int output_pin = get_output_pin();
+/**
+ * Call back function for to toggle the Estop pin. This will change the electric output on the pin and enable or disable
+ * the estop.
+ */
+bool toggleEstopDisable(std_srvs::Trigger::Request &req, std_srvs::Trigger::Response &res) {
+    res.message = "successfully toggle estop to off";
+    gpioSetValue(ESTOP_PIN, 0);
+    res.success = static_cast<unsigned char>(true);
+    return true;
+}
 
-// 	// When CTRL+C pressed, signalHandler will be called
-// 	signal(SIGINT, signalHandler);
+/**
+ * Initialize the configuration to control the GPIO pin.
+ */
+void initializeGPIO() {
+    gpioExport(ESTOP_PIN);
+    gpioSetDirection(ESTOP_PIN, 1);
+    gpioSetValue(ESTOP_PIN, 1);
+}
 
-// 	// Pin Setup.
-// 	// Board pin-numbering scheme
-	// GPIO::setmode(GPIO::BOARD);
-    printf("%d",GPIO::HIGH);
+int main(int argc, char **argv) {
+    ros::init(argc, argv, "markhor_estop");
+    ros::NodeHandle nh;
 
-// 	// set pin as an output pin with optional initial state of HIGH
-// 	GPIO::setup(output_pin, GPIO::OUT, GPIO::HIGH);
-// 	GPIO::PWM p(output_pin, 50);
-// 	auto val = 25.0;
-// 	p.start(val);
+    initializeGPIO();
 
-// 	cout << "PWM running. Press CTRL+C to exit." << endl;
+    ros::ServiceServer serviceEnable = nh.advertiseService("markhor_estop_enable", toggleEstopEnable);
+    ros::ServiceServer serviceDisable = nh.advertiseService("markhor_estop_disable", toggleEstopDisable);
+    ros::spin();
 
-// 	while (!end_this_program)
-// 	{
-// 		delay(1);
-// 	}
-
-// 	p.stop();
-// 	GPIO::cleanup();
-
-	return 0;
+    return 0;
 }
