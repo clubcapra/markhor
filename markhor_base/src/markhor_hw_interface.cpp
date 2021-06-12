@@ -110,6 +110,9 @@ void MarkhorHWInterface::write()
 
   limitDifferentialSpeed(diff_ang_speed_front_left, diff_ang_speed_rear_left, diff_ang_speed_front_right,
                          diff_ang_speed_rear_right);
+
+  ctre::phoenix::unmanaged::FeedEnable(100);
+
   // Set data
   // front_left_track_vel_msg.data = diff_ang_speed_front_left;
   front_right_track_vel_msg.data = diff_ang_speed_front_right;
