@@ -48,8 +48,6 @@ void MarkhorHWInterface::setupRosControl()
 
 void MarkhorHWInterface::setupCTREDrive()
 {
-  // ROS_INFO("TEST LUDO 0");
-
   std::string interface = "can0";
   ctre::phoenix::platform::can::SetCANInterface(interface.c_str());
 
@@ -107,7 +105,6 @@ void MarkhorHWInterface::write()
 void MarkhorHWInterface::read(const ros::Duration& period)
 {
   // Read from the motor API, going to read from the TalonSRX objects
-  // ROS_INFO("READ TEST period : %f", period.toSec());
 }
 
 ros::Time MarkhorHWInterface::get_time()
