@@ -1,6 +1,6 @@
-#include <ros/callback_queue.h>
 #include <chrono>
 #include <ros/ros.h>
+#include <ros/callback_queue.h>
 #include "markhor_hw_interface.hpp"
 
 void controlLoop(MarkhorHWInterface& hw, controller_manager::ControllerManager& cm,
