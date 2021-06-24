@@ -43,8 +43,8 @@ int main(int argc, char **argv) {
 
     initializeGPIO();
 
-    ros::ServiceServer serviceEnable = nh.advertiseService("markhor_estop_enable", toggleEstopEnable);
-    ros::ServiceServer serviceDisable = nh.advertiseService("markhor_estop_disable", toggleEstopDisable);
+    ros::ServiceServer serviceEnable = nh.advertiseService("estop_enable", toggleEstopEnable);
+    ros::ServiceServer serviceDisable = nh.advertiseService("estop_disable", toggleEstopDisable);
     ros::spin();
 
     return 0;
