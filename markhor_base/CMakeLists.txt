@@ -42,13 +42,13 @@ include_directories(
 
 set(source src/markhor_base.cpp src/markhor_hw_interface.cpp)
 
-add_executable(${PROJECT_NAME} ${source})
+add_executable(${PROJECT_NAME}_node ${source})
 
-target_link_libraries(${PROJECT_NAME} 
+target_link_libraries(${PROJECT_NAME}_node 
     ${catkin_LIBRARIES}
     )
 
-target_link_libraries(${PROJECT_NAME}
+target_link_libraries(${PROJECT_NAME}_node
     Threads::Threads
     )
 
@@ -56,19 +56,19 @@ message("Your architecture is " ${CMAKE_LIBRARY_ARCHITECTURE})
 message("Your path " ${PROJECT_SOURCE_DIR}/src)
 if(${CMAKE_LIBRARY_ARCHITECTURE} STREQUAL "aarch64-linux-gnu") # Jetson TX2
     message("Jetson TX2")
-    target_link_libraries(${PROJECT_NAME} ${PROJECT_SOURCE_DIR}/include/lib/aarch64/libCTRE_Phoenix.a)
-    target_link_libraries(${PROJECT_NAME} ${PROJECT_SOURCE_DIR}/include/lib/aarch64/libCTRE_PhoenixCCI.a)
-    target_link_libraries(${PROJECT_NAME} ${PROJECT_SOURCE_DIR}/include/lib/aarch64/libCTRE_PhoenixPlatformLinuxSocketCan.a)
-    target_link_libraries(${PROJECT_NAME} ${PROJECT_SOURCE_DIR}/include/lib/aarch64/libCTRE_PhoenixCanutils.a)
+    target_link_libraries(${PROJECT_NAME}_node ${PROJECT_SOURCE_DIR}/include/lib/aarch64/libCTRE_Phoenix.a)
+    target_link_libraries(${PROJECT_NAME}_node ${PROJECT_SOURCE_DIR}/include/lib/aarch64/libCTRE_PhoenixCCI.a)
+    target_link_libraries(${PROJECT_NAME}_node ${PROJECT_SOURCE_DIR}/include/lib/aarch64/libCTRE_PhoenixPlatformLinuxSocketCan.a)
+    target_link_libraries(${PROJECT_NAME}_node ${PROJECT_SOURCE_DIR}/include/lib/aarch64/libCTRE_PhoenixCanutils.a)
 else()
     message("x86-64")
-    target_link_libraries(${PROJECT_NAME} ${PROJECT_SOURCE_DIR}/include/lib/x86-64/libCTRE_Phoenix.a)
-    target_link_libraries(${PROJECT_NAME} ${PROJECT_SOURCE_DIR}/include/lib/x86-64/libCTRE_PhoenixCCI.a)
-    target_link_libraries(${PROJECT_NAME} ${PROJECT_SOURCE_DIR}/include/lib/x86-64/libCTRE_PhoenixPlatformLinuxSocketCan.a)
-    target_link_libraries(${PROJECT_NAME} ${PROJECT_SOURCE_DIR}/include/lib/x86-64/libCTRE_PhoenixCanutils.a)
+    target_link_libraries(${PROJECT_NAME}_node ${PROJECT_SOURCE_DIR}/include/lib/x86-64/libCTRE_Phoenix.a)
+    target_link_libraries(${PROJECT_NAME}_node ${PROJECT_SOURCE_DIR}/include/lib/x86-64/libCTRE_PhoenixCCI.a)
+    target_link_libraries(${PROJECT_NAME}_node ${PROJECT_SOURCE_DIR}/include/lib/x86-64/libCTRE_PhoenixPlatformLinuxSocketCan.a)
+    target_link_libraries(${PROJECT_NAME}_node ${PROJECT_SOURCE_DIR}/include/lib/x86-64/libCTRE_PhoenixCanutils.a)
 endif()
 
-add_dependencies(${PROJECT_NAME}
+add_dependencies(${PROJECT_NAME}_node
   ${${PROJECT_NAME}_EXPORTED_TARGETS}
   ${catkin_EXPORTED_TARGETS}
 )

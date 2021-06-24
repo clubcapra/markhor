@@ -1,10 +1,7 @@
-//
-// Created by ludovic on 2/6/20.
-//
-#include <ros/callback_queue.h>
 #include <chrono>
-#include "markhor_hw_interface.hpp"
 #include <ros/ros.h>
+#include <ros/callback_queue.h>
+#include "markhor_hw_interface.hpp"
 
 void controlLoop(MarkhorHWInterface& hw, controller_manager::ControllerManager& cm,
                  std::chrono::system_clock::time_point& last_time)
