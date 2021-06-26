@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>markhor_slam</name>
+  <version>0.0.0</version>
+  <description>The markhor_slam package</description>
+
+  <maintainer email="capra@clubcapra.com">charles</maintainer>
+
+  <license>MIT</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <buildtool_depend>hector_mapping</buildtool_depend>
+  <buildtool_depend>hector_geotiff</buildtool_depend>
+  <buildtool_depend>sick_tim</buildtool_depend>
+  <export></export>
+</package>
