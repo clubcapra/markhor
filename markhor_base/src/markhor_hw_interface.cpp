@@ -1,7 +1,6 @@
 #include <markhor_hw_interface.hpp>
 
-std::string drives_name[NUM_JOINTS] = { "flipper_fr_motor_j", "flipper_rr_motor_j", "flipper_fl_motor_j",
-                                        "flipper_rl_motor_j" };
+std::string drives_name[] = { "flipper_fl_motor_j", "flipper_fr_motor_j", "flipper_rl_motor_j", "flipper_rr_motor_j" };
 
 MarkhorHWInterface::MarkhorHWInterface()
   : running_(true)
