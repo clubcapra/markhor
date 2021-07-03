@@ -56,10 +56,12 @@ void MarkhorHWInterface::setupCTREDrive()
   if (nh.getParam("/markhor/markhor_base_node/front_left", drive_fl_id) == true)
   {
     front_left_drive = std::make_unique<TalonSRX>(drive_fl_id);
+    front_left_drive->SetInverted(true); // Fix drive orientation
   }
   if (nh.getParam("/markhor/markhor_base_node/rear_left", drive_rl_id) == true)
   {
     rear_left_drive = std::make_unique<TalonSRX>(drive_rl_id);
+    rear_left_drive->SetInverted(true); // Fix drive orientation
   }
   if (nh.getParam("/markhor/markhor_base_node/front_right", drive_fr_id) == true)
   {
@@ -74,8 +76,8 @@ void MarkhorHWInterface::setupCTREDrive()
 void MarkhorHWInterface::write()
 {
   double diff_ang_speed_front_left = cmd[0];
-  double diff_ang_speed_rear_left = cmd[1];
-  double diff_ang_speed_front_right = cmd[2];
+  double diff_ang_speed_front_right = cmd[1];
+  double diff_ang_speed_rear_left = cmd[2];
   double diff_ang_speed_rear_right = cmd[3];
 
   limitDifferentialSpeed(diff_ang_speed_front_left, diff_ang_speed_rear_left, diff_ang_speed_front_right,
@@ -91,9 +93,9 @@ void MarkhorHWInterface::write()
 
   // Write to drive
   front_left_drive->Set(ControlMode::PercentOutput, front_left_track_vel_msg.data);
-  front_right_drive->Set(ControlMode::PercentOutput, front_left_track_vel_msg.data);
-  rear_left_drive->Set(ControlMode::PercentOutput, front_left_track_vel_msg.data);
-  rear_right_drive->Set(ControlMode::PercentOutput, front_left_track_vel_msg.data);
+  front_right_drive->Set(ControlMode::PercentOutput, front_right_track_vel_msg.data);
+  rear_left_drive->Set(ControlMode::PercentOutput, rear_left_track_vel_msg.data);
+  rear_right_drive->Set(ControlMode::PercentOutput, rear_right_track_vel_msg.data);
 
   // Publish data
   front_left_track_vel_pub_.publish(front_left_track_vel_msg);
