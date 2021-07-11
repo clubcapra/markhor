@@ -1,0 +1,4 @@
+<launch>
+    <include file="$(find markhor_estop)/launch/estop.launch"/>
+    <include file="$(find markhor_base_flipper)/launch/hw_control_flipper.launch"/>
+</launch>
