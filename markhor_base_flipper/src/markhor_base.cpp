@@ -1,9 +1,9 @@
 #include <chrono>
 #include <ros/ros.h>
 #include <ros/callback_queue.h>
-#include "markhor_hw_interface_flipper.hpp"
+#include "markhor_hw_interface.hpp"
 
-void controlLoop(MarkhorHWInterfaceFlipper& hw, controller_manager::ControllerManager& cm,
+void controlLoop(MarkhorHWInterface& hw, controller_manager::ControllerManager& cm,
                  std::chrono::system_clock::time_point& last_time)
 {
   std::chrono::system_clock::time_point current_time = std::chrono::system_clock::now();
@@ -18,9 +18,9 @@ void controlLoop(MarkhorHWInterfaceFlipper& hw, controller_manager::ControllerMa
 
 int main(int argc, char** argv)
 {
-  ros::init(argc, argv, "markhor_base_flipper_node");
+  ros::init(argc, argv, "markhor_base_node");
 
-  MarkhorHWInterfaceFlipper hw;
+  MarkhorHWInterface hw;
   controller_manager::ControllerManager cm(&hw, hw.nh);
 
   double control_frequency;

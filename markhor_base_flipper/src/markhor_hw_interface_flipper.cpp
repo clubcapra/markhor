@@ -1,6 +1,6 @@
 #include <markhor_hw_interface_flipper.hpp>
 
-std::string drives_name[NUM_JOINTS] = { "flipper_fr_j"};
+std::string drives_name[NUM_JOINTS] = { "flipper_fl_j"};
 
 MarkhorHWInterfaceFlipper::MarkhorHWInterfaceFlipper()
   : running_(true)
@@ -23,7 +23,7 @@ MarkhorHWInterfaceFlipper::MarkhorHWInterfaceFlipper()
 void MarkhorHWInterfaceFlipper::setupPublisher()
 {
   // Initialize publishers and subscribers
-  front_left_track_vel_pub_ = nh.advertise<std_msgs::Float32>("front_left_track_vel", 1);
+  // front_left_track_vel_pub_ = nh.advertise<std_msgs::Float32>("front_left_track_vel", 1);
 }
 
 void MarkhorHWInterfaceFlipper::setupRosControl()
