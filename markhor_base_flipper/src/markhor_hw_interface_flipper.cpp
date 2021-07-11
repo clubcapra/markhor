@@ -49,7 +49,7 @@ void MarkhorHWInterfaceFlipper::setupCTREDrive()
 
   int drive_fl_id, drive_fr_id, drive_rl_id, drive_rr_id = 0;
 
-  if (nh.getParam("/markhor/markhor_base_node/front_left", drive_fl_id) == true)
+  if (nh.getParam("/markhor/markhor_base_flipper_node/front_left", drive_fl_id) == true)
   {
     front_left_drive = std::make_unique<TalonSRX>(drive_fl_id);
   }
@@ -71,7 +71,15 @@ void MarkhorHWInterfaceFlipper::write()
 {
 
   ROS_INFO("HWI FLIPPER WRITE");
-  // double diff_ang_speed_front_left = cmd[0];
+
+  ROS_INFO("pos %f",pos[0]);
+  ROS_INFO("eff %f",eff[0]);
+  ROS_INFO("vel %f",vel[0]);
+  ROS_INFO("cmd %f",cmd[0]);
+  double diff_ang_speed_front_left = cmd[0];
+
+  ROS_INFO("diff_ang_speed_front_left %f",diff_ang_speed_front_left);
+
   // double diff_ang_speed_rear_left = cmd[1];
   // double diff_ang_speed_front_right = cmd[2];
   // double diff_ang_speed_rear_right = cmd[3];
@@ -79,16 +87,16 @@ void MarkhorHWInterfaceFlipper::write()
   // limitDifferentialSpeed(diff_ang_speed_front_left, diff_ang_speed_rear_left, diff_ang_speed_front_right,
   //                        diff_ang_speed_rear_right);
 
-  // ctre::phoenix::unmanaged::FeedEnable(100);
+  ctre::phoenix::unmanaged::FeedEnable(100);
 
   // // Set data
-  // front_left_track_vel_msg.data = diff_ang_speed_front_left;
+  front_left_track_vel_msg.data = diff_ang_speed_front_left;
   // front_right_track_vel_msg.data = diff_ang_speed_front_right;
   // rear_left_track_vel_msg.data = diff_ang_speed_rear_left;
   // rear_right_track_vel_msg.data = diff_ang_speed_rear_right;
 
   // // Write to drive
-  // front_left_drive->Set(ControlMode::PercentOutput, front_left_track_vel_msg.data);
+  front_left_drive->Set(ControlMode::PercentOutput, front_left_track_vel_msg.data);
   // front_right_drive->Set(ControlMode::PercentOutput, front_left_track_vel_msg.data);
   // rear_left_drive->Set(ControlMode::PercentOutput, front_left_track_vel_msg.data);
   // rear_right_drive->Set(ControlMode::PercentOutput, front_left_track_vel_msg.data);
