@@ -40,37 +40,25 @@ class MarkhorHWInterfaceFlipper : public hardware_interface::RobotHW
 public:
   MarkhorHWInterfaceFlipper();
   void write();
-  void read(const ros::Duration& period);
-  ros::Time get_time();
-  ros::Duration get_period();
+  void read();
 
   ros::NodeHandle nh;
-  ros::NodeHandle private_nh;
 
 private:
-  bool start_callback(std_srvs::Empty::Request& /*req*/, std_srvs::Empty::Response& /*res*/);
-  bool stop_callback(std_srvs::Empty::Request& /*req*/, std_srvs::Empty::Response& /*res*/);
-  void setupPublisher();
   void setupRosControl();
   void setupCTREDrive();
 
-  hardware_interface::JointStateInterface jnt_state_interface;
-  hardware_interface::EffortJointInterface jnt_eff_interface;
-  double cmd[NUM_JOINTS];
-  double pos[NUM_JOINTS];
-  double vel[NUM_JOINTS];
-  double eff[NUM_JOINTS];
-
-  bool running_;
-  double max_speed;
-  ros::Time curr_update_time, prev_update_time;
-
-  ros::Publisher front_left_track_vel_pub_;
-
-  std_msgs::Float32 front_left_track_vel_msg;
-
-  ros::ServiceServer start_srv_;
-  ros::ServiceServer stop_srv_;
+  hardware_interface::JointStateInterface joint_state_interface_;
+  hardware_interface::EffortJointInterface effort_joint_interface_;
+  std::vector<std::string> joint_names_;
+  
+  std::vector<double> joint_position_;
+  std::vector<double> joint_velocity_;
+  std::vector<double> joint_effort_;
+  
+  std::vector<double> joint_position_command_;
+  std::vector<double> joint_velocity_command_;
+  std::vector<double> joint_effort_command_;
 
   std::unique_ptr<TalonSRX> front_left_drive;
 };

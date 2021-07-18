@@ -1,0 +1,24 @@
+markhor:
+  # Publish all joint states -----------------------------------
+  joint_state_controller:
+    type: joint_state_controller/JointStateController
+    publish_rate: 50  
+  
+  # Position Controllers ---------------------------------------
+  flipper_fl_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: flipper_fl_j
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+  flipper_fr_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: flipper_fr_j
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+  flipper_rl_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: flipper_rl_j
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+  flipper_rr_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: flipper_rr_j
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+
