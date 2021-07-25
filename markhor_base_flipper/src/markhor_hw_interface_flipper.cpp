@@ -7,15 +7,17 @@ MarkhorHWInterfaceFlipper::MarkhorHWInterfaceFlipper()
   joint_names_.push_back("flipper_rl_j");
   joint_names_.push_back("flipper_rr_j");
 
+  num_joints = joint_names_.size();
+
   // Status
-  joint_position_.resize(NUM_JOINTS, 0.0);
-  joint_velocity_.resize(NUM_JOINTS, 0.0);
-  joint_effort_.resize(NUM_JOINTS, 0.0);
+  joint_position_.resize(num_joints, 0.0);
+  joint_velocity_.resize(num_joints, 0.0);
+  joint_effort_.resize(num_joints, 0.0);
 
   // Command
-  joint_position_command_.resize(NUM_JOINTS, 0.0);
-  joint_velocity_command_.resize(NUM_JOINTS, 0.0);
-  joint_effort_command_.resize(NUM_JOINTS, 0.0);
+  joint_position_command_.resize(num_joints, 0.0);
+  joint_velocity_command_.resize(num_joints, 0.0);
+  joint_effort_command_.resize(num_joints, 0.0);
 
   setupRosControl();
   // setupCTREDrive();
@@ -23,11 +25,12 @@ MarkhorHWInterfaceFlipper::MarkhorHWInterfaceFlipper()
 
 void MarkhorHWInterfaceFlipper::setupRosControl()
 {
-  // connect and register the joint state and velocity interfaces
-  for (unsigned int joint_id = 0; joint_id < NUM_JOINTS; ++joint_id)
+  // connect and register the joint state and effort interfaces
+  for (unsigned int joint_id = 0; joint_id < num_joints; ++joint_id)
   {
     hardware_interface::JointStateHandle state_handle(joint_names_[joint_id], &joint_position_[joint_id],
                                                       &joint_velocity_[joint_id], &joint_effort_[joint_id]);
+
     joint_state_interface_.registerHandle(state_handle);
 
     hardware_interface::JointHandle joint_handle_effort = hardware_interface::JointHandle(
@@ -82,25 +85,15 @@ void MarkhorHWInterfaceFlipper::write()
   // limitDifferentialSpeed(diff_ang_speed_front_left, diff_ang_speed_rear_left, diff_ang_speed_front_right,
   //                        diff_ang_speed_rear_right);
 
-  // ctre::phoenix::unmanaged::FeedEnable(100);
+  // Convert value of 0.0 .. -3.14 to 0 .. 100.
 
-  // // Set data
-  // front_left_track_vel_msg.data = diff_ang_speed_front_left;
-  // front_right_track_vel_msg.data = diff_ang_speed_front_right;
-  // rear_left_track_vel_msg.data = diff_ang_speed_rear_left;
-  // rear_right_track_vel_msg.data = diff_ang_speed_rear_right;
+  ctre::phoenix::unmanaged::FeedEnable(100);
 
   // // Write to drive
   // front_left_drive->Set(ControlMode::PercentOutput, front_left_track_vel_msg.data);
   // front_right_drive->Set(ControlMode::PercentOutput, front_left_track_vel_msg.data);
   // rear_left_drive->Set(ControlMode::PercentOutput, front_left_track_vel_msg.data);
   // rear_right_drive->Set(ControlMode::PercentOutput, front_left_track_vel_msg.data);
-
-  // // Publish data
-  // front_left_track_vel_pub_.publish(front_left_track_vel_msg);
-  // front_right_track_vel_pub_.publish(front_right_track_vel_msg);
-  // rear_left_track_vel_pub_.publish(rear_left_track_vel_msg);
-  // rear_right_track_vel_pub_.publish(rear_right_track_vel_msg);
 }
 
 void MarkhorHWInterfaceFlipper::read()
@@ -108,42 +101,3 @@ void MarkhorHWInterfaceFlipper::read()
   // Read from the motor API, going to read from the TalonSRX objects
   ROS_INFO("HWI FLIPPER READs");
 }
-
-// ros::Time MarkhorHWInterfaceFlipper::get_time()
-// {
-//   prev_update_time = curr_update_time;
-//   curr_update_time = ros::Time::now();
-//   return curr_update_time;
-// }
-
-// ros::Duration MarkhorHWInterfaceFlipper::get_period()
-// {
-//   return curr_update_time - prev_update_time;
-// }
-
-// bool MarkhorHWInterfaceFlipper::start_callback(std_srvs::Empty::Request&, std_srvs::Empty::Response&)
-// {
-//   running_ = true;
-//   return true;
-// }
-
-// bool MarkhorHWInterfaceFlipper::stop_callback(std_srvs::Empty::Request&, std_srvs::Empty::Response&)
-// {
-//   running_ = false;
-//   return true;
-// }
-
-// void MarkhorHWInterfaceFlipper::limitDifferentialSpeed(double& diff_speed_front_left, double& diff_speed_rear_left,
-//                                                 double& diff_speed_front_right, double& diff_speed_rear_right)
-// {
-//   // std::max can take a list to find the max value inside.
-//   double speed = std::max({ std::abs(diff_speed_front_left), std::abs(diff_speed_rear_left),
-//                             std::abs(diff_speed_front_right), std::abs(diff_speed_rear_right) });
-//   if (speed > max_speed)
-//   {
-//     diff_speed_front_left *= max_speed / speed;
-//     diff_speed_rear_left *= max_speed / speed;
-//     diff_speed_front_right *= max_speed / speed;
-//     diff_speed_rear_right *= max_speed / speed;
-//   }
-// }

@@ -6,6 +6,9 @@
     <!-- Load hardware interface-->
     <node name="markhor_base_flipper_node" pkg="markhor_base_flipper" type="markhor_base_flipper_node" ns="$(arg robot_namespace)" output="screen">
         <param name="front_left" type="int" value="11" />
+        <param name="front_right" type="int" value="12" />
+        <param name="rear_left" type="int" value="13" />
+        <param name="rear_right" type="int" value="14" />
     </node>
 
     <!-- Load controller config -->
@@ -17,8 +20,6 @@
     flipper_fr_position_controller
     flipper_rl_position_controller
     flipper_rr_position_controller" />
-    
-    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" ns="$(arg robot_namespace)" respawn="false" output="screen">
-        <!-- <remap from="/joint_states" to="$(arg robot_namespace)/joint_states" /> -->
-    </node>
+
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" ns="$(arg robot_namespace)" respawn="false" output="screen" />
 </launch>
