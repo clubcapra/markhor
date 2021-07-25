@@ -33,7 +33,7 @@
 #include <thread>
 #include <vector>
 
-constexpr unsigned int NUM_JOINTS = 1;
+constexpr unsigned int NUM_JOINTS = 4;
 
 class MarkhorHWInterfaceFlipper : public hardware_interface::RobotHW
 {
@@ -49,17 +49,20 @@ private:
   void setupCTREDrive();
 
   hardware_interface::JointStateInterface joint_state_interface_;
-  hardware_interface::EffortJointInterface effort_joint_interface_;
+  hardware_interface::PositionJointInterface position_joint_interface_;
   std::vector<std::string> joint_names_;
-  
+
   std::vector<double> joint_position_;
   std::vector<double> joint_velocity_;
   std::vector<double> joint_effort_;
-  
+
   std::vector<double> joint_position_command_;
   std::vector<double> joint_velocity_command_;
   std::vector<double> joint_effort_command_;
 
   std::unique_ptr<TalonSRX> front_left_drive;
+  std::unique_ptr<TalonSRX> front_right_drive;
+  std::unique_ptr<TalonSRX> rear_left_drive;
+  std::unique_ptr<TalonSRX> rear_right_drive;
 };
 #endif  // MARKHOR_HW_INTERFACE_H

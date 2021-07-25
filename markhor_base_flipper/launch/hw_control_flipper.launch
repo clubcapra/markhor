@@ -9,11 +9,14 @@
     </node>
 
     <!-- Load controller config -->
-    <rosparam command="load" file="$(find markhor_control)/config/flipper.yaml" />
+    <rosparam command="load" file="$(find markhor_control)/config/control_flipper.yaml" />
 
     <!-- load the controllers -->
     <node name="controller_spawner" pkg="controller_manager" type="spawner" output="screen" ns="$(arg robot_namespace)" args="joint_state_controller 
-    flipper_fl_effort_controller" />
+    flipper_fl_position_controller
+    flipper_fr_position_controller
+    flipper_rl_position_controller
+    flipper_rr_position_controller" />
     
     <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" ns="$(arg robot_namespace)" respawn="false" output="screen">
         <!-- <remap from="/joint_states" to="$(arg robot_namespace)/joint_states" /> -->

@@ -3,6 +3,9 @@
 MarkhorHWInterfaceFlipper::MarkhorHWInterfaceFlipper()
 {
   joint_names_.push_back("flipper_fl_j");
+  joint_names_.push_back("flipper_fr_j");
+  joint_names_.push_back("flipper_rl_j");
+  joint_names_.push_back("flipper_rr_j");
 
   // Status
   joint_position_.resize(NUM_JOINTS, 0.0);
@@ -28,14 +31,14 @@ void MarkhorHWInterfaceFlipper::setupRosControl()
     joint_state_interface_.registerHandle(state_handle);
 
     hardware_interface::JointHandle joint_handle_effort = hardware_interface::JointHandle(
-        joint_state_interface_.getHandle(joint_names_[joint_id]), &joint_effort_command_[joint_id]);
-    effort_joint_interface_.registerHandle(joint_handle_effort);
+        joint_state_interface_.getHandle(joint_names_[joint_id]), &joint_position_command_[joint_id]);
+    position_joint_interface_.registerHandle(joint_handle_effort);
     // hardware_interface::JointHandle eff_handle(jnt_state_interface.getHandle(joint_names_[joint_id]),
     // &cmd[joint_id]); jnt_eff_interface.registerHandle(eff_handle);
   }
 
   registerInterface(&joint_state_interface_);
-  registerInterface(&effort_joint_interface_);
+  registerInterface(&position_joint_interface_);
 }
 
 void MarkhorHWInterfaceFlipper::setupCTREDrive()
@@ -45,28 +48,32 @@ void MarkhorHWInterfaceFlipper::setupCTREDrive()
 
   int drive_fl_id, drive_fr_id, drive_rl_id, drive_rr_id = 0;
 
-  if (nh.getParam("/markhor/markhor_base_node/front_left", drive_fl_id) == true)
+  if (nh.getParam("/markhor/markhor_base_flipper/front_left", drive_fl_id) == true)
   {
     front_left_drive = std::make_unique<TalonSRX>(drive_fl_id);
   }
-  // if (nh.getParam("/markhor/markhor_base_node/rear_left", drive_rl_id) == true)
-  // {
-  //   rear_left_drive = std::make_unique<TalonSRX>(drive_rl_id);
-  // }
-  // if (nh.getParam("/markhor/markhor_base_node/front_right", drive_fr_id) == true)
-  // {
-  //   front_right_drive = std::make_unique<TalonSRX>(drive_fr_id);
-  // }
-  // if (nh.getParam("/markhor/markhor_base_node/rear_right", drive_rr_id) == true)
-  // {
-  //   rear_right_drive = std::make_unique<TalonSRX>(drive_rr_id);
-  // }
+  if (nh.getParam("/markhor/markhor_base_flipper/front_right", drive_fr_id) == true)
+  {
+    front_right_drive = std::make_unique<TalonSRX>(drive_fr_id);
+  }
+  if (nh.getParam("/markhor/markhor_base_flipper/rear_left", drive_rl_id) == true)
+  {
+    rear_left_drive = std::make_unique<TalonSRX>(drive_rl_id);
+  }
+  if (nh.getParam("/markhor/markhor_base_flipper/rear_right", drive_rr_id) == true)
+  {
+    rear_right_drive = std::make_unique<TalonSRX>(drive_rr_id);
+  }
 }
 
 void MarkhorHWInterfaceFlipper::write()
 {
   ROS_INFO("HWI FLIPPER WRITE");
-  ROS_INFO("effort command : %f",joint_effort_command_[0]);
+  ROS_INFO("position FL command : %f", joint_position_command_[0]);
+  ROS_INFO("position FR command : %f", joint_position_command_[1]);
+  ROS_INFO("position RL command : %f", joint_position_command_[2]);
+  ROS_INFO("position RR command : %f", joint_position_command_[3]);
+
   // double diff_ang_speed_front_left = cmd[0];
   // double diff_ang_speed_rear_left = cmd[1];
   // double diff_ang_speed_front_right = cmd[2];
