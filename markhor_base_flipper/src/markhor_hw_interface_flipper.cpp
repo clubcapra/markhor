@@ -33,11 +33,10 @@ void MarkhorHWInterfaceFlipper::setupRosControl()
 
     joint_state_interface_.registerHandle(state_handle);
 
-    hardware_interface::JointHandle joint_handle_effort = hardware_interface::JointHandle(
+    hardware_interface::JointHandle joint_handle_position = hardware_interface::JointHandle(
         joint_state_interface_.getHandle(joint_names_[joint_id]), &joint_position_command_[joint_id]);
-    position_joint_interface_.registerHandle(joint_handle_effort);
-    // hardware_interface::JointHandle eff_handle(jnt_state_interface.getHandle(joint_names_[joint_id]),
-    // &cmd[joint_id]); jnt_eff_interface.registerHandle(eff_handle);
+
+    position_joint_interface_.registerHandle(joint_handle_position);
   }
 
   registerInterface(&joint_state_interface_);
@@ -72,10 +71,10 @@ void MarkhorHWInterfaceFlipper::setupCTREDrive()
 void MarkhorHWInterfaceFlipper::write()
 {
   ROS_INFO("HWI FLIPPER WRITE");
-  ROS_INFO("position FL command : %f", joint_position_command_[0]);
-  ROS_INFO("position FR command : %f", joint_position_command_[1]);
-  ROS_INFO("position RL command : %f", joint_position_command_[2]);
-  ROS_INFO("position RR command : %f", joint_position_command_[3]);
+  // ROS_INFO("position FL command : %f", joint_position_command_[0]);
+  // ROS_INFO("position FR command : %f", joint_position_command_[1]);
+  // ROS_INFO("position RL command : %f", joint_position_command_[2]);
+  // ROS_INFO("position RR command : %f", joint_position_command_[3]);
 
   // double diff_ang_speed_front_left = cmd[0];
   // double diff_ang_speed_rear_left = cmd[1];
@@ -84,8 +83,6 @@ void MarkhorHWInterfaceFlipper::write()
 
   // limitDifferentialSpeed(diff_ang_speed_front_left, diff_ang_speed_rear_left, diff_ang_speed_front_right,
   //                        diff_ang_speed_rear_right);
-
-  // Convert value of 0.0 .. -3.14 to 0 .. 100.
 
   ctre::phoenix::unmanaged::FeedEnable(100);
 

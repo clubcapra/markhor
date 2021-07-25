@@ -1,9 +1,26 @@
 #include <ros/ros.h>
 #include "markhor_hw_interface_flipper.hpp"
+#include <sensor_msgs/Joy.h>
+#include <std_msgs/Float64.h>
+
+static std_msgs::Float64 msg;
+
+void joyCallback(const sensor_msgs::Joy::ConstPtr& joy)
+{
+
+  msg.data = joy->axes[1];
+
+}
+
 
 int main(int argc, char** argv)
 {
   ros::init(argc, argv, "markhor_base_flipper_node");
+
+  ros::NodeHandle nh;
+
+  ros::Publisher flipper_fl_pub = nh.advertise<std_msgs::Float64>("flipper_fl_position_controller/command",1000);
+  ros::Subscriber joy_sub = nh.subscribe("/joy",1000,joyCallback);
 
   MarkhorHWInterfaceFlipper hw;
   controller_manager::ControllerManager cm(&hw);
@@ -18,6 +35,8 @@ int main(int argc, char** argv)
   {
     const ros::Time time = ros::Time::now();
     const ros::Duration period = time - prev_time;
+
+    flipper_fl_pub.publish(msg);
 
     hw.read();
     cm.update(time, period);

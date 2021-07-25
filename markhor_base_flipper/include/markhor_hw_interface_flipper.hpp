@@ -48,6 +48,7 @@ public:
 private:
   void setupRosControl();
   void setupCTREDrive();
+  float normalizePosition();
 
   hardware_interface::JointStateInterface joint_state_interface_;
   hardware_interface::PositionJointInterface position_joint_interface_;
