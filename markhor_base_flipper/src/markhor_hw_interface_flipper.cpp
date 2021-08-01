@@ -71,7 +71,7 @@ void MarkhorHWInterfaceFlipper::setupCTREDrive()
 void MarkhorHWInterfaceFlipper::write()
 {
   ROS_INFO("HWI FLIPPER WRITE");
-  // ROS_INFO("position FL command : %f", joint_position_command_[0]);
+  ROS_INFO("position FL command : %f", joint_position_command_[0]);
   // ROS_INFO("position FR command : %f", joint_position_command_[1]);
   // ROS_INFO("position RL command : %f", joint_position_command_[2]);
   // ROS_INFO("position RR command : %f", joint_position_command_[3]);
@@ -87,7 +87,7 @@ void MarkhorHWInterfaceFlipper::write()
   ctre::phoenix::unmanaged::FeedEnable(100);
 
   // // Write to drive
-  // front_left_drive->Set(ControlMode::PercentOutput, front_left_track_vel_msg.data);
+  front_left_drive->Set(ControlMode::PercentOutput, joint_position_command_[0]);
   // front_right_drive->Set(ControlMode::PercentOutput, front_left_track_vel_msg.data);
   // rear_left_drive->Set(ControlMode::PercentOutput, front_left_track_vel_msg.data);
   // rear_right_drive->Set(ControlMode::PercentOutput, front_left_track_vel_msg.data);
