@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+
+<launch>
+    
+    <!-- MS Lifecam Cinema Camera -->
+    <node name="camera_rearview" pkg="usb_cam" type="usb_cam_node" output="screen">
+    <param name="video_device" value="/dev/video0" />
+    <param name="image_width" value="640" />
+    <param name="image_height" value="480" />
+    <param name="pixel_format" value="yuyv" />
+    <param name="camera_frame_id" value="usb_cam" />
+    <param name="camera_name" value="camera_rearview" />
+    <param name="io_method" value="mmap"/>
+    <param name="autofocus" value="false"/>
+    </node>
+
+</launch>
+

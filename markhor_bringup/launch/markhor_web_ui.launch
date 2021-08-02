@@ -1,0 +1,11 @@
+<launch>
+    <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch">
+	<!--<arg name="ssl" value="true"/>-->
+	<!--arg name="certfile" value="/etc/ssl/certs/my.crt"/>-->
+	<!--arg name="keyfile" value="/etc/ssl/private/my.key"/>-->
+    </include>
+    <node name="web_video_server" pkg="web_video_server" type="web_video_server">
+        <param name="ros_threads" type="int" value="4" />
+        <param name="quality" type="int" value="50" />
+    </node>
+</launch>
