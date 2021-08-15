@@ -19,7 +19,7 @@
 // CTRE
 #include "Platform-linux-socket-can.h"
 #include "ctre/Phoenix.h"
-#include "ctre/phoenix/MotorControl/CAN/TalonSRX.h"
+#include "ctre/phoenix/motorcontrol/can/TalonSRX.h"
 #include "ctre/phoenix/unmanaged/Unmanaged.h"
 #include "geometry_msgs/Twist.h"
 #include "std_msgs/String.h"
