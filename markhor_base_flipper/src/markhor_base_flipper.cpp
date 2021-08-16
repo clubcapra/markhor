@@ -19,8 +19,8 @@ int main(int argc, char** argv)
 
   ros::NodeHandle nh;
 
-  ros::Publisher flipper_fl_pub = nh.advertise<std_msgs::Float64>("flipper_fl_position_controller/command",1000);
-  ros::Subscriber joy_sub = nh.subscribe("/joy",1000,joyCallback);
+  // ros::Publisher flipper_fl_pub = nh.advertise<std_msgs::Float64>("flipper_fl_position_controller/command",1000);
+  // ros::Subscriber joy_sub = nh.subscribe("/joy",1000,joyCallback);
 
   MarkhorHWInterfaceFlipper hw;
   controller_manager::ControllerManager cm(&hw);
@@ -36,7 +36,7 @@ int main(int argc, char** argv)
     const ros::Time time = ros::Time::now();
     const ros::Duration period = time - prev_time;
 
-    flipper_fl_pub.publish(msg);
+    // flipper_fl_pub.publish(msg);
 
     hw.read();
     cm.update(time, period);

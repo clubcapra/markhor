@@ -5,7 +5,6 @@
  * The Phoenix WPI extensions are only available on roboRIO.
  * This is necessary if compiling on RaspberryPi, Jetson, Linux-Desktop, etc.
  */
-
 #define Phoenix_No_WPI
 #ifndef Phoenix_No_WPI
 #define Phoenix_WPI

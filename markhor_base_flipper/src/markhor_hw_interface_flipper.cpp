@@ -20,7 +20,7 @@ MarkhorHWInterfaceFlipper::MarkhorHWInterfaceFlipper()
   joint_effort_command_.resize(num_joints, 0.0);
 
   setupRosControl();
-  // setupCTREDrive();
+  setupCTREDrive();
 }
 
 void MarkhorHWInterfaceFlipper::setupRosControl()
@@ -48,31 +48,53 @@ void MarkhorHWInterfaceFlipper::setupCTREDrive()
   std::string interface = "can0";
   ctre::phoenix::platform::can::SetCANInterface(interface.c_str());
 
+  const int kTimeoutMs = 30;
+
   int drive_fl_id, drive_fr_id, drive_rl_id, drive_rr_id = 0;
 
-  if (nh.getParam("/markhor/markhor_base_flipper/front_left", drive_fl_id) == true)
+  if (nh.getParam("/markhor/markhor_base_flipper_node/front_left", drive_fl_id) == true)
   {
+    ROS_INFO("CREATE FRONT LEFT");
     front_left_drive = std::make_unique<TalonSRX>(drive_fl_id);
   }
-  if (nh.getParam("/markhor/markhor_base_flipper/front_right", drive_fr_id) == true)
+  if (nh.getParam("/markhor/markhor_base_flipper_node/front_right", drive_fr_id) == true)
   {
+    ROS_INFO("CREATE FRONT RIGHT");
     front_right_drive = std::make_unique<TalonSRX>(drive_fr_id);
+    front_right_drive->Config_kP(0, 0.01f, kTimeoutMs);
+    front_right_drive->Config_kI(0, 0.0f, kTimeoutMs);
+    front_right_drive->Config_kD(0, 0.0f, kTimeoutMs);
+    front_right_drive->Config_kF(0, 0.0f, kTimeoutMs);
+    front_right_drive->SelectProfileSlot(0, 0);
+
+    front_right_drive->ConfigNominalOutputForward(0.0f, kTimeoutMs);
+    front_right_drive->ConfigNominalOutputReverse(0.0f, kTimeoutMs);
+    front_right_drive->ConfigPeakOutputForward(+1.0f, kTimeoutMs);
+    front_right_drive->ConfigPeakOutputReverse(-1.0f, kTimeoutMs);
+
+    /* how much error is allowed?  This defaults to 0. */
+    front_right_drive->ConfigAllowableClosedloopError(0, 0, kTimeoutMs);
+
+    /* put in a ramp to prevent the user from flipping their mechanism in open loop mode */
+    front_right_drive->ConfigClosedloopRamp(0, kTimeoutMs);
+    front_right_drive->ConfigOpenloopRamp(1, kTimeoutMs);
+
   }
-  if (nh.getParam("/markhor/markhor_base_flipper/rear_left", drive_rl_id) == true)
-  {
-    rear_left_drive = std::make_unique<TalonSRX>(drive_rl_id);
-  }
-  if (nh.getParam("/markhor/markhor_base_flipper/rear_right", drive_rr_id) == true)
-  {
-    rear_right_drive = std::make_unique<TalonSRX>(drive_rr_id);
-  }
+  // if (nh.getParam("/markhor/markhor_base_flipper/rear_left", drive_rl_id) == true)
+  // {
+  //   rear_left_drive = std::make_unique<TalonSRX>(drive_rl_id);
+  // }
+  // if (nh.getParam("/markhor/markhor_base_flipper/rear_right", drive_rr_id) == true)
+  // {
+  //   rear_right_drive = std::make_unique<TalonSRX>(drive_rr_id);
+  // }
 }
 
 void MarkhorHWInterfaceFlipper::write()
 {
-  ROS_INFO("HWI FLIPPER WRITE");
+  // ROS_INFO("HWI FLIPPER WRITE");
   ROS_INFO("position FL command : %f", joint_position_command_[0]);
-  // ROS_INFO("position FR command : %f", joint_position_command_[1]);
+  ROS_INFO("position FR command : %f", joint_position_command_[1]);
   // ROS_INFO("position RL command : %f", joint_position_command_[2]);
   // ROS_INFO("position RR command : %f", joint_position_command_[3]);
 
@@ -87,8 +109,8 @@ void MarkhorHWInterfaceFlipper::write()
   ctre::phoenix::unmanaged::FeedEnable(100);
 
   // // Write to drive
-  front_left_drive->Set(ControlMode::PercentOutput, joint_position_command_[0]);
-  // front_right_drive->Set(ControlMode::PercentOutput, front_left_track_vel_msg.data);
+  front_left_drive->Set(ControlMode::Position, joint_position_command_[0]);
+  front_right_drive->Set(ControlMode::Position, joint_position_command_[1]);
   // rear_left_drive->Set(ControlMode::PercentOutput, front_left_track_vel_msg.data);
   // rear_right_drive->Set(ControlMode::PercentOutput, front_left_track_vel_msg.data);
 }
@@ -96,5 +118,5 @@ void MarkhorHWInterfaceFlipper::write()
 void MarkhorHWInterfaceFlipper::read()
 {
   // Read from the motor API, going to read from the TalonSRX objects
-  ROS_INFO("HWI FLIPPER READs");
+  // ROS_INFO("HWI FLIPPER READs");
 }

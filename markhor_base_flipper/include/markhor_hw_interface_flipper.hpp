@@ -43,7 +43,7 @@ public:
   void read();
 
   ros::NodeHandle nh;
-  int num_joints = 0;
+  int num_joints = 4;
 
 private:
   void setupRosControl();
