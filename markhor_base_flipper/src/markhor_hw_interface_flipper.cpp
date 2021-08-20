@@ -56,29 +56,34 @@ void MarkhorHWInterfaceFlipper::setupCTREDrive()
   {
     ROS_INFO("CREATE FRONT LEFT");
     front_left_drive = std::make_unique<TalonSRX>(drive_fl_id);
+    front_left_drive->ConfigFactoryDefault();
+    front_left_drive->ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Absolute, 0, 50);
+    front_left_drive->SetSensorPhase(false);
+    front_left_drive->SelectProfileSlot(0, 0);
+    front_left_drive->Config_kF(0, 0, 30);
+    front_left_drive->Config_kP(0, 100.0, 30);
+    front_left_drive->Config_kI(0, 0, 30);
+    front_left_drive->Config_kD(0, 0, 30);
   }
   if (nh.getParam("/markhor/markhor_base_flipper_node/front_right", drive_fr_id) == true)
   {
     ROS_INFO("CREATE FRONT RIGHT");
     front_right_drive = std::make_unique<TalonSRX>(drive_fr_id);
-    front_right_drive->Config_kP(0, 0.01f, kTimeoutMs);
-    front_right_drive->Config_kI(0, 0.0f, kTimeoutMs);
-    front_right_drive->Config_kD(0, 0.0f, kTimeoutMs);
-    front_right_drive->Config_kF(0, 0.0f, kTimeoutMs);
+
+    front_right_drive->ConfigFactoryDefault();
+
+    if (front_right_drive->ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Absolute, 0, 50) != 0)
+    {
+      ROS_INFO("ConfigSelectedFeedbackSensor failed");
+    }
+    front_right_drive->SetSensorPhase(false);
     front_right_drive->SelectProfileSlot(0, 0);
+    front_right_drive->Config_kF(0, 0, 30);
+    front_right_drive->Config_kP(0, 1.0, 30);
+    front_right_drive->Config_kI(0, 0, 30);
+    front_right_drive->Config_kD(0, 0, 30);
 
-    front_right_drive->ConfigNominalOutputForward(0.0f, kTimeoutMs);
-    front_right_drive->ConfigNominalOutputReverse(0.0f, kTimeoutMs);
-    front_right_drive->ConfigPeakOutputForward(+1.0f, kTimeoutMs);
-    front_right_drive->ConfigPeakOutputReverse(-1.0f, kTimeoutMs);
-
-    /* how much error is allowed?  This defaults to 0. */
-    front_right_drive->ConfigAllowableClosedloopError(0, 0, kTimeoutMs);
-
-    /* put in a ramp to prevent the user from flipping their mechanism in open loop mode */
-    front_right_drive->ConfigClosedloopRamp(0, kTimeoutMs);
-    front_right_drive->ConfigOpenloopRamp(1, kTimeoutMs);
-
+    // ROS_INFO("Get front_right_drive PID config : %s", front_right_drive_pid.toString());
   }
   // if (nh.getParam("/markhor/markhor_base_flipper/rear_left", drive_rl_id) == true)
   // {
@@ -93,8 +98,8 @@ void MarkhorHWInterfaceFlipper::setupCTREDrive()
 void MarkhorHWInterfaceFlipper::write()
 {
   // ROS_INFO("HWI FLIPPER WRITE");
-  ROS_INFO("position FL command : %f", joint_position_command_[0]);
-  ROS_INFO("position FR command : %f", joint_position_command_[1]);
+  // ROS_INFO("position FL command : %f", joint_position_command_[0]);
+  // ROS_INFO("position FR command : %f", joint_position_command_[1]);
   // ROS_INFO("position RL command : %f", joint_position_command_[2]);
   // ROS_INFO("position RR command : %f", joint_position_command_[3]);
 
@@ -109,8 +114,18 @@ void MarkhorHWInterfaceFlipper::write()
   ctre::phoenix::unmanaged::FeedEnable(100);
 
   // // Write to drive
-  front_left_drive->Set(ControlMode::Position, joint_position_command_[0]);
-  front_right_drive->Set(ControlMode::Position, joint_position_command_[1]);
+  // front_left_drive->Set(ControlMode::Position, joint_position_command_[0]);
+  ROS_INFO("GetPulseWidthPosition %d", front_left_drive->GetSensorCollection().GetPulseWidthPosition() & 0xFFF);
+  ROS_INFO("GetClosedLoopError %lf", front_left_drive->GetClosedLoopError(0));
+  ROS_INFO("GetClosedLoopTarget %lf", front_left_drive->GetClosedLoopTarget(0));
+  if (joint_position_command_[0] != 0.0)
+  {
+    front_left_drive->Set(ControlMode::Position, joint_position_command_[0]);
+  }
+  ROS_INFO("GetPulseWidthPosition %d", front_left_drive->GetSensorCollection().GetPulseWidthPosition() & 0xFFF);
+  ROS_INFO("GetClosedLoopError %lf", front_left_drive->GetClosedLoopError(0));
+  ROS_INFO("GetClosedLoopTarget %lf", front_left_drive->GetClosedLoopTarget(0));
+  // front_right_drive->Set(ControlMode::Position, joint_position_command_[1]);
   // rear_left_drive->Set(ControlMode::PercentOutput, front_left_track_vel_msg.data);
   // rear_right_drive->Set(ControlMode::PercentOutput, front_left_track_vel_msg.data);
 }
