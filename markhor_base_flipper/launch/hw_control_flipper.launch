@@ -9,6 +9,10 @@
         <param name="front_right" type="int" value="12" />
         <param name="rear_left" type="int" value="13" />
         <param name="rear_right" type="int" value="14" />
+        <!-- <param name="kP" type="double" value="1.0" />
+        <param name="kI" type="double" value="0" />
+        <param name="kD" type="double" value="0" /> -->
+        <!-- <param name="ratio" type="double" value="10" /> -->
     </node>
 
     <!-- Load controller config -->

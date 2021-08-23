@@ -49,6 +49,7 @@ private:
   void setupRosControl();
   void setupCTREDrive();
   float normalizePosition();
+  void PrintDriveInfo(std::unique_ptr<TalonSRX>& drive);
 
   hardware_interface::JointStateInterface joint_state_interface_;
   hardware_interface::PositionJointInterface position_joint_interface_;
@@ -66,5 +67,6 @@ private:
   std::unique_ptr<TalonSRX> front_right_drive;
   std::unique_ptr<TalonSRX> rear_left_drive;
   std::unique_ptr<TalonSRX> rear_right_drive;
+  int ratio = 1;
 };
 #endif  // MARKHOR_HW_INTERFACE_H
