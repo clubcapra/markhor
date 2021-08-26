@@ -22,48 +22,14 @@ MarkhorHWInterfaceFlipper::MarkhorHWInterfaceFlipper()
   joint_effort_command_.resize(num_joints, 0.0);
 
   setupRosControl();
-  setupCTREDrive();
+  setupCtreDrive();
 
   nh.getParam("/markhor/markhor_base_flipper_node/config_folder_location", config_folder_str);
   nh.getParam("/markhor/markhor_base_flipper_node/config_file_1", config_file_1);
   nh.getParam("/markhor/markhor_base_flipper_node/config_file_2", config_file_2);
-  nh.getParam("/markhor/markhor_base_flipper_node/config_file_3", config_file_3);
-  uint count = 0;
-  while (1)
-  {
-    if (count % 3 == 0)
-    {
-      file.open((config_folder_str + config_file_1).c_str(), std::fstream::out | std::fstream::trunc);
-      if (!file)
-      {
-        ROS_INFO("error openning file %s", config_file_1.c_str());
-      }
-      file << "test : " << count++ << std::endl;
-      file.rdbuf()->pubsync();
-    }
-    else if (count % 3 == 1)
-    {
-      file.open((config_folder_str + config_file_2).c_str(), std::fstream::out | std::fstream::trunc);
-      if (!file)
-      {
-        ROS_INFO("error openning file %s", config_file_2.c_str());
-      }
-      file << "test2 : " << count++ << std::endl;
-      file.rdbuf()->pubsync();
-    }
-    else
-    {
-      file.open((config_folder_str + config_file_3).c_str(), std::fstream::out | std::fstream::trunc);
-      if (!file)
-      {
-        ROS_INFO("error openning file %s", config_file_3.c_str());
-      }
-      file << "test3 : " << count++ << std::endl;
-      file.rdbuf()->pubsync();
-    }
 
-    file.close();
-  }
+  // saveDrivePosition();
+  loadDrivePosition();
 }
 
 void MarkhorHWInterfaceFlipper::setupRosControl()
@@ -86,7 +52,7 @@ void MarkhorHWInterfaceFlipper::setupRosControl()
   registerInterface(&position_joint_interface_);
 }
 
-void MarkhorHWInterfaceFlipper::setupCTREDrive()
+void MarkhorHWInterfaceFlipper::setupCtreDrive()
 {
   std::string interface = "can0";
   ctre::phoenix::platform::can::SetCANInterface(interface.c_str());
@@ -218,7 +184,7 @@ void MarkhorHWInterfaceFlipper::write()
   {
     rear_left_drive->Set(ControlMode::Position, joint_position_command_[2]);
   }
-  saveDrivePosition(rear_left_drive);
+  // saveDrivePosition();
   // front_right_drive->Set(ControlMode::Position, joint_position_command_[1]);
   // rear_left_drive->Set(ControlMode::Position, front_left_track_vel_msg.data);
   // rear_right_drive->Set(ControlMode::Position, front_left_track_vel_msg.data);
@@ -238,6 +204,66 @@ void MarkhorHWInterfaceFlipper::printDriveInfo(std::unique_ptr<TalonSRX>& drive)
   ROS_INFO("GetClosedLoopTarget %f", drive->GetClosedLoopTarget(0));
 }
 
-void MarkhorHWInterfaceFlipper::saveDrivePosition(std::unique_ptr<TalonSRX>& drive)
+void MarkhorHWInterfaceFlipper::saveDrivePosition()
 {
+  // TODO : Only write if the value is different
+
+  if (alternating_value == true)
+  {
+    alternating_value = false;
+    writeDrivePositionToFile(config_file_1);
+  }
+  else
+  {
+    alternating_value = true;
+    writeDrivePositionToFile(config_file_2);
+  }
+
+  drive_config_file.close();
+}
+
+void MarkhorHWInterfaceFlipper::writeDrivePositionToFile(std::string config_file_name)
+{
+  drive_config_file.open((config_folder_str + config_file_name).c_str(), std::fstream::out | std::fstream::trunc);
+  if (!drive_config_file)
+  {
+    ROS_INFO("error openning file %s", config_file_name.c_str());
+  }
+  drive_config_file << rear_left_drive->GetDeviceID() << ":"
+                    << rear_left_drive->GetSensorCollection().GetPulseWidthPosition() << std::endl;
+  drive_config_file.rdbuf()->pubsync();
+}
+
+void MarkhorHWInterfaceFlipper::loadDrivePosition()
+{
+  // Check the first file is not empty, else check the second
+  std::fstream drive_config_file_1;
+  drive_config_file_1.open((config_folder_str + config_file_1).c_str(), std::fstream::in);
+  if (drive_config_file_1.peek() != std::fstream::traits_type::eof())
+  {
+    ROS_INFO("TEST 1");
+    // readDrivePositionFromFile(config_file_1);
+    drive_config_file_1.close();
+  }
+
+  // BUG PAS CAPABLE DE LIRE ICI malgré que le fichier est plein
+
+  drive_config_file_1.open((config_folder_str + config_file_2).c_str(), std::fstream::in);
+  if (drive_config_file_1.peek() != std::fstream::traits_type::eof())
+  {
+    ROS_INFO("TEST 2");
+    // readDrivePositionFromFile(config_file_2);
+    drive_config_file_1.close();
+  }
+  else
+  {
+    ROS_INFO("BOTH FILE EMPTY !!!");
+  }
+}
+
+void MarkhorHWInterfaceFlipper::readDrivePositionFromFile(std::string config_file_name)
+{
+  std::string line;
+  std::getline(drive_config_file, line);
+  ROS_INFO("[%s] contains: %s", config_file_name.c_str(), line.c_str());
 }

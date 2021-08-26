@@ -12,13 +12,12 @@
         <param name="rear_left_drive_upper_limit" type="double" value="117000"/>
         <param name="rear_right" type="int" value="14" />
         <param name="kP" type="double" value="1.27" />
-        <param name="kI" type="double" value="0.0000" />
+        <param name="kI" type="double" value="0" />
         <param name="kD" type="double" value="0" />
         <param name="ratio" type="double" value="41.3"/>
         <param name="config_folder_location" type="string" value="/home/markhor/Code/markhor_ws/src/markhor/markhor_base_flipper/config"/>
         <param name="config_file_1" type="string" value="/drives_calibration_1.cfg"/>
         <param name="config_file_2" type="string" value="/drives_calibration_2.cfg"/>
-        <param name="config_file_3" type="string" value="/drives_calibration_3.cfg"/>
     </node>
 
     <!-- Load controller config -->

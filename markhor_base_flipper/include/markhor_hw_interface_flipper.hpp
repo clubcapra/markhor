@@ -49,9 +49,13 @@ public:
 
 private:
   void setupRosControl();
-  void setupCTREDrive();
+  void setupCtreDrive();
+  void setupCtreEncoder();
   void printDriveInfo(std::unique_ptr<TalonSRX>& drive);
-  void saveDrivePosition(std::unique_ptr<TalonSRX>& drive);
+  void saveDrivePosition();
+  void writeDrivePositionToFile(std::string config_file_name);
+  void loadDrivePosition();
+  void readDrivePositionFromFile(std::string config_file_name);
 
   hardware_interface::JointStateInterface joint_state_interface_;
   hardware_interface::PositionJointInterface position_joint_interface_;
@@ -72,10 +76,11 @@ private:
   std::unique_ptr<TalonSRX> rear_right_drive;
   int ratio = 1;
 
-  std::fstream file;
+  std::fstream drive_config_file;
   std::string config_file_1;
   std::string config_file_2;
-  std::string config_file_3;
   std::string config_folder_str;
+
+  bool alternating_value = true;
 };
 #endif  // MARKHOR_HW_INTERFACE_H
