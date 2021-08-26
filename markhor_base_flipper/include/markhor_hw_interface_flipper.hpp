@@ -32,6 +32,8 @@
 #include <string>
 #include <thread>
 #include <vector>
+#include <iostream>
+#include <fstream>
 
 constexpr unsigned int NUM_JOINTS = 4;
 
@@ -48,8 +50,8 @@ public:
 private:
   void setupRosControl();
   void setupCTREDrive();
-  float normalizePosition();
-  void PrintDriveInfo(std::unique_ptr<TalonSRX>& drive);
+  void printDriveInfo(std::unique_ptr<TalonSRX>& drive);
+  void saveDrivePosition(std::unique_ptr<TalonSRX>& drive);
 
   hardware_interface::JointStateInterface joint_state_interface_;
   hardware_interface::PositionJointInterface position_joint_interface_;
@@ -66,7 +68,14 @@ private:
   std::unique_ptr<TalonSRX> front_left_drive;
   std::unique_ptr<TalonSRX> front_right_drive;
   std::unique_ptr<TalonSRX> rear_left_drive;
+  float rear_left_drive_upper_limit, rear_left_drive_lower_limit;
   std::unique_ptr<TalonSRX> rear_right_drive;
   int ratio = 1;
+
+  std::fstream file;
+  std::string config_file_1;
+  std::string config_file_2;
+  std::string config_file_3;
+  std::string config_folder_str;
 };
 #endif  // MARKHOR_HW_INTERFACE_H
