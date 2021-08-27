@@ -154,6 +154,11 @@ void MarkhorHWInterfaceFlipper::setupCtreDrive()
 
 void MarkhorHWInterfaceFlipper::write()
 {
+  if (hasResetOccurred() == true)
+  {
+    loadDrivePosition();
+  }
+
   // ROS_INFO("HWI FLIPPER WRITE");
   // ROS_INFO("position FL command : %f", joint_position_command_[0]);
   // ROS_INFO("position FR command : %f", joint_position_command_[1]);
@@ -188,9 +193,9 @@ void MarkhorHWInterfaceFlipper::read()
 
 void MarkhorHWInterfaceFlipper::printDriveInfo(std::unique_ptr<TalonSRX>& drive)
 {
-  // ROS_INFO("GetPulseWidthPosition %d", drive->GetSensorCollection().GetPulseWidthPosition() & 0xFFF);
+  ROS_INFO("HasResetOccurred : %s", drive->HasResetOccurred() ? "true" : "false");
   ROS_INFO("GetPulseWidthPosition %d", drive->GetSensorCollection().GetPulseWidthPosition());
-  ROS_INFO("GetClosedLoopError %d", drive->GetClosedLoopError(0) / ratio);
+  ROS_INFO("GetClosedLoopError %d", drive->GetClosedLoopError(0));
   ROS_INFO("GetClosedLoopTarget %f", drive->GetClosedLoopTarget(0));
 }
 
@@ -259,7 +264,10 @@ void MarkhorHWInterfaceFlipper::loadDrivePosition()
   else
   {
     is_drives_config_file_2_empty = true;
-    ROS_WARN("drives config file 2 is empty");
+    if (drive_config_file_2.peek() == std::fstream::traits_type::eof())
+    {
+      ROS_WARN("drives config file 2 is empty");
+    }
   }
 
   if (is_drives_config_file_1_empty == true && is_drives_config_file_2_empty == true)
@@ -328,4 +336,37 @@ void MarkhorHWInterfaceFlipper::applyDrivePosition(std::unique_ptr<TalonSRX>& dr
     error = drive->GetSensorCollection().SetPulseWidthPosition(drive_position, 30);
     ROS_INFO("SetPulseWidthPosition error code : %d", error);
   } while (error != ErrorCode::OKAY);
+}
+
+bool MarkhorHWInterfaceFlipper::hasResetOccurred()
+{
+  if (front_left_drive)
+  {
+    if (front_left_drive->HasResetOccurred())
+    {
+      return true;
+    }
+  }
+  if (front_right_drive)
+  {
+    if (front_right_drive->HasResetOccurred())
+    {
+      return true;
+    }
+  }
+  if (rear_left_drive)
+  {
+    if (rear_left_drive->HasResetOccurred())
+    {
+      return true;
+    }
+  }
+  if (rear_right_drive)
+  {
+    if (rear_right_drive->HasResetOccurred())
+    {
+      return true;
+    }
+  }
+  return false;
 }
