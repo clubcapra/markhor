@@ -28,7 +28,6 @@ MarkhorHWInterfaceFlipper::MarkhorHWInterfaceFlipper()
   nh.getParam("/markhor/markhor_base_flipper_node/config_file_1", config_file_1);
   nh.getParam("/markhor/markhor_base_flipper_node/config_file_2", config_file_2);
 
-  // saveDrivePosition();
   loadDrivePosition();
 }
 
@@ -58,8 +57,6 @@ void MarkhorHWInterfaceFlipper::setupCtreDrive()
   ctre::phoenix::platform::can::SetCANInterface(interface.c_str());
 
   const int kTimeoutMs = 30;
-
-  int drive_fl_id, drive_fr_id, drive_rl_id, drive_rr_id = 0;
 
   // if (nh.getParam("/markhor/markhor_base_flipper_node/front_left", drive_fl_id) == true)
   // {
@@ -126,13 +123,6 @@ void MarkhorHWInterfaceFlipper::setupCtreDrive()
     ROS_INFO("CREATE REAR LEFT");
     rear_left_drive = std::make_unique<TalonSRX>(drive_rl_id);
     rear_left_drive->ConfigFactoryDefault();
-    int absolutePosition = rear_left_drive->GetSensorCollection().GetPulseWidthPosition();
-    int error;
-    do
-    {
-      error = rear_left_drive->GetSensorCollection().SetPulseWidthPosition(-81925, 30);
-      ROS_INFO("SetPulseWidthPosition error code : %d", error);
-    } while (error != ErrorCode::OKAY);
     rear_left_drive->ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Absolute, 0, 50);
     rear_left_drive->SetSensorPhase(true);
     rear_left_drive->ConfigNominalOutputForward(0, kTimeoutMs);
@@ -184,7 +174,7 @@ void MarkhorHWInterfaceFlipper::write()
   {
     rear_left_drive->Set(ControlMode::Position, joint_position_command_[2]);
   }
-  // saveDrivePosition();
+  saveDrivePosition();
   // front_right_drive->Set(ControlMode::Position, joint_position_command_[1]);
   // rear_left_drive->Set(ControlMode::Position, front_left_track_vel_msg.data);
   // rear_right_drive->Set(ControlMode::Position, front_left_track_vel_msg.data);
@@ -236,34 +226,106 @@ void MarkhorHWInterfaceFlipper::writeDrivePositionToFile(std::string config_file
 
 void MarkhorHWInterfaceFlipper::loadDrivePosition()
 {
-  // Check the first file is not empty, else check the second
-  std::fstream drive_config_file_1;
+  bool is_drives_config_file_1_empty, is_drives_config_file_2_empty;
+
+  // TODO : there's doesn't need to have two fstream object, but right now it doesn't work with only one
+  std::fstream drive_config_file_1, drive_config_file_2;
+
+  // Check if the files exists
   drive_config_file_1.open((config_folder_str + config_file_1).c_str(), std::fstream::in);
-  if (drive_config_file_1.peek() != std::fstream::traits_type::eof())
+  drive_config_file_2.open((config_folder_str + config_file_2).c_str(), std::fstream::in);
+  if (drive_config_file_1.good() == false || drive_config_file_2.good() == false)
   {
-    ROS_INFO("TEST 1");
-    // readDrivePositionFromFile(config_file_1);
-    drive_config_file_1.close();
+    ROS_FATAL("Missing drives calibration file(s). You need to either create the files or calibrate it before using "
+              "markhor_base_flipper node");
+    ros::shutdown();
   }
 
-  // BUG PAS CAPABLE DE LIRE ICI malgré que le fichier est plein
-
-  drive_config_file_1.open((config_folder_str + config_file_2).c_str(), std::fstream::in);
+  // Check if the files are empty
   if (drive_config_file_1.peek() != std::fstream::traits_type::eof())
   {
-    ROS_INFO("TEST 2");
-    // readDrivePositionFromFile(config_file_2);
-    drive_config_file_1.close();
+    is_drives_config_file_1_empty = false;
   }
   else
   {
-    ROS_INFO("BOTH FILE EMPTY !!!");
+    is_drives_config_file_1_empty = true;
+    ROS_WARN("drives config file 1 is empty");
+  }
+
+  if (is_drives_config_file_1_empty == true && drive_config_file_2.peek() != std::fstream::traits_type::eof())
+  {
+    is_drives_config_file_2_empty = false;
+  }
+  else
+  {
+    is_drives_config_file_2_empty = true;
+    ROS_WARN("drives config file 2 is empty");
+  }
+
+  if (is_drives_config_file_1_empty == true && is_drives_config_file_2_empty == true)
+  {
+    // TODO : Add link to documentation on how to calibrate the flipper and create the files
+    ROS_FATAL("Drives configuration files are empty. Please calibrate before using markhor_base_flipper node");
+    ros::shutdown();
+  }
+
+  // Read the files
+  if (is_drives_config_file_1_empty == false)
+  {
+    readDrivePositionFromFile(config_file_1, drive_config_file_1);
+    drive_config_file_1.close();
+  }
+  if (is_drives_config_file_2_empty == false)
+  {
+    readDrivePositionFromFile(config_file_2, drive_config_file_2);
+    drive_config_file_2.close();
   }
 }
 
-void MarkhorHWInterfaceFlipper::readDrivePositionFromFile(std::string config_file_name)
+void MarkhorHWInterfaceFlipper::readDrivePositionFromFile(std::string config_file_name, std::fstream& config_file)
 {
   std::string line;
-  std::getline(drive_config_file, line);
-  ROS_INFO("[%s] contains: %s", config_file_name.c_str(), line.c_str());
+  while (std::getline(config_file, line))
+  {
+    parseDrivePosition(line);
+  }
+}
+
+void MarkhorHWInterfaceFlipper::parseDrivePosition(std::string line)
+{
+  int drive_id;
+  float drive_position;
+  std::string::size_type pos = line.find(':');
+  if (pos != std::string::npos)
+  {
+    drive_id = std::stoi(line.substr(0, pos));
+    drive_position = std::stof(line.substr(pos + 1, line.length()));
+    std::unique_ptr<TalonSRX> tmp_drive;
+    if (drive_id == drive_fl_id)
+    {
+      applyDrivePosition(front_left_drive, drive_position);
+    }
+    if (drive_id == drive_fr_id)
+    {
+      applyDrivePosition(front_right_drive, drive_position);
+    }
+    if (drive_id == drive_rl_id)
+    {
+      applyDrivePosition(rear_left_drive, drive_position);
+    }
+    if (drive_id == drive_rr_id)
+    {
+      applyDrivePosition(rear_right_drive, drive_position);
+    }
+  }
+}
+
+void MarkhorHWInterfaceFlipper::applyDrivePosition(std::unique_ptr<TalonSRX>& drive, float drive_position)
+{
+  int error;
+  do
+  {
+    error = drive->GetSensorCollection().SetPulseWidthPosition(drive_position, 30);
+    ROS_INFO("SetPulseWidthPosition error code : %d", error);
+  } while (error != ErrorCode::OKAY);
 }

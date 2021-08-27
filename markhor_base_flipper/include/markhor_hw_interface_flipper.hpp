@@ -55,7 +55,11 @@ private:
   void saveDrivePosition();
   void writeDrivePositionToFile(std::string config_file_name);
   void loadDrivePosition();
-  void readDrivePositionFromFile(std::string config_file_name);
+  void readDrivePositionFromFile(std::string config_file_name, std::fstream& config_file);
+  void parseDrivePosition(std::string line);
+  void applyDrivePosition(std::unique_ptr<TalonSRX>& drive, float drive_position);
+
+  int drive_fl_id, drive_fr_id, drive_rl_id, drive_rr_id = 0;
 
   hardware_interface::JointStateInterface joint_state_interface_;
   hardware_interface::PositionJointInterface position_joint_interface_;
