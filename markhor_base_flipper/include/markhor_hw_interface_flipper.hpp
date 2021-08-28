@@ -87,5 +87,9 @@ private:
   std::string config_folder_str;
 
   bool alternating_value = true;
+
+  float base_position;
+  bool HasResetEventOccurred = false;
+  float accumulator_rl_test = 0;
 };
 #endif  // MARKHOR_HW_INTERFACE_H

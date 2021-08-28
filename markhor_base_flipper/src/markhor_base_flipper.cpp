@@ -4,23 +4,38 @@
 #include <std_msgs/Float64.h>
 
 static std_msgs::Float64 msg;
-
+static float accumulator_rl = 0;
+static ros::Publisher flipper_fl_pub;
+static ros::Publisher flipper_fr_pub;
+static ros::Publisher flipper_rl_pub;
+static ros::Publisher flipper_rr_pub;
+static float accumulator = 0;
 void joyCallback(const sensor_msgs::Joy::ConstPtr& joy)
 {
-
-  msg.data = joy->axes[1];
-
+  std_msgs::Float64 msg;
+  if (joy->buttons[0] == 1)
+  {
+    msg.data = joy->axes[1] * 2000;  // TODO : Set the multiplicator inside the launch file
+    flipper_rl_pub.publish(msg);
+  }
+  else
+  {
+    msg.data = joy->axes[1] * 0;
+    flipper_rl_pub.publish(msg);
+  }
 }
-
 
 int main(int argc, char** argv)
 {
   ros::init(argc, argv, "markhor_base_flipper_node");
-
   ros::NodeHandle nh;
 
-  // ros::Publisher flipper_fl_pub = nh.advertise<std_msgs::Float64>("flipper_fl_position_controller/command",1000);
-  // ros::Subscriber joy_sub = nh.subscribe("/joy",1000,joyCallback);
+  flipper_fl_pub = nh.advertise<std_msgs::Float64>("flipper_fl_position_controller/command", 1000);
+  flipper_fr_pub = nh.advertise<std_msgs::Float64>("flipper_fr_position_controller/command", 1000);
+  flipper_rl_pub = nh.advertise<std_msgs::Float64>("flipper_rl_position_controller/command", 1000);
+  flipper_rr_pub = nh.advertise<std_msgs::Float64>("flipper_rr_position_controller/command", 1000);
+
+  ros::Subscriber joy_sub = nh.subscribe("/joy", 1000, joyCallback);
 
   MarkhorHWInterfaceFlipper hw;
   controller_manager::ControllerManager cm(&hw);
