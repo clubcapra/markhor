@@ -55,6 +55,8 @@ private:
   void printDriveInfo(std::unique_ptr<TalonSRX>& drive);
   void saveDrivePosition();
   void writeDrivePositionToFile(std::string config_file_name);
+  std::string getDrivePositionAndIdFormated(std::unique_ptr<TalonSRX>& drive);
+
   void loadDrivePosition();
   void readDrivePositionFromFile(std::string config_file_name, std::fstream& config_file);
   void parseDrivePosition(std::string line);
@@ -75,10 +77,13 @@ private:
   std::vector<double> joint_effort_command_;
 
   std::unique_ptr<TalonSRX> front_left_drive;
+  float front_left_drive_upper_limit, front_left_drive_lower_limit;
   std::unique_ptr<TalonSRX> front_right_drive;
+  float front_right_drive_upper_limit, front_right_drive_lower_limit;
   std::unique_ptr<TalonSRX> rear_left_drive;
   float rear_left_drive_upper_limit, rear_left_drive_lower_limit;
   std::unique_ptr<TalonSRX> rear_right_drive;
+  float rear_right_drive_upper_limit, rear_right_drive_lower_limit;
   int ratio = 1;
 
   std::fstream drive_config_file;
@@ -88,8 +93,14 @@ private:
 
   bool alternating_value = true;
 
-  float base_position;
+  float front_left_drive_base_position;
+  float front_right_drive_base_position;
+  float rear_left_drive_base_position;
+  float rear_right_drive_base_position;
   bool HasResetEventOccurred = false;
-  float accumulator_rl_test = 0;
+  float accumulator_fr = 0;
+  float accumulator_fl = 0;
+  float accumulator_rl = 0;
+  float accumulator_rr = 0;
 };
 #endif  // MARKHOR_HW_INTERFACE_H

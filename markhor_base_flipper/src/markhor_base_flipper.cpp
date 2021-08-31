@@ -15,13 +15,15 @@ void joyCallback(const sensor_msgs::Joy::ConstPtr& joy)
   std_msgs::Float64 msg;
   if (joy->buttons[0] == 1)
   {
-    msg.data = joy->axes[1] * 2000;  // TODO : Set the multiplicator inside the launch file
+    msg.data = joy->axes[1] * 1500;  // TODO : Set the multiplicator inside the launch file
     flipper_rl_pub.publish(msg);
+    flipper_rr_pub.publish(msg);
   }
   else
   {
     msg.data = joy->axes[1] * 0;
     flipper_rl_pub.publish(msg);
+    flipper_rr_pub.publish(msg);
   }
 }
 

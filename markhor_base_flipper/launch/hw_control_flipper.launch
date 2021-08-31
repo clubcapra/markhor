@@ -6,13 +6,23 @@
     <!-- Load hardware interface-->
     <node name="markhor_base_flipper_node" pkg="markhor_base_flipper" type="markhor_base_flipper_node" ns="$(arg robot_namespace)" output="screen">
         <param name="front_left" type="int" value="11" />
+        <param name="front_left_drive_upper_limit" type="double" value="1"/>
+        <param name="front_left_drive_lower_limit" type="double" value="-1"/>
+
         <param name="front_right" type="int" value="12" />
+        <param name="front_right_drive_upper_limit" type="double" value="1"/>
+        <param name="front_right_drive_lower_limit" type="double" value="-1"/>
+
         <param name="rear_left" type="int" value="13" />
-        <param name="rear_left_drive_lower_limit" type="double" value="35000"/>
         <param name="rear_left_drive_upper_limit" type="double" value="120000"/>
+        <param name="rear_left_drive_lower_limit" type="double" value="45000"/>
+
         <param name="rear_right" type="int" value="14" />
+        <param name="rear_right_drive_upper_limit" type="double" value="120000"/>
+        <param name="rear_right_drive_lower_limit" type="double" value="45000"/>
+
         <param name="kP" type="double" value="1.27" />
-        <param name="kI" type="double" value="0" />
+        <param name="kI" type="double" value="0.0001" />
         <param name="kD" type="double" value="0" />
         <param name="ratio" type="double" value="41.3"/>
         <param name="config_folder_location" type="string" value="/home/markhor/Code/markhor_ws/src/markhor/markhor_base_flipper/config"/>
