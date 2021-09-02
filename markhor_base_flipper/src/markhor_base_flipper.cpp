@@ -2,6 +2,7 @@
 #include "markhor_hw_interface_flipper.hpp"
 #include <sensor_msgs/Joy.h>
 #include <std_msgs/Float64.h>
+#include "std_srvs/Trigger.h"
 
 static std_msgs::Float64 msg;
 static float accumulator_rl = 0;
@@ -10,10 +11,14 @@ static ros::Publisher flipper_fr_pub;
 static ros::Publisher flipper_rl_pub;
 static ros::Publisher flipper_rr_pub;
 static float accumulator = 0;
+
+static bool flipper_mode_front = false;
+static bool flipper_mode_back = false;
+
 void joyCallback(const sensor_msgs::Joy::ConstPtr& joy)
 {
   std_msgs::Float64 msg;
-  if (joy->buttons[0] == 1)
+  if (flipper_mode_front == true)
   {
     msg.data = joy->axes[1] * 1500;  // TODO : Set the multiplicator inside the launch file
     flipper_rl_pub.publish(msg);
@@ -26,7 +31,7 @@ void joyCallback(const sensor_msgs::Joy::ConstPtr& joy)
     flipper_rr_pub.publish(msg);
   }
 
-  if (joy->buttons[1] == 1)
+  if (flipper_mode_back == true)
   {
     msg.data = joy->axes[1] * 1350;  // TODO : Set the multiplicator inside the launch file
     flipper_fl_pub.publish(msg);
@@ -38,6 +43,38 @@ void joyCallback(const sensor_msgs::Joy::ConstPtr& joy)
     flipper_fl_pub.publish(msg);
     flipper_fr_pub.publish(msg);
   }
+}
+
+bool flipperModeFrontEnable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Response& res)
+{
+  flipper_mode_front = true;
+  res.message = "successfully enable flipper mode front";
+  res.success = static_cast<unsigned char>(true);
+  return true;
+}
+
+bool flipperModeFrontDisable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Response& res)
+{
+  flipper_mode_front = false;
+  res.message = "successfully disable flipper mode front";
+  res.success = static_cast<unsigned char>(true);
+  return true;
+}
+
+bool flipperModeBackEnable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Response& res)
+{
+  flipper_mode_back = true;
+  res.message = "successfully enable flipper mode back";
+  res.success = static_cast<unsigned char>(true);
+  return true;
+}
+
+bool flipperModeBackDisable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Response& res)
+{
+  flipper_mode_back = false;
+  res.message = "successfully disable flipper mode back";
+  res.success = static_cast<unsigned char>(true);
+  return true;
 }
 
 int main(int argc, char** argv)
@@ -52,6 +89,16 @@ int main(int argc, char** argv)
 
   ros::Subscriber joy_sub = nh.subscribe("/joy", 1000, joyCallback);
 
+  ros::ServiceServer flipper_mode_front_enable =
+      nh.advertiseService("flipper_mode_front_enable", flipperModeFrontEnable);
+  ros::ServiceServer flipper_mode_front_disable =
+      nh.advertiseService("flipper_mode_front_disable", flipperModeFrontDisable);
+
+  ros::ServiceServer flipper_mode_back_enable = 
+      nh.advertiseService("flipper_mode_back_enable", flipperModeBackEnable);
+  ros::ServiceServer flipper_mode_back_disable =
+      nh.advertiseService("flipper_mode_back_disable", flipperModeBackDisable);
+
   MarkhorHWInterfaceFlipper hw;
   controller_manager::ControllerManager cm(&hw);
 
@@ -65,8 +112,6 @@ int main(int argc, char** argv)
   {
     const ros::Time time = ros::Time::now();
     const ros::Duration period = time - prev_time;
-
-    // flipper_fl_pub.publish(msg);
 
     hw.read();
     cm.update(time, period);
