@@ -1,7 +1,7 @@
 #include <markhor_hw_interface_flipper.hpp>
 #include <string>
 #include <unistd.h>
-#include <SupplyCurrentLimitConfiguration.h>
+#include <ctre/phoenix/motorcontrol/SupplyCurrentLimitConfiguration.h>
 
 MarkhorHWInterfaceFlipper::MarkhorHWInterfaceFlipper()
 {
