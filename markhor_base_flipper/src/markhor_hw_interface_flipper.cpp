@@ -1,6 +1,7 @@
 #include <markhor_hw_interface_flipper.hpp>
 #include <string>
 #include <unistd.h>
+#include <SupplyCurrentLimitConfiguration.h>
 
 MarkhorHWInterfaceFlipper::MarkhorHWInterfaceFlipper()
 {
@@ -56,6 +57,10 @@ void MarkhorHWInterfaceFlipper::setupCtreDrive()
   std::string interface = "can0";
   ctre::phoenix::platform::can::SetCANInterface(interface.c_str());
 
+  SupplyCurrentLimitConfiguration current_limit_config;
+  current_limit_config.enable = true;
+  current_limit_config.currentLimit = 89;
+
   const int kTimeoutMs = 30;
   float kP, kI, kD = 0.0;
   nh.getParam("/markhor/markhor_base_flipper_node/kP", kP);
@@ -68,6 +73,7 @@ void MarkhorHWInterfaceFlipper::setupCtreDrive()
     front_left_drive->ConfigFactoryDefault();
     front_left_drive->ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Absolute, 0, 50);
     front_left_drive->SetSensorPhase(true);
+    front_left_drive->ConfigSupplyCurrentLimit(current_limit_config);
     front_left_drive->ConfigNominalOutputForward(0, kTimeoutMs);
     front_left_drive->ConfigNominalOutputReverse(0, kTimeoutMs);
 
@@ -95,6 +101,7 @@ void MarkhorHWInterfaceFlipper::setupCtreDrive()
     front_right_drive->ConfigFactoryDefault();
     front_right_drive->ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Absolute, 0, 50);
     front_right_drive->SetSensorPhase(true);
+    front_right_drive->ConfigSupplyCurrentLimit(current_limit_config);
     front_right_drive->ConfigNominalOutputForward(0, kTimeoutMs);
     front_right_drive->ConfigNominalOutputReverse(0, kTimeoutMs);
 
@@ -129,6 +136,7 @@ void MarkhorHWInterfaceFlipper::setupCtreDrive()
     nh.getParam("/markhor/markhor_base_flipper_node/rear_left_drive_peak_output_reverse",
                 rear_left_peak_output_reverse);
 
+    rear_left_drive->ConfigSupplyCurrentLimit(current_limit_config);
     rear_left_drive->ConfigNominalOutputForward(0, kTimeoutMs);
     rear_left_drive->ConfigNominalOutputReverse(0, kTimeoutMs);
     rear_left_drive->ConfigPeakOutputForward(rear_left_peak_output_forward, kTimeoutMs);
@@ -149,6 +157,7 @@ void MarkhorHWInterfaceFlipper::setupCtreDrive()
     rear_right_drive->ConfigFactoryDefault();
     rear_right_drive->ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Absolute, 0, 50);
     rear_right_drive->SetSensorPhase(true);
+    rear_right_drive->ConfigSupplyCurrentLimit(current_limit_config);
     rear_right_drive->ConfigNominalOutputForward(0, kTimeoutMs);
     rear_right_drive->ConfigNominalOutputReverse(0, kTimeoutMs);
 
@@ -174,7 +183,8 @@ void MarkhorHWInterfaceFlipper::setupCtreDrive()
 
 void MarkhorHWInterfaceFlipper::write()
 {
-  ROS_INFO("************");
+  // Write to drive
+
   if (hasResetOccurred() == true)
   {
     loadDrivePosition();
@@ -182,13 +192,6 @@ void MarkhorHWInterfaceFlipper::write()
 
   ctre::phoenix::unmanaged::FeedEnable(100);
 
-  // Write to drive
-  ROS_INFO("position FL command : %f", joint_position_command_[0]);
-  ROS_INFO("FL lower limit : %f", front_left_drive_lower_limit);
-  ROS_INFO("FL upper limit : %f", front_left_drive_upper_limit);
-  ROS_INFO("front_left_drive_base_position : %f", front_left_drive_base_position);
-  ROS_INFO("accumulator_fl : %f", accumulator_fl);
-  ROS_INFO("Target : %f", front_left_drive_base_position + accumulator_fl + joint_position_command_[0]);
   printDriveInfo(front_left_drive);
   if (front_left_drive_lower_limit <= front_left_drive_base_position + accumulator_fl + joint_position_command_[0] &&
       front_left_drive_base_position + accumulator_fl + joint_position_command_[0] < front_left_drive_upper_limit)
@@ -198,13 +201,7 @@ void MarkhorHWInterfaceFlipper::write()
     ROS_INFO("target = [%f]", target);
     front_left_drive->Set(ControlMode::Position, target);
   }
-  ROS_INFO("-------------");
-  ROS_INFO("position FR command : %f", joint_position_command_[1]);
-  ROS_INFO("FR lower limit : %f", front_right_drive_lower_limit);
-  ROS_INFO("FR upper limit : %f", front_right_drive_upper_limit);
-  ROS_INFO("front_right_drive_base_position : %f", front_right_drive_base_position);
-  ROS_INFO("accumulator_fr : %f", accumulator_fr);
-  ROS_INFO("Target : %f", front_right_drive_base_position + accumulator_fr + joint_position_command_[1]);
+
   printDriveInfo(front_right_drive);
   if (front_right_drive_lower_limit <= front_right_drive_base_position + accumulator_fr + joint_position_command_[1] &&
       front_right_drive_base_position + accumulator_fr + joint_position_command_[1] < front_right_drive_upper_limit)
@@ -215,13 +212,6 @@ void MarkhorHWInterfaceFlipper::write()
     front_right_drive->Set(ControlMode::Position, target);
   }
 
-  ROS_INFO("-------------");
-  ROS_INFO("position RL command : %f", joint_position_command_[2]);
-  ROS_INFO("RL lower limit : %f", rear_left_drive_lower_limit);
-  ROS_INFO("RL upper limit : %f", rear_left_drive_upper_limit);
-  ROS_INFO("rear_left_drive_base_position : %f", rear_left_drive_base_position);
-  ROS_INFO("accumulator_rl : %f", accumulator_rl);
-  ROS_INFO("Target : %f", rear_left_drive_base_position + accumulator_rl + joint_position_command_[2]);
   printDriveInfo(rear_left_drive);
   if (rear_left_drive_lower_limit <= rear_left_drive_base_position + accumulator_rl + joint_position_command_[2] &&
       rear_left_drive_base_position + accumulator_rl + joint_position_command_[2] < rear_left_drive_upper_limit)
@@ -232,13 +222,6 @@ void MarkhorHWInterfaceFlipper::write()
     rear_left_drive->Set(ControlMode::Position, target);
   }
 
-  ROS_INFO("-------------");
-  ROS_INFO("position RR command : %f", joint_position_command_[3]);
-  ROS_INFO("RR lower limit : %f", rear_right_drive_lower_limit);
-  ROS_INFO("RR upper limit : %f", rear_right_drive_upper_limit);
-  ROS_INFO("rear_right_drive_base_position : %f", rear_right_drive_base_position);
-  ROS_INFO("accumulator_rr : %f", accumulator_rl);
-  ROS_INFO("Target : %f", rear_right_drive_base_position + accumulator_rr + joint_position_command_[3]);
   printDriveInfo(rear_right_drive);
   if (rear_right_drive_lower_limit <= rear_right_drive_base_position + accumulator_rr + joint_position_command_[3] &&
       rear_right_drive_base_position + accumulator_rr + joint_position_command_[3] < rear_right_drive_upper_limit)
@@ -259,7 +242,48 @@ void MarkhorHWInterfaceFlipper::read()
 
 void MarkhorHWInterfaceFlipper::printDriveInfo(std::unique_ptr<TalonSRX>& drive)
 {
-  // ROS_INFO("HasResetOccurred : %s", drive->HasResetOccurred() ? "true" : "false");
+  ROS_INFO("-------------");
+  if (drive->GetDeviceID() == drive_fl_id)
+  {
+    ROS_INFO("position FL command : %f", joint_position_command_[0]);
+    ROS_INFO("FL lower limit : %f", front_left_drive_lower_limit);
+    ROS_INFO("FL upper limit : %f", front_left_drive_upper_limit);
+    ROS_INFO("front_left_drive_base_position : %f", front_left_drive_base_position);
+    ROS_INFO("accumulator_fl : %f", accumulator_fl);
+    ROS_INFO("Target : %f", front_left_drive_base_position + accumulator_fl + joint_position_command_[0]);
+  }
+  else if (drive->GetDeviceID() == drive_fr_id)
+  {
+    ROS_INFO("position FR command : %f", joint_position_command_[1]);
+    ROS_INFO("FR lower limit : %f", front_right_drive_lower_limit);
+    ROS_INFO("FR upper limit : %f", front_right_drive_upper_limit);
+    ROS_INFO("front_right_drive_base_position : %f", front_right_drive_base_position);
+    ROS_INFO("accumulator_fr : %f", accumulator_fr);
+    ROS_INFO("Target : %f", front_right_drive_base_position + accumulator_fr + joint_position_command_[1]);
+  }
+  else if (drive->GetDeviceID() == drive_rl_id)
+  {
+    ROS_INFO("position RL command : %f", joint_position_command_[2]);
+    ROS_INFO("RL lower limit : %f", rear_left_drive_lower_limit);
+    ROS_INFO("RL upper limit : %f", rear_left_drive_upper_limit);
+    ROS_INFO("rear_left_drive_base_position : %f", rear_left_drive_base_position);
+    ROS_INFO("accumulator_rl : %f", accumulator_rl);
+    ROS_INFO("Target : %f", rear_left_drive_base_position + accumulator_rl + joint_position_command_[2]);
+  }
+  else if (drive->GetDeviceID() == drive_rr_id)
+  {
+    ROS_INFO("position RR command : %f", joint_position_command_[3]);
+    ROS_INFO("RR lower limit : %f", rear_right_drive_lower_limit);
+    ROS_INFO("RR upper limit : %f", rear_right_drive_upper_limit);
+    ROS_INFO("rear_right_drive_base_position : %f", rear_right_drive_base_position);
+    ROS_INFO("accumulator_rr : %f", accumulator_rl);
+    ROS_INFO("Target : %f", rear_right_drive_base_position + accumulator_rr + joint_position_command_[3]);
+  }
+  else
+  {
+    ROS_INFO("Device ID is not found");
+  }
+
   ROS_INFO("GetPulseWidthPosition %d", drive->GetSensorCollection().GetPulseWidthPosition());
   ROS_INFO("GetClosedLoopError %d", drive->GetClosedLoopError(0));
   ROS_INFO("GetClosedLoopTarget %f", drive->GetClosedLoopTarget(0));
@@ -293,29 +317,35 @@ void MarkhorHWInterfaceFlipper::writeDrivePositionToFile(std::string config_file
 
   if (front_left_drive)
   {
-    drive_config_file << front_left_drive->GetDeviceID() << ":"
-                      << front_left_drive->GetSensorCollection().GetPulseWidthPosition() << std::endl;
+    // drive_config_file << front_left_drive->GetDeviceID() << ":"
+    //                   << front_left_drive->GetSensorCollection().GetPulseWidthPosition() << std::endl;
+    drive_config_file << getDrivePositionAndIdFormated(front_left_drive);
   }
   if (front_right_drive)
   {
-    drive_config_file << front_right_drive->GetDeviceID() << ":"
-                      << front_right_drive->GetSensorCollection().GetPulseWidthPosition() << std::endl;
+    // drive_config_file << front_right_drive->GetDeviceID() << ":"
+    //                   << front_right_drive->GetSensorCollection().GetPulseWidthPosition() << std::endl;
+    drive_config_file << getDrivePositionAndIdFormated(front_right_drive);
   }
   if (rear_left_drive)
   {
-    drive_config_file << rear_left_drive->GetDeviceID() << ":"
-                      << rear_left_drive->GetSensorCollection().GetPulseWidthPosition() << std::endl;
+    // drive_config_file << rear_left_drive->GetDeviceID() << ":"
+    //                   << rear_left_drive->GetSensorCollection().GetPulseWidthPosition() << std::endl;
+    drive_config_file << getDrivePositionAndIdFormated(rear_left_drive);
   }
   if (rear_right_drive)
   {
-    drive_config_file << rear_right_drive->GetDeviceID() << ":"
-                      << rear_right_drive->GetSensorCollection().GetPulseWidthPosition() << std::flush;
+    // drive_config_file << rear_right_drive->GetDeviceID() << ":"
+    //                   << rear_right_drive->GetSensorCollection().GetPulseWidthPosition() << std::flush;
+    drive_config_file << getDrivePositionAndIdFormated(rear_right_drive);
   }
   drive_config_file.rdbuf()->pubsync();
 }
 
 std::string MarkhorHWInterfaceFlipper::getDrivePositionAndIdFormated(std::unique_ptr<TalonSRX>& drive)
 {
+  std::string drive_info = drive->GetDeviceID() + ":" + drive->GetSensorCollection().GetPulseWidthPosition();
+  return drive_info;
 }
 
 void MarkhorHWInterfaceFlipper::loadDrivePosition()
