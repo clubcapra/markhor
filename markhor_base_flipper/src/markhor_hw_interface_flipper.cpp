@@ -70,8 +70,15 @@ void MarkhorHWInterfaceFlipper::setupCtreDrive()
     front_left_drive->SetSensorPhase(true);
     front_left_drive->ConfigNominalOutputForward(0, kTimeoutMs);
     front_left_drive->ConfigNominalOutputReverse(0, kTimeoutMs);
-    front_left_drive->ConfigPeakOutputForward(0.225, kTimeoutMs);  // TODO set in launch file
-    front_left_drive->ConfigPeakOutputReverse(-0.26, kTimeoutMs);  // TODO set in launch file
+
+    double front_left_peak_output_forward, front_left_peak_output_reverse = 0;
+    nh.getParam("/markhor/markhor_base_flipper_node/front_left_drive_peak_output_forward",
+                front_left_peak_output_forward);
+    nh.getParam("/markhor/markhor_base_flipper_node/front_left_drive_peak_output_reverse",
+                front_left_peak_output_reverse);
+
+    front_left_drive->ConfigPeakOutputForward(front_left_peak_output_forward, kTimeoutMs);
+    front_left_drive->ConfigPeakOutputReverse(front_left_peak_output_reverse, kTimeoutMs);
 
     front_left_drive->SelectProfileSlot(0, 0);
     front_left_drive->Config_kF(0, 0, kTimeoutMs);
@@ -90,8 +97,15 @@ void MarkhorHWInterfaceFlipper::setupCtreDrive()
     front_right_drive->SetSensorPhase(true);
     front_right_drive->ConfigNominalOutputForward(0, kTimeoutMs);
     front_right_drive->ConfigNominalOutputReverse(0, kTimeoutMs);
-    front_right_drive->ConfigPeakOutputForward(0.25, kTimeoutMs);   // TODO set in launch file
-    front_right_drive->ConfigPeakOutputReverse(-0.29, kTimeoutMs);  // TODO set in launch file
+
+    double front_right_peak_output_forward, front_right_peak_output_reverse = 0;
+    nh.getParam("/markhor/markhor_base_flipper_node/front_right_drive_peak_output_forward",
+                front_right_peak_output_forward);
+    nh.getParam("/markhor/markhor_base_flipper_node/front_right_drive_peak_output_reverse",
+                front_right_peak_output_reverse);
+
+    front_right_drive->ConfigPeakOutputForward(front_right_peak_output_forward, kTimeoutMs);
+    front_right_drive->ConfigPeakOutputReverse(front_right_peak_output_reverse, kTimeoutMs);
 
     front_right_drive->SelectProfileSlot(0, 0);
     front_right_drive->Config_kF(0, 0, kTimeoutMs);
@@ -108,10 +122,17 @@ void MarkhorHWInterfaceFlipper::setupCtreDrive()
     rear_left_drive->ConfigFactoryDefault();
     rear_left_drive->ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Absolute, 0, 50);
     rear_left_drive->SetSensorPhase(true);
+
+    double rear_left_peak_output_forward, rear_left_peak_output_reverse = 0;
+    nh.getParam("/markhor/markhor_base_flipper_node/rear_left_drive_peak_output_forward",
+                rear_left_peak_output_forward);
+    nh.getParam("/markhor/markhor_base_flipper_node/rear_left_drive_peak_output_reverse",
+                rear_left_peak_output_reverse);
+
     rear_left_drive->ConfigNominalOutputForward(0, kTimeoutMs);
     rear_left_drive->ConfigNominalOutputReverse(0, kTimeoutMs);
-    rear_left_drive->ConfigPeakOutputForward(0.24, kTimeoutMs);   // TODO set in launch file
-    rear_left_drive->ConfigPeakOutputReverse(-0.28, kTimeoutMs);  // TODO set in launch file
+    rear_left_drive->ConfigPeakOutputForward(rear_left_peak_output_forward, kTimeoutMs);
+    rear_left_drive->ConfigPeakOutputReverse(rear_left_peak_output_reverse, kTimeoutMs);
 
     rear_left_drive->SelectProfileSlot(0, 0);
     rear_left_drive->Config_kF(0, 0, kTimeoutMs);
@@ -130,8 +151,15 @@ void MarkhorHWInterfaceFlipper::setupCtreDrive()
     rear_right_drive->SetSensorPhase(true);
     rear_right_drive->ConfigNominalOutputForward(0, kTimeoutMs);
     rear_right_drive->ConfigNominalOutputReverse(0, kTimeoutMs);
-    rear_right_drive->ConfigPeakOutputForward(0.25, kTimeoutMs);   // TODO set in launch file
-    rear_right_drive->ConfigPeakOutputReverse(-0.29, kTimeoutMs);  // TODO set in launch file
+
+    double rear_right_peak_output_forward, rear_right_peak_output_reverse = 0;
+    nh.getParam("/markhor/markhor_base_flipper_node/rear_right_drive_peak_output_forward",
+                rear_right_peak_output_forward);
+    nh.getParam("/markhor/markhor_base_flipper_node/rear_right_drive_peak_output_reverse",
+                rear_right_peak_output_reverse);
+
+    rear_right_drive->ConfigPeakOutputForward(rear_right_peak_output_forward, kTimeoutMs);
+    rear_right_drive->ConfigPeakOutputReverse(rear_right_peak_output_reverse, kTimeoutMs);
 
     rear_right_drive->SelectProfileSlot(0, 0);
     rear_right_drive->Config_kF(0, 0, kTimeoutMs);
@@ -201,7 +229,7 @@ void MarkhorHWInterfaceFlipper::write()
     accumulator_rl += joint_position_command_[2];
     float target = rear_left_drive_base_position + accumulator_rl;
     ROS_INFO("target = [%f]", target);
-    // rear_left_drive->Set(ControlMode::Position, target);
+    rear_left_drive->Set(ControlMode::Position, target);
   }
 
   ROS_INFO("-------------");
@@ -218,12 +246,9 @@ void MarkhorHWInterfaceFlipper::write()
     accumulator_rr += joint_position_command_[3];
     float target = rear_right_drive_base_position + accumulator_rr;
     ROS_INFO("target = [%f]", target);
-    // rear_right_drive->Set(ControlMode::Position, target);
+    rear_right_drive->Set(ControlMode::Position, target);
   }
   saveDrivePosition();
-  // front_right_drive->Set(ControlMode::Position, joint_position_command_[1]);
-  // rear_left_drive->Set(ControlMode::Position, front_left_track_vel_msg.data);
-  // rear_right_drive->Set(ControlMode::Position, front_left_track_vel_msg.data);
 }
 
 void MarkhorHWInterfaceFlipper::read()
@@ -418,7 +443,7 @@ void MarkhorHWInterfaceFlipper::applyDrivePosition(std::unique_ptr<TalonSRX>& dr
   do
   {
     error = drive->GetSensorCollection().SetPulseWidthPosition(drive_position, 30);
-    ROS_INFO("SetPulseWidthPosition error code : %d", error);
+    ROS_INFO("SetPulseWidthPosition error code : %d for drive %d", error, drive->GetDeviceID());
   } while (error != ErrorCode::OKAY);
 }
 
