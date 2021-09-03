@@ -344,6 +344,7 @@ void MarkhorHWInterfaceFlipper::writeDrivePositionToFile(std::string config_file
 
 std::string MarkhorHWInterfaceFlipper::getDrivePositionAndIdFormated(std::unique_ptr<TalonSRX>& drive)
 {
+  // TODO check if the value is a correct value
   std::string drive_info = drive->GetDeviceID() + ":" + drive->GetSensorCollection().GetPulseWidthPosition();
   return drive_info;
 }
