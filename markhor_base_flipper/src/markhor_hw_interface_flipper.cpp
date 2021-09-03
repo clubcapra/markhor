@@ -59,7 +59,7 @@ void MarkhorHWInterfaceFlipper::setupCtreDrive()
 
   SupplyCurrentLimitConfiguration current_limit_config;
   current_limit_config.enable = true;
-  current_limit_config.currentLimit = 89;
+  current_limit_config.currentLimit = 53;
 
   const int kTimeoutMs = 30;
   float kP, kI, kD = 0.0;
