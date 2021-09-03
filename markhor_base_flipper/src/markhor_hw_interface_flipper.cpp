@@ -22,7 +22,7 @@ MarkhorHWInterfaceFlipper::MarkhorHWInterfaceFlipper()
   joint_velocity_command_.resize(num_joints, 0.0);
   joint_effort_command_.resize(num_joints, 0.0);
 
-  // setupRosControl();
+  setupRosControl();
   // setupCtreDrive();
 
   nh.getParam("/markhor/markhor_base_flipper_node/config_folder_location", config_folder_str);
