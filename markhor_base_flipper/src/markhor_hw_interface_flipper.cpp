@@ -29,7 +29,7 @@ MarkhorHWInterfaceFlipper::MarkhorHWInterfaceFlipper()
   nh.getParam("/markhor/markhor_base_flipper_node/config_file_1", config_file_1);
   nh.getParam("/markhor/markhor_base_flipper_node/config_file_2", config_file_2);
 
-  // loadDrivePosition();
+  loadDrivePosition();
 }
 
 void MarkhorHWInterfaceFlipper::setupRosControl()
@@ -185,54 +185,53 @@ void MarkhorHWInterfaceFlipper::write()
 {
   // Write to drive
 
-  // if (hasResetOccurred() == true)
-  // {
-  //   loadDrivePosition();
-  // }
+  if (hasResetOccurred() == true)
+  {
+    loadDrivePosition();
+  }
 
-  // ctre::phoenix::unmanaged::FeedEnable(100);
+  ctre::phoenix::unmanaged::FeedEnable(100);
 
-  // printDriveInfo(front_left_drive);
-  // if (front_left_drive_lower_limit <= front_left_drive_base_position + accumulator_fl + joint_position_command_[0] &&
-  //     front_left_drive_base_position + accumulator_fl + joint_position_command_[0] < front_left_drive_upper_limit)
-  // {
-  //   accumulator_fl += joint_position_command_[0];
-  //   float target = front_left_drive_base_position + accumulator_fl;
-  //   ROS_INFO("target = [%f]", target);
-  //   front_left_drive->Set(ControlMode::Position, target);
-  // }
+  printDriveInfo(front_left_drive);
+  if (front_left_drive_lower_limit <= front_left_drive_base_position + accumulator_fl + joint_position_command_[0] &&
+      front_left_drive_base_position + accumulator_fl + joint_position_command_[0] < front_left_drive_upper_limit)
+  {
+    accumulator_fl += joint_position_command_[0];
+    float target = front_left_drive_base_position + accumulator_fl;
+    ROS_INFO("target = [%f]", target);
+    // front_left_drive->Set(ControlMode::Position, target);
+  }
 
-  // printDriveInfo(front_right_drive);
-  // if (front_right_drive_lower_limit <= front_right_drive_base_position + accumulator_fr + joint_position_command_[1]
-  // &&
-  //     front_right_drive_base_position + accumulator_fr + joint_position_command_[1] < front_right_drive_upper_limit)
-  // {
-  //   accumulator_fr += joint_position_command_[1];
-  //   float target = front_right_drive_base_position + accumulator_fr;
-  //   ROS_INFO("target = [%f]", target);
-  //   front_right_drive->Set(ControlMode::Position, target);
-  // }
+  printDriveInfo(front_right_drive);
+  if (front_right_drive_lower_limit <= front_right_drive_base_position + accumulator_fr + joint_position_command_[1] &&
+      front_right_drive_base_position + accumulator_fr + joint_position_command_[1] < front_right_drive_upper_limit)
+  {
+    accumulator_fr += joint_position_command_[1];
+    float target = front_right_drive_base_position + accumulator_fr;
+    ROS_INFO("target = [%f]", target);
+    // front_right_drive->Set(ControlMode::Position, target);
+  }
 
-  // printDriveInfo(rear_left_drive);
-  // if (rear_left_drive_lower_limit <= rear_left_drive_base_position + accumulator_rl + joint_position_command_[2] &&
-  //     rear_left_drive_base_position + accumulator_rl + joint_position_command_[2] < rear_left_drive_upper_limit)
-  // {
-  //   accumulator_rl += joint_position_command_[2];
-  //   float target = rear_left_drive_base_position + accumulator_rl;
-  //   ROS_INFO("target = [%f]", target);
-  //   rear_left_drive->Set(ControlMode::Position, target);
-  // }
+  printDriveInfo(rear_left_drive);
+  if (rear_left_drive_lower_limit <= rear_left_drive_base_position + accumulator_rl + joint_position_command_[2] &&
+      rear_left_drive_base_position + accumulator_rl + joint_position_command_[2] < rear_left_drive_upper_limit)
+  {
+    accumulator_rl += joint_position_command_[2];
+    float target = rear_left_drive_base_position + accumulator_rl;
+    ROS_INFO("target = [%f]", target);
+    // rear_left_drive->Set(ControlMode::Position, target);
+  }
 
-  // printDriveInfo(rear_right_drive);
-  // if (rear_right_drive_lower_limit <= rear_right_drive_base_position + accumulator_rr + joint_position_command_[3] &&
-  //     rear_right_drive_base_position + accumulator_rr + joint_position_command_[3] < rear_right_drive_upper_limit)
-  // {
-  //   accumulator_rr += joint_position_command_[3];
-  //   float target = rear_right_drive_base_position + accumulator_rr;
-  //   ROS_INFO("target = [%f]", target);
-  //   rear_right_drive->Set(ControlMode::Position, target);
-  // }
-  // saveDrivePosition();
+  printDriveInfo(rear_right_drive);
+  if (rear_right_drive_lower_limit <= rear_right_drive_base_position + accumulator_rr + joint_position_command_[3] &&
+      rear_right_drive_base_position + accumulator_rr + joint_position_command_[3] < rear_right_drive_upper_limit)
+  {
+    accumulator_rr += joint_position_command_[3];
+    float target = rear_right_drive_base_position + accumulator_rr;
+    ROS_INFO("target = [%f]", target);
+    // rear_right_drive->Set(ControlMode::Position, target);
+  }
+  saveDrivePosition();
 }
 
 void MarkhorHWInterfaceFlipper::read()
