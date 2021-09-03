@@ -199,7 +199,7 @@ void MarkhorHWInterfaceFlipper::write()
     accumulator_fl += joint_position_command_[0];
     float target = front_left_drive_base_position + accumulator_fl;
     ROS_INFO("target = [%f]", target);
-    // front_left_drive->Set(ControlMode::Position, target);
+    front_left_drive->Set(ControlMode::Position, target);
   }
 
   printDriveInfo(front_right_drive);
@@ -209,7 +209,7 @@ void MarkhorHWInterfaceFlipper::write()
     accumulator_fr += joint_position_command_[1];
     float target = front_right_drive_base_position + accumulator_fr;
     ROS_INFO("target = [%f]", target);
-    // front_right_drive->Set(ControlMode::Position, target);
+    front_right_drive->Set(ControlMode::Position, target);
   }
 
   printDriveInfo(rear_left_drive);
@@ -219,7 +219,7 @@ void MarkhorHWInterfaceFlipper::write()
     accumulator_rl += joint_position_command_[2];
     float target = rear_left_drive_base_position + accumulator_rl;
     ROS_INFO("target = [%f]", target);
-    // rear_left_drive->Set(ControlMode::Position, target);
+    rear_left_drive->Set(ControlMode::Position, target);
   }
 
   printDriveInfo(rear_right_drive);
@@ -229,7 +229,7 @@ void MarkhorHWInterfaceFlipper::write()
     accumulator_rr += joint_position_command_[3];
     float target = rear_right_drive_base_position + accumulator_rr;
     ROS_INFO("target = [%f]", target);
-    // rear_right_drive->Set(ControlMode::Position, target);
+    rear_right_drive->Set(ControlMode::Position, target);
   }
   saveDrivePosition();
 }
