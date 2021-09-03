@@ -251,6 +251,8 @@ void MarkhorHWInterfaceFlipper::printDriveInfo(std::unique_ptr<TalonSRX>& drive)
     ROS_INFO("front_left_drive_base_position : %f", front_left_drive_base_position);
     ROS_INFO("accumulator_fl : %f", accumulator_fl);
     ROS_INFO("Target : %f", front_left_drive_base_position + accumulator_fl + joint_position_command_[0]);
+    ROS_INFO("Drive %d : output voltage : %f", front_left_drive->GetDeviceID(),
+             front_left_drive->GetMotorOutputVoltage());
   }
   else if (drive->GetDeviceID() == drive_fr_id)
   {
@@ -260,6 +262,8 @@ void MarkhorHWInterfaceFlipper::printDriveInfo(std::unique_ptr<TalonSRX>& drive)
     ROS_INFO("front_right_drive_base_position : %f", front_right_drive_base_position);
     ROS_INFO("accumulator_fr : %f", accumulator_fr);
     ROS_INFO("Target : %f", front_right_drive_base_position + accumulator_fr + joint_position_command_[1]);
+    ROS_INFO("Drive %d : output voltage : %f", front_right_drive->GetDeviceID(),
+             front_right_drive->GetMotorOutputVoltage());
   }
   else if (drive->GetDeviceID() == drive_rl_id)
   {
@@ -269,6 +273,8 @@ void MarkhorHWInterfaceFlipper::printDriveInfo(std::unique_ptr<TalonSRX>& drive)
     ROS_INFO("rear_left_drive_base_position : %f", rear_left_drive_base_position);
     ROS_INFO("accumulator_rl : %f", accumulator_rl);
     ROS_INFO("Target : %f", rear_left_drive_base_position + accumulator_rl + joint_position_command_[2]);
+    ROS_INFO("Drive %d : output voltage : %f", rear_left_drive->GetDeviceID(),
+             rear_left_drive->GetMotorOutputVoltage());
   }
   else if (drive->GetDeviceID() == drive_rr_id)
   {
@@ -278,6 +284,8 @@ void MarkhorHWInterfaceFlipper::printDriveInfo(std::unique_ptr<TalonSRX>& drive)
     ROS_INFO("rear_right_drive_base_position : %f", rear_right_drive_base_position);
     ROS_INFO("accumulator_rr : %f", accumulator_rl);
     ROS_INFO("Target : %f", rear_right_drive_base_position + accumulator_rr + joint_position_command_[3]);
+    ROS_INFO("Drive %d : output voltage : %f", rear_right_drive->GetDeviceID(),
+             rear_right_drive->GetMotorOutputVoltage());
   }
   else
   {
@@ -319,25 +327,21 @@ void MarkhorHWInterfaceFlipper::writeDrivePositionToFile(std::string config_file
   {
     drive_config_file << front_left_drive->GetDeviceID() << ":"
                       << front_left_drive->GetSensorCollection().GetPulseWidthPosition() << std::endl;
-    // drive_config_file << getDrivePositionAndIdFormated(front_left_drive);
   }
   if (front_right_drive)
   {
     drive_config_file << front_right_drive->GetDeviceID() << ":"
                       << front_right_drive->GetSensorCollection().GetPulseWidthPosition() << std::endl;
-    // drive_config_file << getDrivePositionAndIdFormated(front_right_drive);
   }
   if (rear_left_drive)
   {
     drive_config_file << rear_left_drive->GetDeviceID() << ":"
                       << rear_left_drive->GetSensorCollection().GetPulseWidthPosition() << std::endl;
-    // drive_config_file << getDrivePositionAndIdFormated(rear_left_drive);
   }
   if (rear_right_drive)
   {
     drive_config_file << rear_right_drive->GetDeviceID() << ":"
                       << rear_right_drive->GetSensorCollection().GetPulseWidthPosition() << std::flush;
-    // drive_config_file << getDrivePositionAndIdFormated(rear_right_drive);
   }
   drive_config_file.rdbuf()->pubsync();
 }
