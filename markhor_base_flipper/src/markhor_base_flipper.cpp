@@ -21,27 +21,27 @@ void joyCallback(const sensor_msgs::Joy::ConstPtr& joy)
   if (flipper_mode_front == true)
   {
     msg.data = joy->axes[1] * 1500;  // TODO : Set the multiplicator inside the launch file
-    flipper_rl_pub.publish(msg);
-    flipper_rr_pub.publish(msg);
+    flipper_fl_pub.publish(msg);
+    flipper_fr_pub.publish(msg);
   }
   else
   {
     msg.data = joy->axes[1] * 0;
-    flipper_rl_pub.publish(msg);
-    flipper_rr_pub.publish(msg);
+    flipper_fl_pub.publish(msg);
+    flipper_fr_pub.publish(msg);
   }
 
   if (flipper_mode_back == true)
   {
     msg.data = joy->axes[1] * 1350;  // TODO : Set the multiplicator inside the launch file
-    flipper_fl_pub.publish(msg);
-    flipper_fr_pub.publish(msg);
+    flipper_rl_pub.publish(msg);
+    flipper_rr_pub.publish(msg);
   }
   else
   {
     msg.data = joy->axes[1] * 0;
-    flipper_fl_pub.publish(msg);
-    flipper_fr_pub.publish(msg);
+    flipper_rl_pub.publish(msg);
+    flipper_rr_pub.publish(msg);
   }
 }
 

@@ -317,27 +317,27 @@ void MarkhorHWInterfaceFlipper::writeDrivePositionToFile(std::string config_file
 
   if (front_left_drive)
   {
-    // drive_config_file << front_left_drive->GetDeviceID() << ":"
-    //                   << front_left_drive->GetSensorCollection().GetPulseWidthPosition() << std::endl;
-    drive_config_file << getDrivePositionAndIdFormated(front_left_drive);
+    drive_config_file << front_left_drive->GetDeviceID() << ":"
+                      << front_left_drive->GetSensorCollection().GetPulseWidthPosition() << std::endl;
+    // drive_config_file << getDrivePositionAndIdFormated(front_left_drive);
   }
   if (front_right_drive)
   {
-    // drive_config_file << front_right_drive->GetDeviceID() << ":"
-    //                   << front_right_drive->GetSensorCollection().GetPulseWidthPosition() << std::endl;
-    drive_config_file << getDrivePositionAndIdFormated(front_right_drive);
+    drive_config_file << front_right_drive->GetDeviceID() << ":"
+                      << front_right_drive->GetSensorCollection().GetPulseWidthPosition() << std::endl;
+    // drive_config_file << getDrivePositionAndIdFormated(front_right_drive);
   }
   if (rear_left_drive)
   {
-    // drive_config_file << rear_left_drive->GetDeviceID() << ":"
-    //                   << rear_left_drive->GetSensorCollection().GetPulseWidthPosition() << std::endl;
-    drive_config_file << getDrivePositionAndIdFormated(rear_left_drive);
+    drive_config_file << rear_left_drive->GetDeviceID() << ":"
+                      << rear_left_drive->GetSensorCollection().GetPulseWidthPosition() << std::endl;
+    // drive_config_file << getDrivePositionAndIdFormated(rear_left_drive);
   }
   if (rear_right_drive)
   {
-    // drive_config_file << rear_right_drive->GetDeviceID() << ":"
-    //                   << rear_right_drive->GetSensorCollection().GetPulseWidthPosition() << std::flush;
-    drive_config_file << getDrivePositionAndIdFormated(rear_right_drive);
+    drive_config_file << rear_right_drive->GetDeviceID() << ":"
+                      << rear_right_drive->GetSensorCollection().GetPulseWidthPosition() << std::flush;
+    // drive_config_file << getDrivePositionAndIdFormated(rear_right_drive);
   }
   drive_config_file.rdbuf()->pubsync();
 }
