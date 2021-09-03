@@ -115,7 +115,7 @@ int main(int argc, char** argv)
 
     hw.read();
     cm.update(time, period);
-    // hw.write();
+    hw.write();
 
     rate.sleep();
   }
