@@ -50,17 +50,16 @@ public:
 private:
   void setupRosControl();
   void setupCtreDrive();
-  void setupCtreEncoder();
   bool hasResetOccurred();
   void printDriveInfo(std::unique_ptr<TalonSRX>& drive);
   void saveDrivePosition();
   void writeDrivePositionToFile(std::string config_file_name);
-  std::string getDrivePositionAndIdFormated(std::unique_ptr<TalonSRX>& drive);
 
   void loadDrivePosition();
   void readDrivePositionFromFile(std::string config_file_name, std::fstream& config_file);
   void parseDrivePosition(std::string line);
   void applyDrivePosition(std::unique_ptr<TalonSRX>& drive, float drive_position);
+  int getEncoderPosition(std::unique_ptr<TalonSRX>& drive);
 
   int drive_fl_id, drive_fr_id, drive_rl_id, drive_rr_id = 0;
 
