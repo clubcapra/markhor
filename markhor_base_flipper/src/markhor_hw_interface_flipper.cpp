@@ -192,6 +192,10 @@ void MarkhorHWInterfaceFlipper::write()
   if (hasResetOccurred() == true)
   {
     loadDrivePosition();
+    accumulator_fl = 0;
+    accumulator_fr = 0;
+    accumulator_rl = 0;
+    accumulator_rr = 0;
   }
 
   ctre::phoenix::unmanaged::FeedEnable(100);
@@ -329,32 +333,91 @@ void MarkhorHWInterfaceFlipper::writeDrivePositionToFile(std::string config_file
 
   if (front_left_drive)
   {
-    drive_config_file << front_left_drive->GetDeviceID() << ":"
-                      << front_left_drive->GetSensorCollection().GetPulseWidthPosition() << std::endl;
+    drive_config_file << front_left_drive->GetDeviceID() << ":" << getEncoderPosition(front_left_drive) << std::endl;
   }
   if (front_right_drive)
   {
-    drive_config_file << front_right_drive->GetDeviceID() << ":"
-                      << front_right_drive->GetSensorCollection().GetPulseWidthPosition() << std::endl;
+    drive_config_file << front_right_drive->GetDeviceID() << ":" << getEncoderPosition(front_right_drive) << std::endl;
   }
   if (rear_left_drive)
   {
-    drive_config_file << rear_left_drive->GetDeviceID() << ":"
-                      << rear_left_drive->GetSensorCollection().GetPulseWidthPosition() << std::endl;
+    drive_config_file << rear_left_drive->GetDeviceID() << ":" << getEncoderPosition(rear_left_drive) << std::endl;
   }
   if (rear_right_drive)
   {
-    drive_config_file << rear_right_drive->GetDeviceID() << ":"
-                      << rear_right_drive->GetSensorCollection().GetPulseWidthPosition() << std::flush;
+    drive_config_file << rear_right_drive->GetDeviceID() << ":" << getEncoderPosition(rear_right_drive) << std::flush;
   }
   drive_config_file.rdbuf()->pubsync();
 }
 
-std::string MarkhorHWInterfaceFlipper::getDrivePositionAndIdFormated(std::unique_ptr<TalonSRX>& drive)
+int MarkhorHWInterfaceFlipper::getEncoderPosition(std::unique_ptr<TalonSRX>& drive)
 {
-  // TODO check if the value is a correct value
-  std::string drive_info = drive->GetDeviceID() + ":" + drive->GetSensorCollection().GetPulseWidthPosition();
-  return drive_info;
+  int pulse_width_position = drive->GetSensorCollection().GetPulseWidthPosition();
+  if (drive->GetDeviceID() == drive_fl_id)
+  {
+    if (pulse_width_position < -1 * front_left_drive_upper_limit)
+    {
+      return -1 * front_left_drive_upper_limit;
+    }
+    else if (pulse_width_position > -1 * front_left_drive_lower_limit)
+    {
+      return -1 * front_left_drive_lower_limit;
+    }
+    else
+    {
+      return pulse_width_position;
+    }
+  }
+  else if (drive->GetDeviceID() == drive_fr_id)
+  {
+    if (pulse_width_position < -1 * front_right_drive_upper_limit)
+    {
+      return -1 * front_right_drive_upper_limit;
+    }
+    else if (pulse_width_position > -1 * front_right_drive_lower_limit)
+    {
+      return -1 * front_right_drive_lower_limit;
+    }
+    else
+    {
+      return pulse_width_position;
+    }
+  }
+  else if (drive->GetDeviceID() == drive_rl_id)
+  {
+    if (pulse_width_position < -1 * rear_left_drive_upper_limit)
+    {
+      return -1 * rear_left_drive_upper_limit;
+    }
+    else if (pulse_width_position > -1 * rear_left_drive_lower_limit)
+    {
+      return -1 * rear_left_drive_lower_limit;
+    }
+    else
+    {
+      return pulse_width_position;
+    }
+  }
+  else if (drive->GetDeviceID() == drive_rr_id)
+  {
+    if (pulse_width_position < -1 * rear_right_drive_upper_limit)
+    {
+      return -1 * rear_right_drive_upper_limit;
+    }
+    else if (pulse_width_position > -1 * rear_right_drive_lower_limit)
+    {
+      return -1 * rear_right_drive_lower_limit;
+    }
+    else
+    {
+      return pulse_width_position;
+    }
+  }
+  else
+  {
+    ROS_FATAL("Could not find drive %d in drives list", drive->GetDeviceID());
+    ros::shutdown();
+  }
 }
 
 void MarkhorHWInterfaceFlipper::loadDrivePosition()
