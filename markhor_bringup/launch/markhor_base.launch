@@ -1,4 +1,4 @@
 <launch>
     <include file="$(find markhor_estop)/launch/estop.launch"/>
-    <include file="$(find markhor_base)/launch/hw_control.launch"/>
+    <include file="$(find markhor_tracks)/launch/hw_control.launch" />
 </launch>

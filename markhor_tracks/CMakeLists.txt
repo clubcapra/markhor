@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.9)
-project(markhor_base LANGUAGES CXX)
+project(markhor_tracks LANGUAGES CXX)
 
 add_compile_options(-std=c++14)
 
@@ -26,7 +26,7 @@ find_package(catkin REQUIRED COMPONENTS
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
   INCLUDE_DIRS include
-#  LIBRARIES markhor_base
+#  LIBRARIES markhor_tracks
   CATKIN_DEPENDS 
     controller_manager 
     roscpp 
@@ -40,7 +40,7 @@ include_directories(
     ${catkin_INCLUDE_DIRS}
 )
 
-set(source src/markhor_base.cpp src/markhor_hw_interface.cpp)
+set(source src/markhor_tracks.cpp src/markhor_hw_interface.cpp)
 
 add_executable(${PROJECT_NAME}_node ${source})
 

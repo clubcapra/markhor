@@ -1,8 +1,8 @@
 <?xml version="1.0" ?>
 <package format="2">
-  <name>markhor_base</name>
+  <name>markhor_tracks</name>
   <version>0.0.0</version>
-  <description>The markhor_base package</description>
+  <description>The markhor_tracks package</description>
 
   <maintainer email="capra@clubcapra.com">Capra</maintainer>
 
