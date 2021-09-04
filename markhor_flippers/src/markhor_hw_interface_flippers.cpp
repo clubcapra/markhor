@@ -1,9 +1,9 @@
-#include <markhor_hw_interface_flipper.hpp>
+#include <markhor_hw_interface_flippers.hpp>
 #include <string>
 #include <unistd.h>
 #include <ctre/phoenix/motorcontrol/SupplyCurrentLimitConfiguration.h>
 
-MarkhorHWInterfaceFlipper::MarkhorHWInterfaceFlipper()
+MarkhorHWInterfaceFlippers::MarkhorHWInterfaceFlippers()
 {
   joint_names_.push_back("flipper_fl_j");
   joint_names_.push_back("flipper_fr_j");
@@ -25,14 +25,14 @@ MarkhorHWInterfaceFlipper::MarkhorHWInterfaceFlipper()
   setupRosControl();
   setupCtreDrive();
 
-  nh.getParam("/markhor/markhor_base_flipper_node/config_folder_location", config_folder_str);
-  nh.getParam("/markhor/markhor_base_flipper_node/config_file_1", config_file_1);
-  nh.getParam("/markhor/markhor_base_flipper_node/config_file_2", config_file_2);
+  nh.getParam("/markhor/markhor_flippers_node/config_folder_location", config_folder_str);
+  nh.getParam("/markhor/markhor_flippers_node/config_file_1", config_file_1);
+  nh.getParam("/markhor/markhor_flippers_node/config_file_2", config_file_2);
 
   loadDrivePosition();
 }
 
-void MarkhorHWInterfaceFlipper::setupRosControl()
+void MarkhorHWInterfaceFlippers::setupRosControl()
 {
   // connect and register the joint state and effort interfaces
   for (unsigned int joint_id = 0; joint_id < num_joints; ++joint_id)
@@ -52,7 +52,7 @@ void MarkhorHWInterfaceFlipper::setupRosControl()
   registerInterface(&position_joint_interface_);
 }
 
-void MarkhorHWInterfaceFlipper::setupCtreDrive()
+void MarkhorHWInterfaceFlippers::setupCtreDrive()
 {
   std::string interface = "can0";
   ctre::phoenix::platform::can::SetCANInterface(interface.c_str());
@@ -63,11 +63,11 @@ void MarkhorHWInterfaceFlipper::setupCtreDrive()
 
   const int kTimeoutMs = 30;
   float kP, kI, kD = 0.0;
-  nh.getParam("/markhor/markhor_base_flipper_node/kP", kP);
-  nh.getParam("/markhor/markhor_base_flipper_node/kI", kI);
-  nh.getParam("/markhor/markhor_base_flipper_node/kD", kD);
+  nh.getParam("/markhor/markhor_flippers_node/kP", kP);
+  nh.getParam("/markhor/markhor_flippers_node/kI", kI);
+  nh.getParam("/markhor/markhor_flippers_node/kD", kD);
 
-  if (nh.getParam("/markhor/markhor_base_flipper_node/front_left", drive_fl_id) == true)
+  if (nh.getParam("/markhor/markhor_flippers_node/front_left", drive_fl_id) == true)
   {
     front_left_drive = std::make_unique<TalonSRX>(drive_fl_id);
     front_left_drive->ConfigFactoryDefault();
@@ -79,10 +79,8 @@ void MarkhorHWInterfaceFlipper::setupCtreDrive()
     front_left_drive->ConfigAllowableClosedloopError(0, 100, kTimeoutMs);
 
     double front_left_peak_output_forward, front_left_peak_output_reverse = 0;
-    nh.getParam("/markhor/markhor_base_flipper_node/front_left_drive_peak_output_forward",
-                front_left_peak_output_forward);
-    nh.getParam("/markhor/markhor_base_flipper_node/front_left_drive_peak_output_reverse",
-                front_left_peak_output_reverse);
+    nh.getParam("/markhor/markhor_flippers_node/front_left_drive_peak_output_forward", front_left_peak_output_forward);
+    nh.getParam("/markhor/markhor_flippers_node/front_left_drive_peak_output_reverse", front_left_peak_output_reverse);
 
     front_left_drive->ConfigPeakOutputForward(front_left_peak_output_forward, kTimeoutMs);
     front_left_drive->ConfigPeakOutputReverse(front_left_peak_output_reverse, kTimeoutMs);
@@ -93,10 +91,10 @@ void MarkhorHWInterfaceFlipper::setupCtreDrive()
     front_left_drive->Config_kI(0, kI, kTimeoutMs);
     front_left_drive->Config_kD(0, kD, kTimeoutMs);
 
-    nh.getParam("/markhor/markhor_base_flipper_node/front_left_drive_upper_limit", front_left_drive_upper_limit);
-    nh.getParam("/markhor/markhor_base_flipper_node/front_left_drive_lower_limit", front_left_drive_lower_limit);
+    nh.getParam("/markhor/markhor_flippers_node/front_left_drive_upper_limit", front_left_drive_upper_limit);
+    nh.getParam("/markhor/markhor_flippers_node/front_left_drive_lower_limit", front_left_drive_lower_limit);
   }
-  if (nh.getParam("/markhor/markhor_base_flipper_node/front_right", drive_fr_id) == true)
+  if (nh.getParam("/markhor/markhor_flippers_node/front_right", drive_fr_id) == true)
   {
     front_right_drive = std::make_unique<TalonSRX>(drive_fr_id);
     front_right_drive->ConfigFactoryDefault();
@@ -108,9 +106,9 @@ void MarkhorHWInterfaceFlipper::setupCtreDrive()
     front_right_drive->ConfigAllowableClosedloopError(0, 100, kTimeoutMs);
 
     double front_right_peak_output_forward, front_right_peak_output_reverse = 0;
-    nh.getParam("/markhor/markhor_base_flipper_node/front_right_drive_peak_output_forward",
+    nh.getParam("/markhor/markhor_flippers_node/front_right_drive_peak_output_forward",
                 front_right_peak_output_forward);
-    nh.getParam("/markhor/markhor_base_flipper_node/front_right_drive_peak_output_reverse",
+    nh.getParam("/markhor/markhor_flippers_node/front_right_drive_peak_output_reverse",
                 front_right_peak_output_reverse);
 
     front_right_drive->ConfigPeakOutputForward(front_right_peak_output_forward, kTimeoutMs);
@@ -122,10 +120,10 @@ void MarkhorHWInterfaceFlipper::setupCtreDrive()
     front_right_drive->Config_kI(0, kI, kTimeoutMs);
     front_right_drive->Config_kD(0, kD, kTimeoutMs);
 
-    nh.getParam("/markhor/markhor_base_flipper_node/front_right_drive_upper_limit", front_right_drive_upper_limit);
-    nh.getParam("/markhor/markhor_base_flipper_node/front_right_drive_lower_limit", front_right_drive_lower_limit);
+    nh.getParam("/markhor/markhor_flippers_node/front_right_drive_upper_limit", front_right_drive_upper_limit);
+    nh.getParam("/markhor/markhor_flippers_node/front_right_drive_lower_limit", front_right_drive_lower_limit);
   }
-  if (nh.getParam("/markhor/markhor_base_flipper_node/rear_left", drive_rl_id) == true)
+  if (nh.getParam("/markhor/markhor_flippers_node/rear_left", drive_rl_id) == true)
   {
     rear_left_drive = std::make_unique<TalonSRX>(drive_rl_id);
     rear_left_drive->ConfigFactoryDefault();
@@ -133,10 +131,8 @@ void MarkhorHWInterfaceFlipper::setupCtreDrive()
     rear_left_drive->SetSensorPhase(true);
 
     double rear_left_peak_output_forward, rear_left_peak_output_reverse = 0;
-    nh.getParam("/markhor/markhor_base_flipper_node/rear_left_drive_peak_output_forward",
-                rear_left_peak_output_forward);
-    nh.getParam("/markhor/markhor_base_flipper_node/rear_left_drive_peak_output_reverse",
-                rear_left_peak_output_reverse);
+    nh.getParam("/markhor/markhor_flippers_node/rear_left_drive_peak_output_forward", rear_left_peak_output_forward);
+    nh.getParam("/markhor/markhor_flippers_node/rear_left_drive_peak_output_reverse", rear_left_peak_output_reverse);
 
     rear_left_drive->ConfigSupplyCurrentLimit(current_limit_config);
     rear_left_drive->ConfigNominalOutputForward(0, kTimeoutMs);
@@ -151,10 +147,10 @@ void MarkhorHWInterfaceFlipper::setupCtreDrive()
     rear_left_drive->Config_kI(0, kI, kTimeoutMs);
     rear_left_drive->Config_kD(0, kD, kTimeoutMs);
 
-    nh.getParam("/markhor/markhor_base_flipper_node/rear_left_drive_upper_limit", rear_left_drive_upper_limit);
-    nh.getParam("/markhor/markhor_base_flipper_node/rear_left_drive_lower_limit", rear_left_drive_lower_limit);
+    nh.getParam("/markhor/markhor_flippers_node/rear_left_drive_upper_limit", rear_left_drive_upper_limit);
+    nh.getParam("/markhor/markhor_flippers_node/rear_left_drive_lower_limit", rear_left_drive_lower_limit);
   }
-  if (nh.getParam("/markhor/markhor_base_flipper_node/rear_right", drive_rr_id) == true)
+  if (nh.getParam("/markhor/markhor_flippers_node/rear_right", drive_rr_id) == true)
   {
     rear_right_drive = std::make_unique<TalonSRX>(drive_rr_id);
     rear_right_drive->ConfigFactoryDefault();
@@ -165,10 +161,8 @@ void MarkhorHWInterfaceFlipper::setupCtreDrive()
     rear_right_drive->ConfigNominalOutputReverse(0, kTimeoutMs);
 
     double rear_right_peak_output_forward, rear_right_peak_output_reverse = 0;
-    nh.getParam("/markhor/markhor_base_flipper_node/rear_right_drive_peak_output_forward",
-                rear_right_peak_output_forward);
-    nh.getParam("/markhor/markhor_base_flipper_node/rear_right_drive_peak_output_reverse",
-                rear_right_peak_output_reverse);
+    nh.getParam("/markhor/markhor_flippers_node/rear_right_drive_peak_output_forward", rear_right_peak_output_forward);
+    nh.getParam("/markhor/markhor_flippers_node/rear_right_drive_peak_output_reverse", rear_right_peak_output_reverse);
 
     rear_right_drive->ConfigPeakOutputForward(rear_right_peak_output_forward, kTimeoutMs);
     rear_right_drive->ConfigPeakOutputReverse(rear_right_peak_output_reverse, kTimeoutMs);
@@ -180,12 +174,12 @@ void MarkhorHWInterfaceFlipper::setupCtreDrive()
     rear_right_drive->Config_kI(0, kI, kTimeoutMs);
     rear_right_drive->Config_kD(0, kD, kTimeoutMs);
 
-    nh.getParam("/markhor/markhor_base_flipper_node/rear_right_drive_upper_limit", rear_right_drive_upper_limit);
-    nh.getParam("/markhor/markhor_base_flipper_node/rear_right_drive_lower_limit", rear_right_drive_lower_limit);
+    nh.getParam("/markhor/markhor_flippers_node/rear_right_drive_upper_limit", rear_right_drive_upper_limit);
+    nh.getParam("/markhor/markhor_flippers_node/rear_right_drive_lower_limit", rear_right_drive_lower_limit);
   }
 }
 
-void MarkhorHWInterfaceFlipper::write()
+void MarkhorHWInterfaceFlippers::write()
 {
   // Write to drive
 
@@ -242,13 +236,13 @@ void MarkhorHWInterfaceFlipper::write()
   saveDrivePosition();
 }
 
-void MarkhorHWInterfaceFlipper::read()
+void MarkhorHWInterfaceFlippers::read()
 {
   // Read from the motor API, going to read from the TalonSRX objects
   // ROS_INFO("HWI FLIPPER READs");
 }
 
-void MarkhorHWInterfaceFlipper::printDriveInfo(std::unique_ptr<TalonSRX>& drive)
+void MarkhorHWInterfaceFlippers::printDriveInfo(std::unique_ptr<TalonSRX>& drive)
 {
   ROS_INFO("-------------");
   if (drive->GetDeviceID() == drive_fl_id)
@@ -305,7 +299,7 @@ void MarkhorHWInterfaceFlipper::printDriveInfo(std::unique_ptr<TalonSRX>& drive)
   ROS_INFO("GetClosedLoopTarget %f", drive->GetClosedLoopTarget(0));
 }
 
-void MarkhorHWInterfaceFlipper::saveDrivePosition()
+void MarkhorHWInterfaceFlippers::saveDrivePosition()
 {
   // TODO : Only write if the value is different
 
@@ -323,7 +317,7 @@ void MarkhorHWInterfaceFlipper::saveDrivePosition()
   drive_config_file.close();
 }
 
-void MarkhorHWInterfaceFlipper::writeDrivePositionToFile(std::string config_file_name)
+void MarkhorHWInterfaceFlippers::writeDrivePositionToFile(std::string config_file_name)
 {
   drive_config_file.open((config_folder_str + config_file_name).c_str(), std::fstream::out | std::fstream::trunc);
   if (!drive_config_file)
@@ -350,7 +344,7 @@ void MarkhorHWInterfaceFlipper::writeDrivePositionToFile(std::string config_file
   drive_config_file.rdbuf()->pubsync();
 }
 
-int MarkhorHWInterfaceFlipper::getEncoderPosition(std::unique_ptr<TalonSRX>& drive)
+int MarkhorHWInterfaceFlippers::getEncoderPosition(std::unique_ptr<TalonSRX>& drive)
 {
   int pulse_width_position = drive->GetSensorCollection().GetPulseWidthPosition();
   if (drive->GetDeviceID() == drive_fl_id)
@@ -420,7 +414,7 @@ int MarkhorHWInterfaceFlipper::getEncoderPosition(std::unique_ptr<TalonSRX>& dri
   }
 }
 
-void MarkhorHWInterfaceFlipper::loadDrivePosition()
+void MarkhorHWInterfaceFlippers::loadDrivePosition()
 {
   bool is_drives_config_file_1_empty, is_drives_config_file_2_empty;
 
@@ -433,7 +427,7 @@ void MarkhorHWInterfaceFlipper::loadDrivePosition()
   if (drive_config_file_1.good() == false || drive_config_file_2.good() == false)
   {
     ROS_FATAL("Missing drives calibration file(s). You need to either create the files or calibrate it before using "
-              "markhor_base_flipper node");
+              "markhor_flippers node");
     ros::shutdown();
   }
 
@@ -464,7 +458,7 @@ void MarkhorHWInterfaceFlipper::loadDrivePosition()
   if (is_drives_config_file_1_empty == true && is_drives_config_file_2_empty == true)
   {
     // TODO : Add link to documentation on how to calibrate the flipper and create the files
-    ROS_FATAL("Drives configuration files are empty. Please calibrate before using markhor_base_flipper node");
+    ROS_FATAL("Drives configuration files are empty. Please calibrate before using markhor_flippers node");
     ros::shutdown();
   }
 
@@ -481,7 +475,7 @@ void MarkhorHWInterfaceFlipper::loadDrivePosition()
   }
 }
 
-void MarkhorHWInterfaceFlipper::readDrivePositionFromFile(std::string config_file_name, std::fstream& config_file)
+void MarkhorHWInterfaceFlippers::readDrivePositionFromFile(std::string config_file_name, std::fstream& config_file)
 {
   std::string line;
   while (std::getline(config_file, line))
@@ -490,7 +484,7 @@ void MarkhorHWInterfaceFlipper::readDrivePositionFromFile(std::string config_fil
   }
 }
 
-void MarkhorHWInterfaceFlipper::parseDrivePosition(std::string line)
+void MarkhorHWInterfaceFlippers::parseDrivePosition(std::string line)
 {
   int drive_id;
   float drive_position;
@@ -520,7 +514,7 @@ void MarkhorHWInterfaceFlipper::parseDrivePosition(std::string line)
   HasResetEventOccurred = false;
 }
 
-void MarkhorHWInterfaceFlipper::applyDrivePosition(std::unique_ptr<TalonSRX>& drive, float drive_position)
+void MarkhorHWInterfaceFlippers::applyDrivePosition(std::unique_ptr<TalonSRX>& drive, float drive_position)
 {
   int error;
   if (HasResetEventOccurred == false)
@@ -549,7 +543,7 @@ void MarkhorHWInterfaceFlipper::applyDrivePosition(std::unique_ptr<TalonSRX>& dr
   } while (error != ErrorCode::OKAY);
 }
 
-bool MarkhorHWInterfaceFlipper::hasResetOccurred()
+bool MarkhorHWInterfaceFlippers::hasResetOccurred()
 {
   if (front_left_drive)
   {

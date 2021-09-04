@@ -1,6 +1,6 @@
-<?xml version="1.0" ?>
+<?xml version="1.0"?>
 <package format="2">
-  <name>markhor_base_flipper </name>
+  <name>markhor_flippers </name>
   <version>0.0.0</version>
   <description>The markhor_base package</description>
 

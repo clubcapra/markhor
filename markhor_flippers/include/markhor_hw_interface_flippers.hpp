@@ -37,10 +37,10 @@
 
 constexpr unsigned int NUM_JOINTS = 4;
 
-class MarkhorHWInterfaceFlipper : public hardware_interface::RobotHW
+class MarkhorHWInterfaceFlippers : public hardware_interface::RobotHW
 {
 public:
-  MarkhorHWInterfaceFlipper();
+  MarkhorHWInterfaceFlippers();
   void write();
   void read();
 

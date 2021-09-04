@@ -1,5 +1,5 @@
 #include <ros/ros.h>
-#include "markhor_hw_interface_flipper.hpp"
+#include "markhor_hw_interface_flippers.hpp"
 #include <sensor_msgs/Joy.h>
 #include <std_msgs/Float64.h>
 #include "std_srvs/Trigger.h"
@@ -65,7 +65,7 @@ bool flipperModeBackDisable(std_srvs::Trigger::Request& req, std_srvs::Trigger::
 
 int main(int argc, char** argv)
 {
-  ros::init(argc, argv, "markhor_base_flipper_node");
+  ros::init(argc, argv, "markhor_flippers_node");
   ros::NodeHandle nh;
 
   flipper_fl_pub = nh.advertise<std_msgs::Float64>("flipper_fl_position_controller/command", 1000);
@@ -84,7 +84,7 @@ int main(int argc, char** argv)
   ros::ServiceServer flipper_mode_back_disable =
       nh.advertiseService("flipper_mode_back_disable", flipperModeBackDisable);
 
-  MarkhorHWInterfaceFlipper hw;
+  MarkhorHWInterfaceFlippers hw;
   controller_manager::ControllerManager cm(&hw);
 
   ros::AsyncSpinner spinner(1);

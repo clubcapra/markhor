@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.9)
-project(markhor_base_flipper LANGUAGES CXX)
+project(markhor_flippers LANGUAGES CXX)
 
 add_compile_options(-std=c++14)
 
@@ -40,7 +40,7 @@ include_directories(
     ${catkin_INCLUDE_DIRS}
 )
 
-set(source src/markhor_base_flipper.cpp src/markhor_hw_interface_flipper.cpp)
+set(source src/markhor_flippers.cpp src/markhor_hw_interface_flippers.cpp)
 
 add_executable(${PROJECT_NAME}_node ${source})
 
