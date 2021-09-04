@@ -1,4 +1,12 @@
 <launch>
-    <include file="$(find markhor_estop)/launch/estop.launch"/>
-    <include file="$(find markhor_tracks)/launch/hw_control.launch" />
+    <!-- markhor_tracks and markhor_flippers are the future names for these packages/nodes.-->  
+    <include file ="$(find markhor_tracks)/launch/tracks.launch"/>
+    <include file ="$(find markhor_flippers)/launch/flippers.launch"/>
+
+    <!-- markhor_estop will become capra_estop in time. -->
+    <include file ="$(find markhor_estop)/launch/estop.launch"/>
+
+    <include file ="$(find capra_headlights)/launch/headlights.launch"/>
+
+    <!-- Lock missing -->
 </launch>

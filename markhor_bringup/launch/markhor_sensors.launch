@@ -1,0 +1,6 @@
+<launch>
+    <include file ="$(find capra_co2)/launch/co2.launch"/>
+    <include file ="$(find capra_audio)/launch/audio_robot.launch"/>
+    <include file ="$(find capra_audio)/launch/audio_ui.launch"/>
+    <include file ="$(find markhor_bringup)/launch/thermal.launch"/>
+</launch>
