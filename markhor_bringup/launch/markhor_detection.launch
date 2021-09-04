@@ -1,0 +1,7 @@
+<launch>
+    <!-- For motion_detection, desired names are used, not current -->
+    <include file ="$(find capra_motion_detection)/launch/motion_detection.launch"/>
+
+    <include file ="$(find markhor_bringup)/launch/qr_reader.launch"/>
+    <include file ="$(find markhor_slam)/launch/markhor_slam.launch"/>
+</launch>
