@@ -292,8 +292,10 @@ void MarkhorHWInterfaceFlippers::printDriveInfo(std::unique_ptr<TalonSRX>& drive
   else
   {
     ROS_INFO("Device ID is not found");
+    return;
   }
 
+  ROS_INFO("GetStatorCurrent %f", drive->GetStatorCurrent());
   ROS_INFO("GetPulseWidthPosition %d", drive->GetSensorCollection().GetPulseWidthPosition());
   ROS_INFO("GetClosedLoopError %d", drive->GetClosedLoopError(0));
   ROS_INFO("GetClosedLoopTarget %f", drive->GetClosedLoopTarget(0));
