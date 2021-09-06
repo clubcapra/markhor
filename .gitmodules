@@ -1,0 +1,3 @@
+[submodule "markhor_estop/include/JetsonXavierGPIO"]
+	path = markhor_estop/include/JetsonXavierGPIO
+	url = https://github.com/clubcapra/JetsonXavierGPIO.git
