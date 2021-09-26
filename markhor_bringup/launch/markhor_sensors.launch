@@ -2,5 +2,5 @@
     <include file ="$(find capra_telaire_ros)/launch/telaire.launch"/>
     <include file ="$(find capra_audio)/launch/audio_robot.launch"/>
     <include file ="$(find capra_audio)/launch/audio_ui.launch"/>
-    <include file ="$(find markhor_bringup)/launch/thermal.launch"/>
+    <include file ="$(find purethermal_ros)/launch/thermal.launch"/>
 </launch>
