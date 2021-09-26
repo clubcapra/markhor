@@ -1,0 +1,13 @@
+@startuml markhor_flipper_control
+    actor pilot
+    participant capra_web_ui
+    participant markhor_flippers
+    participant markhor_hw_interface_flippers
+    participant flipper
+
+    pilot -> capra_web_ui : Move the joystick on the controller
+    capra_web_ui -> markhor_flippers : Send Joy msg
+    markhor_flippers -> markhor_flippers : Republish as Float64 the Joy Msg to the correct controller
+    markhor_flippers -> markhor_hw_interface_flippers : Communicate to the HWI
+    markhor_hw_interface_flippers -> flipper : Communicate to the driver of the motor drive 
+@enduml

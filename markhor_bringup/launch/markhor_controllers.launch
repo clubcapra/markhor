@@ -1,0 +1,24 @@
+<launch>
+    <arg name="robot_namespace" default="/markhor"/>
+    <!-- Load robot model-->
+    <param name="robot_description" command="xacro '$(find markhor_description)/urdf/markhor.urdf.xacro'" />
+
+    <!-- tracks -->
+    <rosparam command="load" file="$(find markhor_control)/config/track.yaml"/>
+
+    <!-- flippers -->
+    <rosparam command="load" file="$(find markhor_control)/config/control_flipper.yaml" />
+
+    <!-- load the controllers -->
+    <!-- <node name="controller_spawner" pkg="controller_manager" type="spawner" output="screen" ns="$(arg robot_namespace)" 
+    args="
+    joint_state_controller 
+    flipper_fl_position_controller
+    flipper_fr_position_controller
+    flipper_rl_position_controller
+    flipper_rr_position_controller
+    " /> -->
+
+    <node name="controller_spawner" pkg="controller_manager" type="spawner" output="screen" ns="$(arg robot_namespace)" args="diff_drive_controller" />
+
+</launch>
