@@ -250,43 +250,52 @@ void MarkhorHWInterfaceFlippers::printDriveInfo(std::unique_ptr<TalonSRX>& drive
     ROS_INFO("position FL command : %f", joint_position_command_[0]);
     ROS_INFO("FL lower limit : %f", front_left_drive_lower_limit);
     ROS_INFO("FL upper limit : %f", front_left_drive_upper_limit);
-    ROS_INFO("base_position : %f", front_left_drive_base_position);
+    ROS_INFO("front_left_drive_base_position : %f", front_left_drive_base_position);
     ROS_INFO("accumulator_fl : %f", accumulator_fl);
     ROS_INFO("Target : %f", front_left_drive_base_position + accumulator_fl + joint_position_command_[0]);
+    ROS_INFO("Drive %d : output voltage : %f", front_left_drive->GetDeviceID(),
+             front_left_drive->GetMotorOutputVoltage());
   }
   else if (drive->GetDeviceID() == drive_fr_id)
   {
     ROS_INFO("position FR command : %f", joint_position_command_[1]);
     ROS_INFO("FR lower limit : %f", front_right_drive_lower_limit);
     ROS_INFO("FR upper limit : %f", front_right_drive_upper_limit);
-    ROS_INFO("base_position : %f", front_right_drive_base_position);
+    ROS_INFO("front_right_drive_base_position : %f", front_right_drive_base_position);
     ROS_INFO("accumulator_fr : %f", accumulator_fr);
     ROS_INFO("Target : %f", front_right_drive_base_position + accumulator_fr + joint_position_command_[1]);
+    ROS_INFO("Drive %d : output voltage : %f", front_right_drive->GetDeviceID(),
+             front_right_drive->GetMotorOutputVoltage());
   }
   else if (drive->GetDeviceID() == drive_rl_id)
   {
     ROS_INFO("position RL command : %f", joint_position_command_[2]);
     ROS_INFO("RL lower limit : %f", rear_left_drive_lower_limit);
     ROS_INFO("RL upper limit : %f", rear_left_drive_upper_limit);
-    ROS_INFO("base_position : %f", rear_left_drive_base_position);
+    ROS_INFO("rear_left_drive_base_position : %f", rear_left_drive_base_position);
     ROS_INFO("accumulator_rl : %f", accumulator_rl);
     ROS_INFO("Target : %f", rear_left_drive_base_position + accumulator_rl + joint_position_command_[2]);
+    ROS_INFO("Drive %d : output voltage : %f", rear_left_drive->GetDeviceID(),
+             rear_left_drive->GetMotorOutputVoltage());
   }
   else if (drive->GetDeviceID() == drive_rr_id)
   {
     ROS_INFO("position RR command : %f", joint_position_command_[3]);
     ROS_INFO("RR lower limit : %f", rear_right_drive_lower_limit);
     ROS_INFO("RR upper limit : %f", rear_right_drive_upper_limit);
-    ROS_INFO("base_position : %f", rear_right_drive_base_position);
+    ROS_INFO("rear_right_drive_base_position : %f", rear_right_drive_base_position);
     ROS_INFO("accumulator_rr : %f", accumulator_rl);
     ROS_INFO("Target : %f", rear_right_drive_base_position + accumulator_rr + joint_position_command_[3]);
+    ROS_INFO("Drive %d : output voltage : %f", rear_right_drive->GetDeviceID(),
+             rear_right_drive->GetMotorOutputVoltage());
   }
   else
   {
-    ROS_ERROR("Device ID is not found");
+    ROS_INFO("Device ID is not found");
+    return;
   }
 
-  ROS_INFO("Output current of the motor controller : %f", drive->GetStatorCurrent());
+  ROS_INFO("GetStatorCurrent %f", drive->GetStatorCurrent());
   ROS_INFO("GetPulseWidthPosition %d", drive->GetSensorCollection().GetPulseWidthPosition());
   ROS_INFO("GetClosedLoopError %d", drive->GetClosedLoopError(0));
   ROS_INFO("GetClosedLoopTarget %f", drive->GetClosedLoopTarget(0));

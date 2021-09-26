@@ -36,7 +36,6 @@ bool flipperModeFrontEnable(std_srvs::Trigger::Request& req, std_srvs::Trigger::
   flipper_mode_front = true;
   res.message = "successfully enable flipper mode front";
   res.success = static_cast<unsigned char>(true);
-  ROS_ERROR("FRONT ENABLE");
   return true;
 }
 
@@ -45,7 +44,6 @@ bool flipperModeFrontDisable(std_srvs::Trigger::Request& req, std_srvs::Trigger:
   flipper_mode_front = false;
   res.message = "successfully disable flipper mode front";
   res.success = static_cast<unsigned char>(true);
-  ROS_ERROR("FRONT DISABLE");
   return true;
 }
 
@@ -54,7 +52,6 @@ bool flipperModeBackEnable(std_srvs::Trigger::Request& req, std_srvs::Trigger::R
   flipper_mode_back = true;
   res.message = "successfully enable flipper mode back";
   res.success = static_cast<unsigned char>(true);
-  ROS_ERROR("BACK ENABLE");
   return true;
 }
 
@@ -63,7 +60,6 @@ bool flipperModeBackDisable(std_srvs::Trigger::Request& req, std_srvs::Trigger::
   flipper_mode_back = false;
   res.message = "successfully disable flipper mode back";
   res.success = static_cast<unsigned char>(true);
-  ROS_ERROR("BACK DISABLE");
   return true;
 }
 
