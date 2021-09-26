@@ -1,7 +1,6 @@
 <launch>
     <arg name="robot_namespace" default="/markhor" />
     <!-- Load robot model-->
-    <!-- <param name="robot_description" command="xacro '$(find markhor_description)/urdf/markhor.urdf.xacro'" /> -->
 
     <!-- Load hardware interface-->>
     <node name="markhor_tracks_node" pkg="markhor_tracks" type="markhor_tracks_node" ns="$(arg robot_namespace)" output="screen">
@@ -11,9 +10,4 @@
         <param name="rear_right" type="int" value="24"/>
     </node>
 
-    <!-- Load controller config -->
-    <!-- <rosparam command="load" file="$(find markhor_control)/config/track.yaml"/> -->
-
-    <!-- load the controllers -->
-    <!-- <node name="controller_spawner" pkg="controller_manager" type="spawner" output="screen" ns="$(arg robot_namespace)" args="diff_drive_controller"/> -->
 </launch>
