@@ -3,7 +3,7 @@
         <param name="video_device" value="/dev/back_cam" />
         <param name="image_width" value="640" />
         <param name="image_height" value="480" />
-        <param name="pixel_format" value="yuyv" />
+        <param name="pixel_format" value="mjpeg" />
         <param name="camera_frame_id" value="usb_cam" />
         <param name="io_method" value="mmap" />
     </node>

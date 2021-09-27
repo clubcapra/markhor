@@ -26,7 +26,7 @@ void MarkhorHWInterface::setupPublisher()
   front_left_track_vel_pub_ = nh.advertise<std_msgs::Float32>("front_left_track_vel", 1);
   rear_left_track_vel_pub_ = nh.advertise<std_msgs::Float32>("rear_right_track_vel", 1);
   front_right_track_vel_pub_ = nh.advertise<std_msgs::Float32>("front_right_track_vel", 1);
-  rear_right_track_vel_pub_ = nh.advertise<std_msgs::Float32>("rear_track_vel", 1);
+  rear_right_track_vel_pub_ = nh.advertise<std_msgs::Float32>("rear_left_track_vel", 1);
 }
 
 void MarkhorHWInterface::setupRosControl()

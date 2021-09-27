@@ -11,4 +11,6 @@
 
     <include file ="$(find markhor_bringup)/launch/markhor_controllers.launch"/>
     <!-- Lock missing -->
+
+    <include file ="$(find markhor_bringup)/launch/markhor_vision.launch"/>
 </launch>
