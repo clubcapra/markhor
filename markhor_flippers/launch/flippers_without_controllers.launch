@@ -7,25 +7,25 @@
     <node name="markhor_flippers_node" pkg="markhor_flippers" type="markhor_flippers_node" ns="$(arg robot_namespace)" output="screen">
         <param name="front_left" type="int" value="11" />
         <param name="front_left_drive_upper_limit" type="double" value="85000" />
-        <param name="front_left_drive_lower_limit" type="double" value="25000" />
+        <param name="front_left_drive_lower_limit" type="double" value="40000" />
         <param name="front_left_drive_peak_output_forward" type="double" value="0.225" />
         <param name="front_left_drive_peak_output_reverse" type="double" value="-0.26" />
 
         <param name="front_right" type="int" value="12" />
         <param name="front_right_drive_upper_limit" type="double" value="85000" />
-        <param name="front_right_drive_lower_limit" type="double" value="25000" />
+        <param name="front_right_drive_lower_limit" type="double" value="40000" />
         <param name="front_right_drive_peak_output_forward" type="double" value="0.225" />
         <param name="front_right_drive_peak_output_reverse" type="double" value="-0.26" />
 
         <param name="rear_left" type="int" value="13" />
         <param name="rear_left_drive_upper_limit" type="double" value="85000" />
-        <param name="rear_left_drive_lower_limit" type="double" value="25000" />
+        <param name="rear_left_drive_lower_limit" type="double" value="40000" />
         <param name="rear_left_drive_peak_output_forward" type="double" value="0.25" />
         <param name="rear_left_drive_peak_output_reverse" type="double" value="-0.28" />
 
         <param name="rear_right" type="int" value="14" />
         <param name="rear_right_drive_upper_limit" type="double" value="85000" />
-        <param name="rear_right_drive_lower_limit" type="double" value="25000" />
+        <param name="rear_right_drive_lower_limit" type="double" value="40000" />
         <param name="rear_right_drive_peak_output_forward" type="double" value="0.26" />
         <param name="rear_right_drive_peak_output_reverse" type="double" value="-0.30" />
 
