@@ -1,5 +1,5 @@
 <launch>
-    <!-- <arg name="joy_config" default="xbox" />
+    <arg name="joy_config" default="xbox" />
     <arg name="joy_dev" default="/dev/input/js0" />
     <arg name="config_filepath" default="$(find markhor_bringup)/config/$(arg joy_config).config.yaml" />
     
@@ -9,9 +9,6 @@
       <param name="autorepeat_rate" value="200" />
     </node>
   
-    <node pkg="joy" type="joy_node" name="joy_node">
-      
-    </node>
 
     <node pkg="teleop_twist_joy" name="teleop_twist_joy" type="teleop_node">
       <rosparam command="load" file="$(arg config_filepath)" />

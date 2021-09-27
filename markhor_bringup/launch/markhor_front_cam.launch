@@ -1,5 +1,5 @@
 <launch>
-    <node name="usb_cam" pkg="usb_cam" type="usb_cam_node" output="screen">
+    <node name="usb_cam" pkg="usb_cam" type="usb_cam_node" ns="markhor/front" output="screen">
         <param name="video_device" value="/dev/front_cam" />
         <param name="image_width" value="640" />
         <param name="image_height" value="480" />
