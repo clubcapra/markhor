@@ -11,5 +11,5 @@
     <!-- markhor_tracks and markhor_flippers are the future names for these packages/nodes.-->
     <include file="$(find markhor_tracks)/launch/tracks_without_controller.launch" />
 
-    <include file="$(find markhor_flippers)/launch/flippers.launch" />
+    <!-- <include file="$(find markhor_flippers)/launch/flippers.launch" /> -->
 </launch>
