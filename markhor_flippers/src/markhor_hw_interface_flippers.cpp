@@ -1,7 +1,8 @@
-#include <markhor_hw_interface_flippers.hpp>
 #include <string>
 #include <unistd.h>
 #include <ctre/phoenix/motorcontrol/SupplyCurrentLimitConfiguration.h>
+
+#include "markhor_hw_interface_flippers.hpp"
 
 MarkhorHWInterfaceFlippers::MarkhorHWInterfaceFlippers()
 {
@@ -59,7 +60,7 @@ void MarkhorHWInterfaceFlippers::setupCtreDrive()
 
   SupplyCurrentLimitConfiguration current_limit_config;
   current_limit_config.enable = true;
-  current_limit_config.currentLimit = 53;
+  current_limit_config.currentLimit = this->currentLimit;
 
   const int kTimeoutMs = 30;
   float kP, kI, kD = 0.0;
