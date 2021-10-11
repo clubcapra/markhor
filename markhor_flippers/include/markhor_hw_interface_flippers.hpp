@@ -35,8 +35,6 @@
 #include <iostream>
 #include <fstream>
 
-constexpr unsigned int NUM_JOINTS = 4;
-
 class MarkhorHWInterfaceFlippers : public hardware_interface::RobotHW
 {
 public:
@@ -46,6 +44,8 @@ public:
 
   ros::NodeHandle nh;
   int num_joints = 4;
+
+  int currentLimit = 53;
 
 private:
   void setupRosControl();
@@ -83,7 +83,6 @@ private:
   float rear_left_drive_upper_limit, rear_left_drive_lower_limit;
   std::unique_ptr<TalonSRX> rear_right_drive;
   float rear_right_drive_upper_limit, rear_right_drive_lower_limit;
-  int ratio = 1;
 
   std::fstream drive_config_file;
   std::string config_file_1;
