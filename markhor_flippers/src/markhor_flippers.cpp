@@ -1,31 +1,34 @@
 #include <ros/ros.h>
-#include "markhor_hw_interface_flippers.hpp"
 #include <sensor_msgs/Joy.h>
 #include <std_msgs/Float64.h>
-#include "std_srvs/Trigger.h"
+#include <std_srvs/Trigger.h>
+
+#include "markhor_hw_interface_flippers.hpp"
 
 static std_msgs::Float64 msg;
-static float accumulator_rl = 0;
+
 static ros::Publisher flipper_fl_pub;
 static ros::Publisher flipper_fr_pub;
 static ros::Publisher flipper_rl_pub;
 static ros::Publisher flipper_rr_pub;
-static float accumulator = 0;
+
 static bool flipper_mode_front = false;
 static bool flipper_mode_back = false;
+
+static int multiplicator = 0;
 
 void joyCallback(const sensor_msgs::Joy::ConstPtr& joy)
 {
   std_msgs::Float64 msg;
   if (flipper_mode_front == true)
   {
-    msg.data = joy->axes[4] * -1350;  // TODO : Set the multiplicator inside the launch file
+    msg.data = joy->axes[4] * multiplicator;
     flipper_fl_pub.publish(msg);
     flipper_fr_pub.publish(msg);
   }
   if (flipper_mode_back == true)
   {
-    msg.data = joy->axes[4] * -1350;  // TODO : Set the multiplicator inside the launch file
+    msg.data = joy->axes[4] * multiplicator;
     flipper_rl_pub.publish(msg);
     flipper_rr_pub.publish(msg);
   }
@@ -68,6 +71,12 @@ int main(int argc, char** argv)
   ros::init(argc, argv, "markhor_flippers_node");
   ros::NodeHandle nh;
 
+  if(nh.getParam("/markhor/markhor_flippers_node/multiplicator", multiplicator) == false)
+  {
+    ROS_ERROR("Missing multiplicator value from launch files."); 
+    ros::shutdown();
+  }
+
   flipper_fl_pub = nh.advertise<std_msgs::Float64>("flipper_fl_position_controller/command", 1000);
   flipper_fr_pub = nh.advertise<std_msgs::Float64>("flipper_fr_position_controller/command", 1000);
   flipper_rl_pub = nh.advertise<std_msgs::Float64>("flipper_rl_position_controller/command", 1000);
@@ -75,14 +84,10 @@ int main(int argc, char** argv)
 
   ros::Subscriber joy_sub = nh.subscribe("/joy", 1000, joyCallback);
 
-  ros::ServiceServer flipper_mode_front_enable =
-      nh.advertiseService("flipper_mode_front_enable", flipperModeFrontEnable);
-  ros::ServiceServer flipper_mode_front_disable =
-      nh.advertiseService("flipper_mode_front_disable", flipperModeFrontDisable);
-
+  ros::ServiceServer flipper_mode_front_enable = nh.advertiseService("flipper_mode_front_enable", flipperModeFrontEnable);
+  ros::ServiceServer flipper_mode_front_disable = nh.advertiseService("flipper_mode_front_disable", flipperModeFrontDisable);
   ros::ServiceServer flipper_mode_back_enable = nh.advertiseService("flipper_mode_back_enable", flipperModeBackEnable);
-  ros::ServiceServer flipper_mode_back_disable =
-      nh.advertiseService("flipper_mode_back_disable", flipperModeBackDisable);
+  ros::ServiceServer flipper_mode_back_disable = nh.advertiseService("flipper_mode_back_disable", flipperModeBackDisable);
 
   MarkhorHWInterfaceFlippers hw;
   controller_manager::ControllerManager cm(&hw);
