@@ -1,6 +1,6 @@
-#include <string>
-#include <unistd.h>
 #include <ctre/phoenix/motorcontrol/SupplyCurrentLimitConfiguration.h>
+#include <unistd.h>
+#include <string>
 
 #include "markhor_hw_interface_flippers.hpp"
 
@@ -329,8 +329,6 @@ void MarkhorHWInterfaceFlippers::saveDrivePosition()
     alternating_value = true;
     writeDrivePositionToFile(config_file_2);
   }
-
-  drive_config_file.close();
 }
 
 void MarkhorHWInterfaceFlippers::writeDrivePositionToFile(std::string config_file_name)
@@ -338,7 +336,9 @@ void MarkhorHWInterfaceFlippers::writeDrivePositionToFile(std::string config_fil
   drive_config_file.open((config_folder_str + config_file_name).c_str(), std::fstream::out | std::fstream::trunc);
   if (!drive_config_file)
   {
-    ROS_INFO("error openning file %s", config_file_name.c_str());
+    ROS_ERROR("%s - Can't open file %s", __FUNCTION__, config_file_name.c_str());
+    ros::shutdown();
+    return;
   }
 
   if (front_left_drive)
@@ -358,6 +358,7 @@ void MarkhorHWInterfaceFlippers::writeDrivePositionToFile(std::string config_fil
     drive_config_file << rear_right_drive->GetDeviceID() << ":" << getEncoderPosition(rear_right_drive) << std::flush;
   }
   drive_config_file.rdbuf()->pubsync();
+  drive_config_file.close();
 }
 
 int MarkhorHWInterfaceFlippers::getEncoderPosition(std::unique_ptr<TalonSRX>& drive)
@@ -427,6 +428,7 @@ int MarkhorHWInterfaceFlippers::getEncoderPosition(std::unique_ptr<TalonSRX>& dr
   {
     ROS_FATAL("Could not find drive %d in drives list", drive->GetDeviceID());
     ros::shutdown();
+    return 0;
   }
 }
 
@@ -445,6 +447,7 @@ void MarkhorHWInterfaceFlippers::loadDrivePosition()
     ROS_FATAL("Missing drives calibration file(s). You need to either create the files or calibrate it before using "
               "markhor_flippers node");
     ros::shutdown();
+    return;
   }
 
   // Check if the files are empty
@@ -476,19 +479,20 @@ void MarkhorHWInterfaceFlippers::loadDrivePosition()
     // TODO : Add link to documentation on how to calibrate the flipper and create the files
     ROS_FATAL("Drives configuration files are empty. Please calibrate before using markhor_flippers node");
     ros::shutdown();
+    return;
   }
 
   // Read the files
   if (is_drives_config_file_1_empty == false)
   {
     readDrivePositionFromFile(config_file_1, drive_config_file_1);
-    drive_config_file_1.close();
   }
   if (is_drives_config_file_2_empty == false)
   {
     readDrivePositionFromFile(config_file_2, drive_config_file_2);
-    drive_config_file_2.close();
   }
+  drive_config_file_1.close();
+  drive_config_file_2.close();
 }
 
 void MarkhorHWInterfaceFlippers::readDrivePositionFromFile(std::string config_file_name, std::fstream& config_file)
@@ -503,30 +507,33 @@ void MarkhorHWInterfaceFlippers::readDrivePositionFromFile(std::string config_fi
 void MarkhorHWInterfaceFlippers::parseDrivePosition(std::string line)
 {
   int drive_id;
-  float drive_position;
+  int drive_position;
   std::string::size_type pos = line.find(':');
-  if (pos != std::string::npos)
+  if (pos == std::string::npos)
   {
-    drive_id = std::stoi(line.substr(0, pos));
-    drive_position = std::stof(line.substr(pos + 1, line.length()));
-    std::unique_ptr<TalonSRX> tmp_drive;
-    if (drive_id == drive_fl_id)
-    {
-      applyDrivePosition(front_left_drive, drive_position);
-    }
-    if (drive_id == drive_fr_id)
-    {
-      applyDrivePosition(front_right_drive, drive_position);
-    }
-    if (drive_id == drive_rl_id)
-    {
-      applyDrivePosition(rear_left_drive, drive_position);
-    }
-    if (drive_id == drive_rr_id)
-    {
-      applyDrivePosition(rear_right_drive, drive_position);
-    }
+    ROS_ERROR("Could not find \':\' character in calibration line : %s", line.c_str());
+    return;
   }
+  drive_id = std::stoi(line.substr(0, pos));
+  drive_position = std::stoi(line.substr(pos + 1, line.length()));
+
+  if (drive_id == drive_fl_id)
+  {
+    applyDrivePosition(front_left_drive, drive_position);
+  }
+  if (drive_id == drive_fr_id)
+  {
+    applyDrivePosition(front_right_drive, drive_position);
+  }
+  if (drive_id == drive_rl_id)
+  {
+    applyDrivePosition(rear_left_drive, drive_position);
+  }
+  if (drive_id == drive_rr_id)
+  {
+    applyDrivePosition(rear_right_drive, drive_position);
+  }
+
   HasResetEventOccurred = false;
 }
 
