@@ -43,9 +43,9 @@ public:
   void read();
 
   ros::NodeHandle nh;
-  int num_joints = 4;
+  int num_joints = 0;
 
-  int currentLimit = 53;
+  int currentLimit = 30;
 
 private:
   void setupRosControl();
