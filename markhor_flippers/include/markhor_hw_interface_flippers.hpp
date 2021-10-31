@@ -42,10 +42,10 @@ public:
   void write();
   void read();
 
-  ros::NodeHandle nh;
-  int num_joints = 0;
+  ros::NodeHandle nh_;
+  int num_joints_ = 0;
 
-  int currentLimit = 30;
+  int current_limit_ = 30;
   
 private:
   void setupRosControl();
@@ -63,9 +63,9 @@ private:
 
   int getEncoderPosition(std::unique_ptr<TalonSRX>& drive);
 
-  const int kTimeoutMs = 30;
+  const int timeout_ms_ = 30;
   
-  int drive_fl_id, drive_fr_id, drive_rl_id, drive_rr_id = 0;
+  int drive_fl_id_, drive_fr_id_, drive_rl_id_, drive_rr_id_ = 0;
 
   hardware_interface::JointStateInterface joint_state_interface_;
   hardware_interface::PositionJointInterface position_joint_interface_;
@@ -79,30 +79,34 @@ private:
   std::vector<double> joint_velocity_command_;
   std::vector<double> joint_effort_command_;
 
-  std::unique_ptr<TalonSRX> front_left_drive;
-  float front_left_drive_upper_limit, front_left_drive_lower_limit;
-  std::unique_ptr<TalonSRX> front_right_drive;
-  float front_right_drive_upper_limit, front_right_drive_lower_limit;
-  std::unique_ptr<TalonSRX> rear_left_drive;
-  float rear_left_drive_upper_limit, rear_left_drive_lower_limit;
-  std::unique_ptr<TalonSRX> rear_right_drive;
-  float rear_right_drive_upper_limit, rear_right_drive_lower_limit;
+  std::unique_ptr<TalonSRX> front_left_drive_;
+  float front_left_drive_upper_limit_;
+  float front_left_drive_lower_limit_;
+  std::unique_ptr<TalonSRX> front_right_drive_;
+  float front_right_drive_upper_limit_;
+  float front_right_drive_lower_limit_;
+  std::unique_ptr<TalonSRX> rear_left_drive_;
+  float rear_left_drive_upper_limit_;
+  float rear_left_drive_lower_limit_;
+  std::unique_ptr<TalonSRX> rear_right_drive_;
+  float rear_right_drive_upper_limit_;
+  float rear_right_drive_lower_limit_;
 
-  std::fstream drive_config_file;
-  std::string config_file_1;
-  std::string config_file_2;
-  std::string config_folder_str;
+  std::fstream drive_config_file_;
+  std::string config_file_1_;
+  std::string config_file_2_;
+  std::string config_folder_str_;
 
-  bool alternating_value = true;
+  bool alternating_value_ = true;
 
-  float front_left_drive_base_position;
-  float front_right_drive_base_position;
-  float rear_left_drive_base_position;
-  float rear_right_drive_base_position;
-  bool HasResetEventOccurred = false;
-  float accumulator_fr = 0;
-  float accumulator_fl = 0;
-  float accumulator_rl = 0;
-  float accumulator_rr = 0;
+  float front_left_drive_base_position_;
+  float front_right_drive_base_position_;
+  float rear_left_drive_base_position_;
+  float rear_right_drive_base_position_;
+  bool has_reset_event_occured_ = false;
+  float accumulator_fr_ = 0;
+  float accumulator_fl_ = 0;
+  float accumulator_rl_ = 0;
+  float accumulator_rr_ = 0;
 };
 #endif  // MARKHOR_HW_INTERFACE_H
