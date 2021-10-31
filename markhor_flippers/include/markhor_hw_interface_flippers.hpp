@@ -52,6 +52,7 @@ private:
   void setupCtreDrive();
   bool hasResetOccurred();
   void printDriveInfo(std::unique_ptr<TalonSRX>& drive);
+  
   void saveDrivePosition();
   void writeDrivePositionToFile(std::string config_file_name);
 
@@ -59,8 +60,11 @@ private:
   void readDrivePositionFromFile(std::string config_file_name, std::fstream& config_file);
   void parseDrivePosition(std::string line);
   void applyDrivePosition(std::unique_ptr<TalonSRX>& drive, float drive_position);
+
   int getEncoderPosition(std::unique_ptr<TalonSRX>& drive);
 
+  const int kTimeoutMs = 30;
+  
   int drive_fl_id, drive_fr_id, drive_rl_id, drive_rr_id = 0;
 
   hardware_interface::JointStateInterface joint_state_interface_;
