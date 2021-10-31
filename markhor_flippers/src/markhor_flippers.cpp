@@ -75,6 +75,7 @@ int main(int argc, char** argv)
   {
     ROS_ERROR("Missing multiplicator value from launch files."); 
     ros::shutdown();
+    return 1;
   }
 
   flipper_fl_pub = nh.advertise<std_msgs::Float64>("flipper_fl_position_controller/command", 1000);

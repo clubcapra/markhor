@@ -1,7 +1,5 @@
 <launch>
     <arg name="robot_namespace" default="/markhor" />
-    <!-- Load robot model-->
-    <param name="robot_description" command="xacro '$(find markhor_description)/urdf/markhor.urdf.xacro'" />
 
     <!-- Load hardware interface-->
     <node name="markhor_flippers_node" pkg="markhor_flippers" type="markhor_flippers_node" ns="$(arg robot_namespace)" output="screen">
