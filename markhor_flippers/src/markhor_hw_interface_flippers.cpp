@@ -195,6 +195,21 @@ void MarkhorHWInterfaceFlippers::write()
   ctre::phoenix::unmanaged::FeedEnable(100);
 
   printDriveInfo(front_left_drive);
+
+  /*
+  The lines :
+    Lower limit :
+    front_left_drive_lower_limit <= front_left_drive_base_position + accumulator_fl + joint_position_command_[0]
+
+    And
+
+    Upper limit :
+    front_left_drive_base_position + accumulator_fl + joint_position_command_[0] < front_left_drive_upper_limit
+
+  in each if condition for each drive, represent if the next position value we want to apply to the flipper is going to
+  be above or under the limit of the flipper.
+ */
+
   if (front_left_drive_lower_limit <= front_left_drive_base_position + accumulator_fl + joint_position_command_[0] &&
       front_left_drive_base_position + accumulator_fl + joint_position_command_[0] < front_left_drive_upper_limit)
   {
