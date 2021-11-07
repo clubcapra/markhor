@@ -26,7 +26,7 @@ void MarkhorHWInterface::setupPublisher()
   front_left_track_vel_pub_ = nh.advertise<std_msgs::Float32>("front_left_track_vel", 1);
   rear_left_track_vel_pub_ = nh.advertise<std_msgs::Float32>("rear_right_track_vel", 1);
   front_right_track_vel_pub_ = nh.advertise<std_msgs::Float32>("front_right_track_vel", 1);
-  rear_right_track_vel_pub_ = nh.advertise<std_msgs::Float32>("rear_track_vel", 1);
+  rear_right_track_vel_pub_ = nh.advertise<std_msgs::Float32>("rear_left_track_vel", 1);
 }
 
 void MarkhorHWInterface::setupRosControl()
@@ -52,23 +52,27 @@ void MarkhorHWInterface::setupCTREDrive()
 
   int drive_fl_id, drive_fr_id, drive_rl_id, drive_rr_id = 0;
 
-  if (nh.getParam("/markhor/markhor_base_node/front_left", drive_fl_id) == true)
+  if (nh.getParam("/markhor/markhor_tracks_node/front_left", drive_fl_id) == true)
   {
     front_left_drive = std::make_unique<TalonSRX>(drive_fl_id);
-    front_left_drive->SetInverted(true); // Fix drive orientation
+    front_left_drive->SetNeutralMode(NeutralMode::Brake);
+    front_left_drive->SetInverted(true);  // Fix drive orientation
   }
-  if (nh.getParam("/markhor/markhor_base_node/rear_left", drive_rl_id) == true)
+  if (nh.getParam("/markhor/markhor_tracks_node/rear_left", drive_rl_id) == true)
   {
     rear_left_drive = std::make_unique<TalonSRX>(drive_rl_id);
-    rear_left_drive->SetInverted(true); // Fix drive orientation
+    rear_left_drive->SetNeutralMode(NeutralMode::Brake);
   }
-  if (nh.getParam("/markhor/markhor_base_node/front_right", drive_fr_id) == true)
+  if (nh.getParam("/markhor/markhor_tracks_node/front_right", drive_fr_id) == true)
   {
     front_right_drive = std::make_unique<TalonSRX>(drive_fr_id);
+    front_right_drive->SetNeutralMode(NeutralMode::Brake);
+    front_right_drive->SetInverted(true);
   }
-  if (nh.getParam("/markhor/markhor_base_node/rear_right", drive_rr_id) == true)
+  if (nh.getParam("/markhor/markhor_tracks_node/rear_right", drive_rr_id) == true)
   {
     rear_right_drive = std::make_unique<TalonSRX>(drive_rr_id);
+    rear_right_drive->SetNeutralMode(NeutralMode::Brake);
   }
 }
 

@@ -7,7 +7,7 @@
     <param name="robot_description" command="xacro '$(find markhor_description)/urdf/markhor.urdf.xacro'" />
 
     <!-- Load joint controller configurations from YAML file to parameter server -->
-    <rosparam file="$(find markhor_control)/config/flipper.yaml" command="load" />
+    <rosparam file="$(find markhor_control)/config/flippers.yaml" command="load" />
 
     <!-- load the controllers -->
     <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" ns="$(arg namespace)" args="joint_state_controller 

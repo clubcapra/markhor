@@ -1,4 +1,14 @@
 <launch>
-    <include file="$(find markhor_estop)/launch/estop.launch"/>
-    <include file="$(find markhor_base)/launch/hw_control.launch"/>
+    <include file="$(find markhor_estop)/launch/estop.launch" />
+
+    <include file="$(find markhor_bringup)/launch/markhor_web_ui.launch" />
+
+    <include file="$(find markhor_bringup)/launch/markhor_controllers.launch" />
+    <include file="$(find markhor_tracks)/launch/tracks_without_controllers.launch" />
+
+    <include file="$(find capra_telaire_ros)/launch/telaire.launch" />
+
+
+    <include file="$(find markhor_bringup)/launch/markhor_vision_video.launch" />
+    
 </launch>
