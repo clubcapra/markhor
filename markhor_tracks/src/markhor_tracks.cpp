@@ -24,7 +24,7 @@ int main(int argc, char** argv)
   controller_manager::ControllerManager cm(&hw, hw.nh);
 
   double control_frequency;
-  hw.private_nh.param<double>("control_frequency", control_frequency, 10.0);
+  hw.private_nh.param<double>("control_frequency", control_frequency, 60.0);
 
   ros::CallbackQueue my_robot_queue;
   ros::AsyncSpinner my_robot_spinner(1, &my_robot_queue);

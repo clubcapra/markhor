@@ -31,6 +31,13 @@ JNIEXPORT jint JNICALL Java_com_ctre_phoenix_platform_can_PlatformCANJNI_JNI_1Se
 //JNIEXPORT jint JNICALL Java_com_ctre_phoenix_platform_can_PlatformCANJNI_JNI_1StartAll
 //  (JNIEnv *, jclass);
 
+/*
+ * Class:     com_ctre_phoenix_platform_can_PlatformCANJNI
+ * Method:    JNI_SetAutocacheLevel
+ * Signature: (I)V
+ */
+JNIEXPORT void JNICALL Java_com_ctre_phoenix_platform_can_PlatformCANJNI_JNI_1SetAutocacheLevel(JNIEnv *, jclass, jint);
+
 #ifdef __cplusplus
 }
 #endif

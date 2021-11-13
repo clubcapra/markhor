@@ -23,6 +23,37 @@ JNIEXPORT void JNICALL Java_com_ctre_phoenix_unmanaged_UnmanagedJNI_JNI_1FeedEna
 JNIEXPORT jboolean JNICALL Java_com_ctre_phoenix_unmanaged_UnmanagedJNI_JNI_1GetEnableState
   (JNIEnv *, jclass);
 
+/*
+ * Class:     com_ctre_phoenix_unmanaged_UnmanagedJNI
+ * Method:    JNI_GetPhoenixVersion
+ * Signature: ()Z
+ */
+JNIEXPORT jint JNICALL Java_com_ctre_phoenix_unmanaged_UnmanagedJNI_JNI_1GetPhoenixVersion
+  (JNIEnv *, jclass);
+
+/*
+ * Class:     com_ctre_phoenix_unmanaged_UnmanagedJNI
+ * Method:    JNI_LoadPhoenix
+ * Signature: ()Z
+ */
+JNIEXPORT void JNICALL Java_com_ctre_phoenix_unmanaged_UnmanagedJNI_JNI_1LoadPhoenix
+  (JNIEnv *, jclass);
+
+/*
+ * Class:     Java_com_ctre_phoenix_unmanaged_UnmanagedJNI_JNI_1SetPhoenixDiagnosticsStartTime
+ * Method:    JNI_1SetPhoenixDiagnosticsStartTime
+ * Signature: (I)Z
+ */
+JNIEXPORT void JNICALL Java_com_ctre_phoenix_unmanaged_UnmanagedJNI_JNI_1SetPhoenixDiagnosticsStartTime(JNIEnv *, jclass, jint startTimeSeconds);
+
+/*
+ * Class:     com_ctre_phoenix_unmanaged_UnmanagedJNI
+ * Method:    JNI_IoControl
+ * Signature: (IJ)I
+ */
+JNIEXPORT jint JNICALL Java_com_ctre_phoenix_unmanaged_UnmanagedJNI_JNI_1IoControl
+  (JNIEnv *, jclass, jint ioControlCode, jlong ioControlParam);
+
 #ifdef __cplusplus
 }
 #endif

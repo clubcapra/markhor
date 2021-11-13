@@ -1,18 +1,28 @@
 #include "ctre/phoenix/cci/CCI.h"
 #include "ctre/phoenix/ErrorCode.h"
+#include "ctre/phoenix/motorcontrol/ControlMode.h"
+#include "ctre/phoenix/motorcontrol/MotorCommutation.h"
+#include "ctre/phoenix/motorcontrol/SupplyCurrentLimitConfiguration.h"
+#include "ctre/phoenix/motorcontrol/StatorCurrentLimitConfiguration.h"
+#include "ctre/phoenix/sensors/AbsoluteSensorRange.h"
+#include "ctre/phoenix/sensors/SensorInitializationStrategy.h"
 #include <cstddef>
 
 extern "C"{
 	CCIEXPORT void* c_MotController_Create1(int baseArbId);
+	CCIEXPORT void* c_MotController_Create2(int deviceID, const char * model);
     CCIEXPORT void c_MotController_DestroyAll();
     CCIEXPORT ctre::phoenix::ErrorCode c_MotController_Destroy(void *handle);
+	CCIEXPORT ctre::phoenix::ErrorCode c_MotController_GetAppliedControlMode(void *handle, int &controlMode);
 	CCIEXPORT ctre::phoenix::ErrorCode c_MotController_GetDeviceNumber(void *handle, int *deviceNumber);
 	CCIEXPORT ctre::phoenix::ErrorCode c_MotController_GetDescription(void *handle, char * toFill, int toFillByteSz, size_t * numBytesFilled);
+	CCIEXPORT ctre::phoenix::ErrorCode c_MotController_GetBaseID(void* handle, int* baseArbId);
 	CCIEXPORT ctre::phoenix::ErrorCode c_MotController_SetDemand(void *handle, int mode, int demand0, int demand1);
 	CCIEXPORT ctre::phoenix::ErrorCode c_MotController_Set_4(void *handle, int mode, double demand0, double demand1, int demand1Type);
 	CCIEXPORT void c_MotController_SetNeutralMode(void *handle, int neutralMode);
 	CCIEXPORT void c_MotController_SetSensorPhase(void *handle, bool PhaseSensor);
 	CCIEXPORT void c_MotController_SetInverted(void *handle, bool invert);
+	CCIEXPORT void c_MotController_SetInverted_2(void *handle, int invertType);
 	CCIEXPORT ctre::phoenix::ErrorCode c_MotController_ConfigFactoryDefault(void *handle, int timeoutMs);
 	CCIEXPORT ctre::phoenix::ErrorCode c_MotController_ConfigOpenLoopRamp(void *handle, double secondsFromNeutralToFull, int timeoutMs);
 	CCIEXPORT ctre::phoenix::ErrorCode c_MotController_ConfigClosedLoopRamp(void *handle, double secondsFromNeutralToFull, int timeoutMs);
@@ -24,9 +34,12 @@ extern "C"{
 	CCIEXPORT ctre::phoenix::ErrorCode c_MotController_ConfigVoltageCompSaturation(void *handle, double voltage, int timeoutMs);
 	CCIEXPORT ctre::phoenix::ErrorCode c_MotController_ConfigVoltageMeasurementFilter(void *handle, int filterWindowSamples, int timeoutMs);
 	CCIEXPORT void c_MotController_EnableVoltageCompensation(void *handle, bool enable);
+	CCIEXPORT ctre::phoenix::ErrorCode c_MotController_GetInverted(void *handle, bool *invert);
 	CCIEXPORT ctre::phoenix::ErrorCode c_MotController_GetBusVoltage(void *handle, double *voltage);
 	CCIEXPORT ctre::phoenix::ErrorCode c_MotController_GetMotorOutputPercent(void *handle, double *percentOutput);
-	CCIEXPORT ctre::phoenix::ErrorCode c_MotController_GetOutputCurrent(void *handle, double *current);
+	CCIEXPORT ctre::phoenix::ErrorCode c_MotController_GetOutputCurrent(void* handle, double* current);
+	CCIEXPORT ctre::phoenix::ErrorCode c_MotController_GetSupplyCurrent(void* handle, double* current);
+	CCIEXPORT ctre::phoenix::ErrorCode c_MotController_GetStatorCurrent(void* handle, double* current);
 	CCIEXPORT ctre::phoenix::ErrorCode c_MotController_GetTemperature(void *handle, double *temperature);
 	CCIEXPORT ctre::phoenix::ErrorCode c_MotController_ConfigSelectedFeedbackSensor(void *handle, int feedbackDevice, int pidIdx, int timeoutMs);
 	CCIEXPORT ctre::phoenix::ErrorCode c_MotController_ConfigSelectedFeedbackCoefficient(void *handle, double coefficient, int pidIdx, int timeoutMs);
@@ -65,9 +78,14 @@ extern "C"{
 	CCIEXPORT ctre::phoenix::ErrorCode c_MotController_GetActiveTrajectoryPosition(void *handle, int *param);
 	CCIEXPORT ctre::phoenix::ErrorCode c_MotController_GetActiveTrajectoryVelocity(void *handle, int *param);
 	CCIEXPORT ctre::phoenix::ErrorCode c_MotController_GetActiveTrajectoryHeading(void *handle, double *param);
+	CCIEXPORT ctre::phoenix::ErrorCode c_MotController_GetActiveTrajectoryPosition_3(void *handle, int *param, int pidIdx);
+	CCIEXPORT ctre::phoenix::ErrorCode c_MotController_GetActiveTrajectoryVelocity_3(void *handle, int *param, int pidIdx);
+	CCIEXPORT ctre::phoenix::ErrorCode c_MotController_GetActiveTrajectoryArbFeedFwd_3(void *handle, double *param, int pidIdx);
 	CCIEXPORT ctre::phoenix::ErrorCode c_MotController_GetActiveTrajectoryAll(void *handle, int * vel, int * pos, double *heading);
+	CCIEXPORT ctre::phoenix::ErrorCode c_MotController_GetActiveTrajectoryAll_5(void *handle, int * vel, int * pos, double *arbFeedFwd, int pidIdx);
 	CCIEXPORT ctre::phoenix::ErrorCode c_MotController_ConfigMotionCruiseVelocity(void *handle, int sensorUnitsPer100ms, int timeoutMs);
 	CCIEXPORT ctre::phoenix::ErrorCode c_MotController_ConfigMotionAcceleration(void *handle, int sensorUnitsPer100msPerSec, int timeoutMs);
+	CCIEXPORT ctre::phoenix::ErrorCode c_MotController_ConfigMotionSCurveStrength(void *handle, int curveStrength, int timeoutMs);
 	CCIEXPORT ctre::phoenix::ErrorCode c_MotController_ClearMotionProfileTrajectories(void *handle);
 	CCIEXPORT ctre::phoenix::ErrorCode c_MotController_GetMotionProfileTopLevelBufferCount(void *handle, int * value);
 	CCIEXPORT ctre::phoenix::ErrorCode c_MotController_PushMotionProfileTrajectory(void *handle, double position,
@@ -75,6 +93,9 @@ extern "C"{
 	CCIEXPORT ctre::phoenix::ErrorCode c_MotController_PushMotionProfileTrajectory_2(
 		void *handle, double position, double velocity, double headingDeg,
 		int profileSlotSelect0, int profileSlotSelect1, bool isLastPoint, bool zeroPos, int durationMs);
+	CCIEXPORT ctre::phoenix::ErrorCode c_MotController_PushMotionProfileTrajectory_3(void *handle, double position, double velocity, double arbFeedFwd, double auxiliaryPos, double auxiliaryVel, double auxiliaryArbFeedFwd, uint32_t profileSlotSelect0, uint32_t profileSlotSelect1, bool isLastPoint, bool zeroPos0, uint32_t timeDur, bool useAuxPID);
+	CCIEXPORT ctre::phoenix::ErrorCode c_MotController_StartMotionProfile(void *handle, void * streamHandle, uint32_t minBufferedPts, ctre::phoenix::motorcontrol::ControlMode controlMode);
+	CCIEXPORT ctre::phoenix::ErrorCode c_MotController_IsMotionProfileFinished(void *handle, bool * value);
 	CCIEXPORT ctre::phoenix::ErrorCode c_MotController_IsMotionProfileTopLevelBufferFull(void *handle, bool * value);
 	CCIEXPORT ctre::phoenix::ErrorCode c_MotController_ProcessMotionProfileBuffer(void *handle);
 	CCIEXPORT ctre::phoenix::ErrorCode c_MotController_GetMotionProfileStatus(void *handle,
@@ -92,6 +113,7 @@ extern "C"{
 			int periodMs);
 	CCIEXPORT ctre::phoenix::ErrorCode c_MotController_ConfigMotionProfileTrajectoryPeriod(
 			void *handle, int durationMs, int timeoutMs);
+	CCIEXPORT ctre::phoenix::ErrorCode c_MotController_ConfigMotionProfileTrajectoryInterpolationEnable(void *handle, bool enable, int timeoutMs);
     CCIEXPORT ctre::phoenix::ErrorCode c_MotController_ConfigFeedbackNotContinuous(void *handle,
             bool feedbackNotContinuous, int timeoutMs);
     CCIEXPORT ctre::phoenix::ErrorCode c_MotController_ConfigRemoteSensorClosedLoopDisableNeutralOnLOS(void *handle,
@@ -152,4 +174,18 @@ extern "C"{
 	CCIEXPORT ctre::phoenix::ErrorCode c_MotController_GetQuadPinStates(void *handle, int * quadA, int * quadB, int * quadIdx);
 	CCIEXPORT ctre::phoenix::ErrorCode c_MotController_GetLimitSwitchState(void *handle, int * isFwdClosed, int * isRevClosed);
 	CCIEXPORT ctre::phoenix::ErrorCode c_MotController_GetClosedLoopTarget(void *handle, int * value, int pidIdx);
+	CCIEXPORT ctre::phoenix::ErrorCode c_MotController_ConfigMotorCommutation(void* handle, ctre::phoenix::motorcontrol::MotorCommutation motorCommutation, int timeoutMs);
+	CCIEXPORT ctre::phoenix::ErrorCode c_MotController_ConfigGetMotorCommutation(void* handle, ctre::phoenix::motorcontrol::MotorCommutation *motorCommutation, int timeoutMs);
+	CCIEXPORT ctre::phoenix::ErrorCode c_MotController_ConfigSupplyCurrentLimit(void* handle, const double* params, int paramCnt, int timeoutMs);
+	CCIEXPORT ctre::phoenix::ErrorCode c_MotController_ConfigStatorCurrentLimit(void* handle, const double* params, int paramCnt, int timeoutMs);
+	CCIEXPORT ctre::phoenix::ErrorCode c_MotController_ConfigSupplyCurrentLimitEnable(void* handle, bool enable, int timeoutMs);
+	CCIEXPORT ctre::phoenix::ErrorCode c_MotController_ConfigStatorCurrentLimitEnable(void* handle, bool enable, int timeoutMs);
+	CCIEXPORT ctre::phoenix::ErrorCode c_MotController_ConfigGetSupplyCurrentLimit(void* handle, double* toFill, int * fillCnt, int fillCapacity, int timeoutMs);
+	CCIEXPORT ctre::phoenix::ErrorCode c_MotController_ConfigGetStatorCurrentLimit(void* handle, double* toFill, int* fillCnt, int fillCapacity, int timeoutMs);
+	CCIEXPORT ctre::phoenix::ErrorCode c_MotController_SetIntegratedSensorPosition(void* handle, double newpos, int timeoutMs);
+	CCIEXPORT ctre::phoenix::ErrorCode c_MotController_SetIntegratedSensorPositionToAbsolute(void* handle, int timeoutMs);
+	CCIEXPORT ctre::phoenix::ErrorCode c_MotController_GetIntegratedSensor(void* handle, double* pos, double * absPos, double * vel);
+	CCIEXPORT ctre::phoenix::ErrorCode c_MotController_ConfigIntegratedSensorAbsoluteRange(void* handle, ctre::phoenix::sensors::AbsoluteSensorRange absoluteSensorRange, int timeoutMs);
+	CCIEXPORT ctre::phoenix::ErrorCode c_MotController_ConfigIntegratedSensorOffset(void* handle, double offsetDegrees, int timeoutMs);
+	CCIEXPORT ctre::phoenix::ErrorCode c_MotController_ConfigIntegratedSensorInitializationStrategy(void* handle, ctre::phoenix::sensors::SensorInitializationStrategy initializationStrategy, int timeoutMs);
 }

@@ -30,13 +30,15 @@ namespace can {
 	/* assumed blocking */
 	int32_t CANbus_ReceiveFrame(canframe_t * toFill, uint32_t frameCap, uint32_t *numFilled);
     
+	/**
+	 * Set the CAN interface to use, for example on Linux you may select "can0".
+	 * @param CANInterface CAN interface string.
+	 * @return errorcode, zero if successful.
+	 */
     int32_t SetCANInterface(const char * CANInterface);
 
 	//-------------- Mid Level CANBus interface, this is required if NOT using phoenix-canutil, --------------------------//
 	void CANComm_SendMessage(uint32_t messageID, const uint8_t *data, uint8_t dataSize, int32_t periodMs, int32_t *status);
-	/**
-	 * @param messageIDMask Completely ignored, TODO remove this.
-	 */
 	void CANComm_ReceiveMessage(uint32_t *messageID, uint32_t messageIDMask, uint8_t *data, uint8_t *dataSize, uint32_t *timeStamp, int32_t *status);
 	void CANComm_OpenStreamSession(uint32_t *sessionHandle, uint32_t messageID, uint32_t messageIDMask, uint32_t maxMessages, int32_t *status);
 	void CANComm_CloseStreamSession(uint32_t sessionHandle);
