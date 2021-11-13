@@ -73,3 +73,4 @@ public:
 	bool IsDone();
 };
 }}}}
+
