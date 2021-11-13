@@ -125,8 +125,8 @@ void MarkhorHWInterface::setupCTREDrive()
 
     rear_right_drive->SelectProfileSlot(0, 0);
     rear_right_drive->Config_kF(0, 0, timeout_ms_);
-    rear_right_drive->Config_kP(0, 0.1, timeout_ms_);
-    rear_right_drive->Config_kI(0, 0.002, timeout_ms_);
+    rear_right_drive->Config_kP(0, 0.1, timeout_ms_);//TODO : Set this value to 0.3 when encoder is fixed
+    rear_right_drive->Config_kI(0, 0.002, timeout_ms_);//TODO : Set this value to 0.005 when encoder is fixed
     rear_right_drive->Config_kD(0, 0, timeout_ms_);
 
     front_left_drive->Set(ControlMode::Velocity, 0);
@@ -139,11 +139,10 @@ void MarkhorHWInterface::setupCTREDrive()
 
 void MarkhorHWInterface::write()
 {
-  ROS_INFO("Vel: %d, %d", rear_right_drive->GetSensorCollection().GetQuadratureVelocity(),rear_left_drive->GetSensorCollection().GetQuadratureVelocity());
   double diff_ang_speed_front_left = cmd[0] * 125;
   double diff_ang_speed_front_right = cmd[1] * 125;
   double diff_ang_speed_rear_left = cmd[2] * 125;
-  double diff_ang_speed_rear_right = cmd[3] * 375;
+  double diff_ang_speed_rear_right = cmd[3] * 375;//TODO : Set this value to 125 when encoder is fixed
 
   limitDifferentialSpeed(diff_ang_speed_front_left, diff_ang_speed_rear_left, diff_ang_speed_front_right,
                          diff_ang_speed_rear_right);
@@ -156,14 +155,9 @@ void MarkhorHWInterface::write()
   rear_left_track_vel_msg.data = diff_ang_speed_rear_left;
   rear_right_track_vel_msg.data = diff_ang_speed_rear_right;
 
-/*
-  front_left_drive->Set(ControlMode::Velocity, 500);//front_left_track_vel_msg.data);
-  front_right_drive->Set(ControlMode::Velocity, 500);
-  rear_left_drive->Set(ControlMode::Velocity, 500);
-  rear_right_drive->Set(ControlMode::Velocity, 1500);
-*/
+
   // Write to drive
-  front_left_drive->Set(ControlMode::Velocity, front_left_track_vel_msg.data);//front_left_track_vel_msg.data);
+  front_left_drive->Set(ControlMode::Velocity, front_left_track_vel_msg.data);
   front_right_drive->Set(ControlMode::Velocity, front_right_track_vel_msg.data);
   rear_left_drive->Set(ControlMode::Velocity, rear_left_track_vel_msg.data);
   rear_right_drive->Set(ControlMode::Velocity, rear_right_track_vel_msg.data);
@@ -178,7 +172,7 @@ void MarkhorHWInterface::write()
 void MarkhorHWInterface::read(const ros::Duration& period)
 {
     // Read from the motor API, going to read from the TalonSRX objects
-    //ROS_INFO("Vel: %d", drive->GetSensorCollection().GetQuadratureVelocity();
+    //ROS_INFO("Vel: %d, %d", rear_right_drive->GetSensorCollection().GetQuadratureVelocity(),rear_left_drive->GetSensorCollection().GetQuadratureVelocity());
 }
 
 ros::Time MarkhorHWInterface::get_time()
