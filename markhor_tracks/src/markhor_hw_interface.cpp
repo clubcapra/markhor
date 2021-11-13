@@ -8,7 +8,7 @@ MarkhorHWInterface::MarkhorHWInterface()
   , start_srv_(nh.advertiseService("start", &MarkhorHWInterface::start_callback, this))
   , stop_srv_(nh.advertiseService("stop", &MarkhorHWInterface::start_callback, this))
 {
-  private_nh.param<double>("max_speed", max_speed, 3000.0);
+  private_nh.param<double>("max_speed", max_speed, 1.0);
 
   std::fill(pos, pos + NUM_JOINTS, 0.0);
   std::fill(vel, vel + NUM_JOINTS, 0.0);
@@ -52,98 +52,36 @@ void MarkhorHWInterface::setupCTREDrive()
 
   int drive_fl_id, drive_fr_id, drive_rl_id, drive_rr_id = 0;
 
-  SupplyCurrentLimitConfiguration current_limit_config;
-  current_limit_config.enable = true;
-  current_limit_config.currentLimit = 30;
-
   if (nh.getParam("/markhor/markhor_tracks_node/front_left", drive_fl_id) == true)
   {
     front_left_drive = std::make_unique<TalonSRX>(drive_fl_id);
-    front_left_drive->SetNeutralMode(NeutralMode::Coast);
+    front_left_drive->SetNeutralMode(NeutralMode::Brake);
     front_left_drive->SetInverted(true);  // Fix drive orientation
-    front_left_drive->ConfigFactoryDefault();
-    front_left_drive->ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Relative , 0, timeout_ms_);
-    front_left_drive->SetSensorPhase(false);
-    front_left_drive->ConfigSupplyCurrentLimit(current_limit_config);
-    front_left_drive->ConfigNominalOutputForward(0, timeout_ms_);
-    front_left_drive->ConfigNominalOutputReverse(0, timeout_ms_);
-    front_left_drive->ConfigAllowableClosedloopError(0, 0, timeout_ms_);
-    
-    front_left_drive->SelectProfileSlot(0, 0);
-    front_left_drive->Config_kF(0, 0, timeout_ms_);
-    front_left_drive->Config_kP(0, 0.3, timeout_ms_);
-    front_left_drive->Config_kI(0, 0.005, timeout_ms_);
-    front_left_drive->Config_kD(0, 0, timeout_ms_);
-
   }
   if (nh.getParam("/markhor/markhor_tracks_node/rear_left", drive_rl_id) == true)
   {
     rear_left_drive = std::make_unique<TalonSRX>(drive_rl_id);
-    rear_left_drive->SetNeutralMode(NeutralMode::Coast);
-    rear_left_drive->ConfigFactoryDefault();
-    rear_left_drive->ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Relative , 0, timeout_ms_);
-    rear_left_drive->SetSensorPhase(true);
-    rear_left_drive->ConfigSupplyCurrentLimit(current_limit_config);
-    rear_left_drive->ConfigNominalOutputForward(0, timeout_ms_);
-    rear_left_drive->ConfigNominalOutputReverse(0, timeout_ms_);
-    rear_left_drive->ConfigAllowableClosedloopError(0, 0, timeout_ms_);
-    rear_left_drive->SelectProfileSlot(0, 0);
-    rear_left_drive->Config_kF(0, 0, timeout_ms_);
-    rear_left_drive->Config_kP(0, 0.3, timeout_ms_);
-    rear_left_drive->Config_kI(0, 0.005, timeout_ms_);
-    rear_left_drive->Config_kD(0, 0, timeout_ms_);
+    rear_left_drive->SetNeutralMode(NeutralMode::Brake);
   }
   if (nh.getParam("/markhor/markhor_tracks_node/front_right", drive_fr_id) == true)
   {
     front_right_drive = std::make_unique<TalonSRX>(drive_fr_id);
-    front_right_drive->SetNeutralMode(NeutralMode::Coast);
+    front_right_drive->SetNeutralMode(NeutralMode::Brake);
     front_right_drive->SetInverted(true);
-    front_right_drive->ConfigFactoryDefault();
-    front_right_drive->ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Relative , 0, timeout_ms_);
-    front_right_drive->SetSensorPhase(true);
-    front_right_drive->ConfigSupplyCurrentLimit(current_limit_config);
-    front_right_drive->ConfigNominalOutputForward(0, timeout_ms_);
-    front_right_drive->ConfigNominalOutputReverse(0, timeout_ms_);
-    front_right_drive->ConfigAllowableClosedloopError(0, 0, timeout_ms_);
-    front_right_drive->SelectProfileSlot(0, 0);
-    front_right_drive->Config_kF(0, 0, timeout_ms_);
-    front_right_drive->Config_kP(0, 0.3, timeout_ms_);
-    front_right_drive->Config_kI(0, 0.005, timeout_ms_);
-    front_right_drive->Config_kD(0, 0, timeout_ms_);
   }
   if (nh.getParam("/markhor/markhor_tracks_node/rear_right", drive_rr_id) == true)
   {
     rear_right_drive = std::make_unique<TalonSRX>(drive_rr_id);
-    rear_right_drive->SetNeutralMode(NeutralMode::Coast);
-    rear_right_drive->ConfigFactoryDefault();
-    rear_right_drive->ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Relative , 0, timeout_ms_);
-    rear_right_drive->SetSensorPhase(false);
-    rear_right_drive->ConfigSupplyCurrentLimit(current_limit_config);
-    rear_right_drive->ConfigNominalOutputForward(0, timeout_ms_);
-    rear_right_drive->ConfigNominalOutputReverse(0, timeout_ms_);
-    rear_right_drive->ConfigAllowableClosedloopError(0, 0, timeout_ms_);
-
-    rear_right_drive->SelectProfileSlot(0, 0);
-    rear_right_drive->Config_kF(0, 0, timeout_ms_);
-    rear_right_drive->Config_kP(0, 0.1, timeout_ms_);
-    rear_right_drive->Config_kI(0, 0.002, timeout_ms_);
-    rear_right_drive->Config_kD(0, 0, timeout_ms_);
-
-    front_left_drive->Set(ControlMode::Velocity, 0);
-    front_right_drive->Set(ControlMode::Velocity, 0);
-    rear_left_drive->Set(ControlMode::Velocity, 0);
-    rear_right_drive->Set(ControlMode::Velocity, 0);
-
+    rear_right_drive->SetNeutralMode(NeutralMode::Brake);
   }
 }
 
 void MarkhorHWInterface::write()
 {
-  ROS_INFO("Vel: %d, %d", rear_right_drive->GetSensorCollection().GetQuadratureVelocity(),rear_left_drive->GetSensorCollection().GetQuadratureVelocity());
-  double diff_ang_speed_front_left = cmd[0] * 125;
-  double diff_ang_speed_front_right = cmd[1] * 125;
-  double diff_ang_speed_rear_left = cmd[2] * 125;
-  double diff_ang_speed_rear_right = cmd[3] * 375;
+  double diff_ang_speed_front_left = cmd[0];
+  double diff_ang_speed_front_right = cmd[1];
+  double diff_ang_speed_rear_left = cmd[2];
+  double diff_ang_speed_rear_right = cmd[3];
 
   limitDifferentialSpeed(diff_ang_speed_front_left, diff_ang_speed_rear_left, diff_ang_speed_front_right,
                          diff_ang_speed_rear_right);
@@ -156,17 +94,11 @@ void MarkhorHWInterface::write()
   rear_left_track_vel_msg.data = diff_ang_speed_rear_left;
   rear_right_track_vel_msg.data = diff_ang_speed_rear_right;
 
-/*
-  front_left_drive->Set(ControlMode::Velocity, 500);//front_left_track_vel_msg.data);
-  front_right_drive->Set(ControlMode::Velocity, 500);
-  rear_left_drive->Set(ControlMode::Velocity, 500);
-  rear_right_drive->Set(ControlMode::Velocity, 1500);
-*/
   // Write to drive
-  front_left_drive->Set(ControlMode::Velocity, front_left_track_vel_msg.data);//front_left_track_vel_msg.data);
-  front_right_drive->Set(ControlMode::Velocity, front_right_track_vel_msg.data);
-  rear_left_drive->Set(ControlMode::Velocity, rear_left_track_vel_msg.data);
-  rear_right_drive->Set(ControlMode::Velocity, rear_right_track_vel_msg.data);
+  front_left_drive->Set(ControlMode::PercentOutput, front_left_track_vel_msg.data);
+  front_right_drive->Set(ControlMode::PercentOutput, front_right_track_vel_msg.data);
+  rear_left_drive->Set(ControlMode::PercentOutput, rear_left_track_vel_msg.data);
+  rear_right_drive->Set(ControlMode::PercentOutput, rear_right_track_vel_msg.data);
 
   // Publish data
   front_left_track_vel_pub_.publish(front_left_track_vel_msg);
@@ -177,8 +109,7 @@ void MarkhorHWInterface::write()
 
 void MarkhorHWInterface::read(const ros::Duration& period)
 {
-    // Read from the motor API, going to read from the TalonSRX objects
-    //ROS_INFO("Vel: %d", drive->GetSensorCollection().GetQuadratureVelocity();
+  // Read from the motor API, going to read from the TalonSRX objects
 }
 
 ros::Time MarkhorHWInterface::get_time()
