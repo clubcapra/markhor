@@ -68,13 +68,13 @@ void MarkhorHWInterface::setupCTREDrive()
     front_left_drive->ConfigNominalOutputForward(0, timeout_ms_);
     front_left_drive->ConfigNominalOutputReverse(0, timeout_ms_);
     front_left_drive->ConfigAllowableClosedloopError(0, 0, timeout_ms_);
-    
     front_left_drive->SelectProfileSlot(0, 0);
     front_left_drive->Config_kF(0, 0, timeout_ms_);
     front_left_drive->Config_kP(0, 0.3, timeout_ms_);
     front_left_drive->Config_kI(0, 0.005, timeout_ms_);
     front_left_drive->Config_kD(0, 0, timeout_ms_);
 
+    front_left_drive->Set(ControlMode::Velocity, 0);
   }
   if (nh.getParam("/markhor/markhor_tracks_node/rear_left", drive_rl_id) == true)
   {
@@ -92,6 +92,8 @@ void MarkhorHWInterface::setupCTREDrive()
     rear_left_drive->Config_kP(0, 0.3, timeout_ms_);
     rear_left_drive->Config_kI(0, 0.005, timeout_ms_);
     rear_left_drive->Config_kD(0, 0, timeout_ms_);
+
+    rear_left_drive->Set(ControlMode::Velocity, 0);
   }
   if (nh.getParam("/markhor/markhor_tracks_node/front_right", drive_fr_id) == true)
   {
@@ -110,6 +112,8 @@ void MarkhorHWInterface::setupCTREDrive()
     front_right_drive->Config_kP(0, 0.3, timeout_ms_);
     front_right_drive->Config_kI(0, 0.005, timeout_ms_);
     front_right_drive->Config_kD(0, 0, timeout_ms_);
+
+    front_right_drive->Set(ControlMode::Velocity, 0);
   }
   if (nh.getParam("/markhor/markhor_tracks_node/rear_right", drive_rr_id) == true)
   {
@@ -122,18 +126,13 @@ void MarkhorHWInterface::setupCTREDrive()
     rear_right_drive->ConfigNominalOutputForward(0, timeout_ms_);
     rear_right_drive->ConfigNominalOutputReverse(0, timeout_ms_);
     rear_right_drive->ConfigAllowableClosedloopError(0, 0, timeout_ms_);
-
     rear_right_drive->SelectProfileSlot(0, 0);
     rear_right_drive->Config_kF(0, 0, timeout_ms_);
     rear_right_drive->Config_kP(0, 0.1, timeout_ms_);//TODO : Set this value to 0.3 when encoder is fixed
     rear_right_drive->Config_kI(0, 0.002, timeout_ms_);//TODO : Set this value to 0.005 when encoder is fixed
     rear_right_drive->Config_kD(0, 0, timeout_ms_);
 
-    front_left_drive->Set(ControlMode::Velocity, 0);
-    front_right_drive->Set(ControlMode::Velocity, 0);
-    rear_left_drive->Set(ControlMode::Velocity, 0);
     rear_right_drive->Set(ControlMode::Velocity, 0);
-
   }
 }
 
