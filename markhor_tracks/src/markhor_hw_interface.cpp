@@ -74,6 +74,7 @@ void MarkhorHWInterface::setupCTREDrive()
     front_left_drive->Config_kI(0, 0.005, timeout_ms_);
     front_left_drive->Config_kD(0, 0, timeout_ms_);
 
+    ctre::phoenix::unmanaged::FeedEnable(timeout_ms_);
     front_left_drive->Set(ControlMode::Velocity, 0);
   }
   if (nh.getParam("/markhor/markhor_tracks_node/rear_left", drive_rl_id) == true)
@@ -93,6 +94,7 @@ void MarkhorHWInterface::setupCTREDrive()
     rear_left_drive->Config_kI(0, 0.005, timeout_ms_);
     rear_left_drive->Config_kD(0, 0, timeout_ms_);
 
+    ctre::phoenix::unmanaged::FeedEnable(timeout_ms_);
     rear_left_drive->Set(ControlMode::Velocity, 0);
   }
   if (nh.getParam("/markhor/markhor_tracks_node/front_right", drive_fr_id) == true)
@@ -113,6 +115,7 @@ void MarkhorHWInterface::setupCTREDrive()
     front_right_drive->Config_kI(0, 0.005, timeout_ms_);
     front_right_drive->Config_kD(0, 0, timeout_ms_);
 
+    ctre::phoenix::unmanaged::FeedEnable(timeout_ms_);
     front_right_drive->Set(ControlMode::Velocity, 0);
   }
   if (nh.getParam("/markhor/markhor_tracks_node/rear_right", drive_rr_id) == true)
@@ -132,6 +135,7 @@ void MarkhorHWInterface::setupCTREDrive()
     rear_right_drive->Config_kI(0, 0.002, timeout_ms_);//TODO : Set this value to 0.005 when encoder is fixed
     rear_right_drive->Config_kD(0, 0, timeout_ms_);
 
+    ctre::phoenix::unmanaged::FeedEnable(timeout_ms_);
     rear_right_drive->Set(ControlMode::Velocity, 0);
   }
 }
@@ -146,7 +150,7 @@ void MarkhorHWInterface::write()
   limitDifferentialSpeed(diff_ang_speed_front_left, diff_ang_speed_rear_left, diff_ang_speed_front_right,
                          diff_ang_speed_rear_right);
 
-  ctre::phoenix::unmanaged::FeedEnable(100);
+  ctre::phoenix::unmanaged::FeedEnable(timeout_ms_);
 
   // Set data
   front_left_track_vel_msg.data = diff_ang_speed_front_left;
