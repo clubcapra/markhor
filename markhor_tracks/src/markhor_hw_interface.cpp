@@ -8,8 +8,6 @@ MarkhorHWInterface::MarkhorHWInterface()
   , start_srv_(nh.advertiseService("start", &MarkhorHWInterface::start_callback, this))
   , stop_srv_(nh.advertiseService("stop", &MarkhorHWInterface::start_callback, this))
 {
-  private_nh.param<double>("max_speed", max_speed, 3000.0);
-
   std::fill(pos, pos + NUM_JOINTS, 0.0);
   std::fill(vel, vel + NUM_JOINTS, 0.0);
   std::fill(eff, eff + NUM_JOINTS, 0.0);
@@ -70,9 +68,11 @@ void MarkhorHWInterface::setupCTREDrive()
     front_left_drive->ConfigAllowableClosedloopError(0, 0, timeout_ms_);
     front_left_drive->SelectProfileSlot(0, 0);
     front_left_drive->Config_kF(0, 0, timeout_ms_);
-    front_left_drive->Config_kP(0, 0.3, timeout_ms_);
-    front_left_drive->Config_kI(0, 0.005, timeout_ms_);
+    front_left_drive->Config_kP(0, tracks_kp, timeout_ms_);
+    front_left_drive->Config_kI(0, tracks_ki, timeout_ms_);
     front_left_drive->Config_kD(0, 0, timeout_ms_);
+    front_left_drive->ConfigMaxIntegralAccumulator(0, integral_max, timeout_ms_);
+    front_left_drive->Config_IntegralZone(0, integral_zone, timeout_ms_);
 
     ctre::phoenix::unmanaged::FeedEnable(timeout_ms_);
     front_left_drive->Set(ControlMode::Velocity, 0);
@@ -90,9 +90,11 @@ void MarkhorHWInterface::setupCTREDrive()
     rear_left_drive->ConfigAllowableClosedloopError(0, 0, timeout_ms_);
     rear_left_drive->SelectProfileSlot(0, 0);
     rear_left_drive->Config_kF(0, 0, timeout_ms_);
-    rear_left_drive->Config_kP(0, 0.3, timeout_ms_);
-    rear_left_drive->Config_kI(0, 0.005, timeout_ms_);
+    rear_left_drive->Config_kP(0, tracks_kp, timeout_ms_);
+    rear_left_drive->Config_kI(0, tracks_ki, timeout_ms_);
     rear_left_drive->Config_kD(0, 0, timeout_ms_);
+    rear_left_drive->ConfigMaxIntegralAccumulator(0, integral_max, timeout_ms_);
+    rear_left_drive->Config_IntegralZone(0, integral_zone, timeout_ms_);
 
     ctre::phoenix::unmanaged::FeedEnable(timeout_ms_);
     rear_left_drive->Set(ControlMode::Velocity, 0);
@@ -111,9 +113,11 @@ void MarkhorHWInterface::setupCTREDrive()
     front_right_drive->ConfigAllowableClosedloopError(0, 0, timeout_ms_);
     front_right_drive->SelectProfileSlot(0, 0);
     front_right_drive->Config_kF(0, 0, timeout_ms_);
-    front_right_drive->Config_kP(0, 0.3, timeout_ms_);
-    front_right_drive->Config_kI(0, 0.005, timeout_ms_);
+    front_right_drive->Config_kP(0, tracks_kp, timeout_ms_);
+    front_right_drive->Config_kI(0, tracks_ki, timeout_ms_);
     front_right_drive->Config_kD(0, 0, timeout_ms_);
+    front_right_drive->ConfigMaxIntegralAccumulator(0, integral_max, timeout_ms_);
+    front_right_drive->Config_IntegralZone(0, integral_zone, timeout_ms_);
 
     ctre::phoenix::unmanaged::FeedEnable(timeout_ms_);
     front_right_drive->Set(ControlMode::Velocity, 0);
@@ -131,9 +135,13 @@ void MarkhorHWInterface::setupCTREDrive()
     rear_right_drive->ConfigAllowableClosedloopError(0, 0, timeout_ms_);
     rear_right_drive->SelectProfileSlot(0, 0);
     rear_right_drive->Config_kF(0, 0, timeout_ms_);
-    rear_right_drive->Config_kP(0, 0.1, timeout_ms_);//TODO : Set this value to 0.3 when encoder is fixed
-    rear_right_drive->Config_kI(0, 0.002, timeout_ms_);//TODO : Set this value to 0.005 when encoder is fixed
+    rear_right_drive->Config_kP(0, tracks_kp, timeout_ms_);//TODO : Set this value to tracks_kp when encoder is fixed
+    rear_right_drive->Config_kI(0, tracks_ki, timeout_ms_);//TODO : Set this value to 0.005 when encoder is fixed
     rear_right_drive->Config_kD(0, 0, timeout_ms_);
+    rear_right_drive->ConfigMaxIntegralAccumulator(0, integral_max, timeout_ms_);
+    rear_right_drive->Config_IntegralZone(0, integral_zone, timeout_ms_);
+
+    rear_right_drive->ConfigSelectedFeedbackCoefficient(1.0/3.0, 0, timeout_ms_);
 
     ctre::phoenix::unmanaged::FeedEnable(timeout_ms_);
     rear_right_drive->Set(ControlMode::Velocity, 0);
@@ -142,13 +150,21 @@ void MarkhorHWInterface::setupCTREDrive()
 
 void MarkhorHWInterface::write()
 {
-  double diff_ang_speed_front_left = cmd[0] * 125;
-  double diff_ang_speed_front_right = cmd[1] * 125;
-  double diff_ang_speed_rear_left = cmd[2] * 125;
-  double diff_ang_speed_rear_right = cmd[3] * 375;//TODO : Set this value to 125 when encoder is fixed
-
+  double diff_ang_speed_front_left = cmd[0] * 125 * 4;
+  double diff_ang_speed_front_right = cmd[1] * 125 * 4;
+  double diff_ang_speed_rear_left = cmd[2] * 125 * 4;
+  double diff_ang_speed_rear_right = cmd[3] * 125 * 4;//TODO : Set this value to 125 when encoder is fixed
+/*
   limitDifferentialSpeed(diff_ang_speed_front_left, diff_ang_speed_rear_left, diff_ang_speed_front_right,
                          diff_ang_speed_rear_right);
+*/
+
+  ROS_INFO("\n\rCommand :");
+  ROS_INFO("FWD_L: %lf, FWD_R: %lf", diff_ang_speed_front_right, diff_ang_speed_front_left);
+  ROS_INFO("AFT_L: %lf, AFT_R: %lf", diff_ang_speed_rear_right, diff_ang_speed_rear_left);
+  ROS_INFO("Encoder Velocity:");
+  ROS_INFO("FWD_L: %d, FWD_R: %d", front_left_drive->GetSensorCollection().GetQuadratureVelocity(),front_right_drive->GetSensorCollection().GetQuadratureVelocity());
+  ROS_INFO("AFT_L: %d, AFT_R: %d", rear_left_drive->GetSensorCollection().GetQuadratureVelocity(),rear_right_drive->GetSensorCollection().GetQuadratureVelocity());
 
   ctre::phoenix::unmanaged::FeedEnable(timeout_ms_);
 
@@ -200,19 +216,4 @@ bool MarkhorHWInterface::stop_callback(std_srvs::Empty::Request&, std_srvs::Empt
 {
   running_ = false;
   return true;
-}
-
-void MarkhorHWInterface::limitDifferentialSpeed(double& diff_speed_front_left, double& diff_speed_rear_left,
-                                                double& diff_speed_front_right, double& diff_speed_rear_right)
-{
-  // std::max can take a list to find the max value inside.
-  double speed = std::max({ std::abs(diff_speed_front_left), std::abs(diff_speed_rear_left),
-                            std::abs(diff_speed_front_right), std::abs(diff_speed_rear_right) });
-  if (speed > max_speed)
-  {
-    diff_speed_front_left *= max_speed / speed;
-    diff_speed_rear_left *= max_speed / speed;
-    diff_speed_front_right *= max_speed / speed;
-    diff_speed_rear_right *= max_speed / speed;
-  }
 }

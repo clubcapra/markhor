@@ -58,6 +58,11 @@ private:
   void setupCTREDrive();
 
   const int timeout_ms_ = 30;
+  const int integral_max = 6000;
+  const int integral_zone = 1500;
+
+  const double tracks_kp = 0.5;
+  const double tracks_ki = 0.01;
 
   hardware_interface::JointStateInterface jnt_state_interface;
   hardware_interface::VelocityJointInterface jnt_vel_interface;
