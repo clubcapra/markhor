@@ -38,6 +38,6 @@ markhor:
     angular:
       z:
         has_velocity_limits    : true
-        max_velocity           : 1   # rad/s
+        max_velocity           : 3   # rad/s
         has_acceleration_limits: true
-        max_acceleration       : 1   # 6 # rad/s^2
+        max_acceleration       : 6   # 6 # rad/s^2
