@@ -58,7 +58,7 @@ void MarkhorHWInterface::setupCTREDrive()
   {
     front_left_drive = std::make_unique<TalonSRX>(drive_fl_id);
     front_left_drive->SetNeutralMode(NeutralMode::Coast);
-    front_left_drive->SetInverted(true);  // Fix drive orientation
+    front_left_drive->SetInverted(true);
     front_left_drive->ConfigFactoryDefault();
     front_left_drive->ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Relative , 0, timeout_ms_);
     front_left_drive->SetSensorPhase(false);
@@ -135,13 +135,13 @@ void MarkhorHWInterface::setupCTREDrive()
     rear_right_drive->ConfigAllowableClosedloopError(0, 0, timeout_ms_);
     rear_right_drive->SelectProfileSlot(0, 0);
     rear_right_drive->Config_kF(0, 0, timeout_ms_);
-    rear_right_drive->Config_kP(0, tracks_kp, timeout_ms_);//TODO : Set this value to tracks_kp when encoder is fixed
-    rear_right_drive->Config_kI(0, tracks_ki, timeout_ms_);//TODO : Set this value to 0.005 when encoder is fixed
+    rear_right_drive->Config_kP(0, tracks_kp, timeout_ms_);
+    rear_right_drive->Config_kI(0, tracks_ki, timeout_ms_);
     rear_right_drive->Config_kD(0, 0, timeout_ms_);
     rear_right_drive->ConfigMaxIntegralAccumulator(0, integral_max, timeout_ms_);
     rear_right_drive->Config_IntegralZone(0, integral_zone, timeout_ms_);
 
-    rear_right_drive->ConfigSelectedFeedbackCoefficient(1.0/3.0, 0, timeout_ms_);
+    rear_right_drive->ConfigSelectedFeedbackCoefficient(1.0/3.0, 0, timeout_ms_);//HOTFIX for the encoder that returned 3x more steps than the others
 
     ctre::phoenix::unmanaged::FeedEnable(timeout_ms_);
     rear_right_drive->Set(ControlMode::Velocity, 0);
@@ -153,11 +153,7 @@ void MarkhorHWInterface::write()
   double diff_ang_speed_front_left = cmd[0] * 125 * 4;
   double diff_ang_speed_front_right = cmd[1] * 125 * 4;
   double diff_ang_speed_rear_left = cmd[2] * 125 * 4;
-  double diff_ang_speed_rear_right = cmd[3] * 125 * 4;//TODO : Set this value to 125 when encoder is fixed
-/*
-  limitDifferentialSpeed(diff_ang_speed_front_left, diff_ang_speed_rear_left, diff_ang_speed_front_right,
-                         diff_ang_speed_rear_right);
-*/
+  double diff_ang_speed_rear_right = cmd[3] * 125 * 4;
 
   ROS_INFO("\n\rCommand :");
   ROS_INFO("FWD_L: %lf, FWD_R: %lf", diff_ang_speed_front_right, diff_ang_speed_front_left);
