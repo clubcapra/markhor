@@ -61,7 +61,7 @@ private:
   const int integral_max = 6000;
   const int integral_zone = 1500;
 
-  const double tracks_kp = 0.5;
+  const double tracks_kp = 0.3;
   const double tracks_ki = 0.01;
 
   hardware_interface::JointStateInterface jnt_state_interface;
