@@ -1,3 +1,0 @@
-<launch>
-    <node pkg="markhor_estop" type="estop" name="estop" ns="markhor" output="screen"></node>
-</launch>
