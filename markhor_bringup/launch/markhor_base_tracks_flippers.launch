@@ -5,8 +5,8 @@
 
   <!-- <include file="$(find markhor_bringup)/launch/markhor_controllers.launch" /> -->
   <!-- <include file="$(find markhor_tracks)/launch/tracks_without_controllers.launch" /> -->
-  <include file="$(find markhor_tracks)/launch/tracks.launch" />
-  <include file="$(find markhor_flippers)/launch/flippers.launch" />
+  <include file="$(find markhor_tracks)/launch/tracks_without_controllers.launch" />
+  <include file="$(find markhor_flippers)/launch/flippers_without_controllers.launch" />
 
   <include file="$(find capra_telaire_ros)/launch/telaire.launch" />
 

@@ -10,4 +10,6 @@
         <param name="rear_right" type="int" value="24"/>
     </node>
 
+    <include file="$(find markhor_bringup)/launch/markhor_controllers_tracks.launch" />
+
 </launch>
