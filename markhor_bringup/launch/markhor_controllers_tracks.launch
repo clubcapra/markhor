@@ -2,7 +2,7 @@
     <arg name="robot_namespace" default="/markhor/tracks" />
 
     <!-- Load robot model-->
-    <param name="robot_description" command="xacro '$(find markhor_description)/urdf/markhor.urdf.xacro'" />
+    <!-- <param name="robot_description" command="xacro '$(find markhor_description)/urdf/markhor.urdf.xacro'" /> -->
 
     <!-- tracks -->
     <rosparam command="load" file="$(find markhor_control)/config/tracks.yaml" />

@@ -1,0 +1,4 @@
+<launch>
+    <include file="$(find markhor_estop)/launch/estop.launch" />
+    <include file="$(find markhor_tracks)/launch/tracks2.launch" />
+</launch>
