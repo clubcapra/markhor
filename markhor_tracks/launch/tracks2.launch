@@ -12,7 +12,7 @@
     </node>
 
     <!-- Load controller config -->
-    <rosparam command="load" file="$(find markhor_control)/config/tracks.yaml" />
+    <rosparam command="load" file="$(find markhor_control)/config/tracks.yaml" ns="$(arg robot_namespace)" />
 
     <!-- load the controllers -->
     <node name="controller_spawner" pkg="controller_manager" type="spawner" output="screen" ns="$(arg robot_namespace)" args="diff_drive_controller" />
