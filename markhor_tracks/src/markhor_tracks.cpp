@@ -18,8 +18,7 @@ void controlLoop(MarkhorHWInterface& hw, controller_manager::ControllerManager& 
 
 int main(int argc, char** argv)
 {
-  ROS_INFO("LUDO %s",__LINE__);
-  ros::init(argc, argv, "markhor_tracks_node");
+   ros::init(argc, argv, "markhor_tracks_node");
 
   ROS_INFO("LUDO %s",__LINE__);
   MarkhorHWInterface hw;
