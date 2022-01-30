@@ -54,7 +54,7 @@ void MarkhorHWInterface::setupCTREDrive()
   current_limit_config.enable = true;
   current_limit_config.currentLimit = 30;
 
-  if (nh.getParam("/markhor/markhor_tracks_node/front_left", drive_fl_id) == true)
+  if (nh.getParam("/markhor/tracks/markhor_tracks_node/front_left", drive_fl_id) == true)
   {
     front_left_drive = std::make_unique<TalonSRX>(drive_fl_id);
     front_left_drive->SetNeutralMode(NeutralMode::Coast);
@@ -77,7 +77,7 @@ void MarkhorHWInterface::setupCTREDrive()
     ctre::phoenix::unmanaged::FeedEnable(timeout_ms_);
     front_left_drive->Set(ControlMode::Velocity, 0);
   }
-  if (nh.getParam("/markhor/markhor_tracks_node/rear_left", drive_rl_id) == true)
+  if (nh.getParam("/markhor/tracks/markhor_tracks_node/rear_left", drive_rl_id) == true)
   {
     rear_left_drive = std::make_unique<TalonSRX>(drive_rl_id);
     rear_left_drive->SetNeutralMode(NeutralMode::Coast);
@@ -99,7 +99,7 @@ void MarkhorHWInterface::setupCTREDrive()
     ctre::phoenix::unmanaged::FeedEnable(timeout_ms_);
     rear_left_drive->Set(ControlMode::Velocity, 0);
   }
-  if (nh.getParam("/markhor/markhor_tracks_node/front_right", drive_fr_id) == true)
+  if (nh.getParam("/markhor/tracks/markhor_tracks_node/front_right", drive_fr_id) == true)
   {
     front_right_drive = std::make_unique<TalonSRX>(drive_fr_id);
     front_right_drive->SetNeutralMode(NeutralMode::Coast);
@@ -122,7 +122,7 @@ void MarkhorHWInterface::setupCTREDrive()
     ctre::phoenix::unmanaged::FeedEnable(timeout_ms_);
     front_right_drive->Set(ControlMode::Velocity, 0);
   }
-  if (nh.getParam("/markhor/markhor_tracks_node/rear_right", drive_rr_id) == true)
+  if (nh.getParam("/markhor/tracks/markhor_tracks_node/rear_right", drive_rr_id) == true)
   {
     rear_right_drive = std::make_unique<TalonSRX>(drive_rr_id);
     rear_right_drive->SetNeutralMode(NeutralMode::Coast);
