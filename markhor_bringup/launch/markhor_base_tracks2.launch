@@ -1,4 +1,11 @@
 <launch>
     <include file="$(find markhor_estop)/launch/estop.launch" />
     <include file="$(find markhor_tracks)/launch/tracks2.launch" />
+    <arg name="joy_config" default="xbox" />
+    <arg name="config_filepath" default="$(find markhor_bringup)/config/$(arg joy_config).config.yaml" />
+
+    <node pkg="teleop_twist_joy" name="teleop_twist_joy" type="teleop_node">
+        <rosparam command="load" file="$(arg config_filepath)" />
+        <remap from="cmd_vel" to="/markhor/diff_drive_controller/cmd_vel" />
+    </node>
 </launch>
