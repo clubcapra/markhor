@@ -1,7 +1,7 @@
 <launch>
     <arg name="robot_namespace" default="/markhor/tracks" />
     <!-- Load robot model-->
-    <param name="robot_description" command="xacro '$(find markhor_description)/urdf/markhor.urdf.xacro'" />
+    <param name="robot_description" command="xacro '$(find markhor_description)/urdf/markhor.urdf.xacro'" ns="$(arg robot_namespace)" />
 
     <!-- Load hardware interface-->
     <node name="markhor_tracks_node" pkg="markhor_tracks" type="markhor_tracks_node" ns="$(arg robot_namespace)" output="screen">
