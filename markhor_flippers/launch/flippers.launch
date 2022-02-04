@@ -34,7 +34,7 @@
         <param name="config_file_1" type="string" value="/drives_calibration_1.cfg" />
         <param name="config_file_2" type="string" value="/drives_calibration_2.cfg" />
 
-        <param name="multiplicator" type="int" value="-1350"/>
+        <param name="multiplicator" type="int" value="-1350" />
     </node>
 
     <!-- Load controller config -->

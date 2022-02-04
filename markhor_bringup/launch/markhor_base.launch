@@ -1,22 +1,10 @@
 <launch>
-    <include file="$(find markhor_estop)/launch/estop.launch" />
-
     <include file="$(find markhor_bringup)/launch/markhor_web_ui.launch" />
 
-    <include file="$(find markhor_bringup)/launch/markhor_controllers.launch" />
-    <include file="$(find markhor_tracks)/launch/tracks_without_controllers.launch" />
+    <include file="$(find markhor_estop)/launch/estop.launch" />
+    <include file="$(find markhor_tracks)/launch/tracks.launch" />
+    <include file="$(find markhor_flippers)/launch/flippers.launch" />
 
-    <include file="$(find capra_telaire_ros)/launch/telaire.launch" />
-
-
-    <include file="$(find markhor_bringup)/launch/markhor_vision_video.launch" />
-
-
-    <arg name="joy_config" default="xbox" />
-    <arg name="config_filepath" default="$(find markhor_bringup)/config/$(arg joy_config).config.yaml" />
-    
-    <node pkg="teleop_twist_joy" name="teleop_twist_joy" type="teleop_node">
-      <rosparam command="load" file="$(arg config_filepath)" />
-      <remap from="cmd_vel" to="/markhor/diff_drive_controller/cmd_vel"/>
-    </node>
+    <include file="$(find markhor_bringup)/launch/markhor_cameras.launch" />
+    <include file="$(find markhor_bringup)/launch/teleop_twist_joy.launch" />
 </launch>
