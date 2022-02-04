@@ -26,9 +26,9 @@ MarkhorHWInterfaceFlippers::MarkhorHWInterfaceFlippers()
   setupRosControl();
   setupCtreDrive();
 
-  nh_.getParam("/markhor/markhor_flippers_node/config_folder_location", config_folder_str_);
-  nh_.getParam("/markhor/markhor_flippers_node/config_file_1", config_file_1_);
-  nh_.getParam("/markhor/markhor_flippers_node/config_file_2", config_file_2_);
+  nh_.getParam("/markhor/flippers/markhor_flippers_node/config_folder_location", config_folder_str_);
+  nh_.getParam("/markhor/flippers/markhor_flippers_node/config_file_1", config_file_1_);
+  nh_.getParam("/markhor/flippers/markhor_flippers_node/config_file_2", config_file_2_);
 
   loadDrivePosition();
 }
@@ -63,11 +63,11 @@ void MarkhorHWInterfaceFlippers::setupCtreDrive()
   current_limit_config.currentLimit = current_limit_;
 
   float kP, kI, kD = 0.0;
-  nh_.getParam("/markhor/markhor_flippers_node/kP", kP);
-  nh_.getParam("/markhor/markhor_flippers_node/kI", kI);
-  nh_.getParam("/markhor/markhor_flippers_node/kD", kD);
+  nh_.getParam("/markhor/flippers/markhor_flippers_node/kP", kP);
+  nh_.getParam("/markhor/flippers/markhor_flippers_node/kI", kI);
+  nh_.getParam("/markhor/flippers/markhor_flippers_node/kD", kD);
 
-  if (nh_.getParam("/markhor/markhor_flippers_node/front_left", drive_fl_id_) == true)
+  if (nh_.getParam("/markhor/flippers/markhor_flippers_node/front_left", drive_fl_id_) == true)
   {
     front_left_drive_ = std::make_unique<TalonSRX>(drive_fl_id_);
     front_left_drive_->ConfigFactoryDefault();
@@ -79,8 +79,8 @@ void MarkhorHWInterfaceFlippers::setupCtreDrive()
     front_left_drive_->ConfigAllowableClosedloopError(0, 100, timeout_ms_);
 
     double front_left_peak_output_forward, front_left_peak_output_reverse = 0;
-    nh_.getParam("/markhor/markhor_flippers_node/front_left_drive_peak_output_forward", front_left_peak_output_forward);
-    nh_.getParam("/markhor/markhor_flippers_node/front_left_drive_peak_output_reverse", front_left_peak_output_reverse);
+    nh_.getParam("/markhor/flippers/markhor_flippers_node/front_left_drive_peak_output_forward", front_left_peak_output_forward);
+    nh_.getParam("/markhor/flippers/markhor_flippers_node/front_left_drive_peak_output_reverse", front_left_peak_output_reverse);
 
     front_left_drive_->ConfigPeakOutputForward(front_left_peak_output_forward, timeout_ms_);
     front_left_drive_->ConfigPeakOutputReverse(front_left_peak_output_reverse, timeout_ms_);
@@ -91,10 +91,10 @@ void MarkhorHWInterfaceFlippers::setupCtreDrive()
     front_left_drive_->Config_kI(0, kI, timeout_ms_);
     front_left_drive_->Config_kD(0, kD, timeout_ms_);
 
-    nh_.getParam("/markhor/markhor_flippers_node/front_left_drive_upper_limit", front_left_drive_upper_limit_);
-    nh_.getParam("/markhor/markhor_flippers_node/front_left_drive_lower_limit", front_left_drive_lower_limit_);
+    nh_.getParam("/markhor/flippers/markhor_flippers_node/front_left_drive_upper_limit", front_left_drive_upper_limit_);
+    nh_.getParam("/markhor/flippers/markhor_flippers_node/front_left_drive_lower_limit", front_left_drive_lower_limit_);
   }
-  if (nh_.getParam("/markhor/markhor_flippers_node/front_right", drive_fr_id_) == true)
+  if (nh_.getParam("/markhor/flippers/markhor_flippers_node/front_right", drive_fr_id_) == true)
   {
     front_right_drive_ = std::make_unique<TalonSRX>(drive_fr_id_);
     front_right_drive_->ConfigFactoryDefault();
@@ -106,9 +106,9 @@ void MarkhorHWInterfaceFlippers::setupCtreDrive()
     front_right_drive_->ConfigAllowableClosedloopError(0, 100, timeout_ms_);
 
     double front_right_peak_output_forward, front_right_peak_output_reverse = 0;
-    nh_.getParam("/markhor/markhor_flippers_node/front_right_drive_peak_output_forward",
+    nh_.getParam("/markhor/flippers/markhor_flippers_node/front_right_drive_peak_output_forward",
                 front_right_peak_output_forward);
-    nh_.getParam("/markhor/markhor_flippers_node/front_right_drive_peak_output_reverse",
+    nh_.getParam("/markhor/flippers/markhor_flippers_node/front_right_drive_peak_output_reverse",
                 front_right_peak_output_reverse);
 
     front_right_drive_->ConfigPeakOutputForward(front_right_peak_output_forward, timeout_ms_);
@@ -120,10 +120,10 @@ void MarkhorHWInterfaceFlippers::setupCtreDrive()
     front_right_drive_->Config_kI(0, kI, timeout_ms_);
     front_right_drive_->Config_kD(0, kD, timeout_ms_);
 
-    nh_.getParam("/markhor/markhor_flippers_node/front_right_drive_upper_limit", front_right_drive_upper_limit_);
-    nh_.getParam("/markhor/markhor_flippers_node/front_right_drive_lower_limit", front_right_drive_lower_limit_);
+    nh_.getParam("/markhor/flippers/markhor_flippers_node/front_right_drive_upper_limit", front_right_drive_upper_limit_);
+    nh_.getParam("/markhor/flippers/markhor_flippers_node/front_right_drive_lower_limit", front_right_drive_lower_limit_);
   }
-  if (nh_.getParam("/markhor/markhor_flippers_node/rear_left", drive_rl_id_) == true)
+  if (nh_.getParam("/markhor/flippers/markhor_flippers_node/rear_left", drive_rl_id_) == true)
   {
     rear_left_drive_ = std::make_unique<TalonSRX>(drive_rl_id_);
     rear_left_drive_->ConfigFactoryDefault();
@@ -131,8 +131,8 @@ void MarkhorHWInterfaceFlippers::setupCtreDrive()
     rear_left_drive_->SetSensorPhase(true);
 
     double rear_left_peak_output_forward, rear_left_peak_output_reverse = 0;
-    nh_.getParam("/markhor/markhor_flippers_node/rear_left_drive_peak_output_forward", rear_left_peak_output_forward);
-    nh_.getParam("/markhor/markhor_flippers_node/rear_left_drive_peak_output_reverse", rear_left_peak_output_reverse);
+    nh_.getParam("/markhor/flippers/markhor_flippers_node/rear_left_drive_peak_output_forward", rear_left_peak_output_forward);
+    nh_.getParam("/markhor/flippers/markhor_flippers_node/rear_left_drive_peak_output_reverse", rear_left_peak_output_reverse);
 
     rear_left_drive_->ConfigSupplyCurrentLimit(current_limit_config);
     rear_left_drive_->ConfigNominalOutputForward(0, timeout_ms_);
@@ -147,10 +147,10 @@ void MarkhorHWInterfaceFlippers::setupCtreDrive()
     rear_left_drive_->Config_kI(0, kI, timeout_ms_);
     rear_left_drive_->Config_kD(0, kD, timeout_ms_);
 
-    nh_.getParam("/markhor/markhor_flippers_node/rear_left_drive_upper_limit", rear_left_drive_upper_limit_);
-    nh_.getParam("/markhor/markhor_flippers_node/rear_left_drive_lower_limit", rear_left_drive_lower_limit_);
+    nh_.getParam("/markhor/flippers/markhor_flippers_node/rear_left_drive_upper_limit", rear_left_drive_upper_limit_);
+    nh_.getParam("/markhor/flippers/markhor_flippers_node/rear_left_drive_lower_limit", rear_left_drive_lower_limit_);
   }
-  if (nh_.getParam("/markhor/markhor_flippers_node/rear_right", drive_rr_id_) == true)
+  if (nh_.getParam("/markhor/flippers/markhor_flippers_node/rear_right", drive_rr_id_) == true)
   {
     rear_right_drive_ = std::make_unique<TalonSRX>(drive_rr_id_);
     rear_right_drive_->ConfigFactoryDefault();
@@ -161,8 +161,8 @@ void MarkhorHWInterfaceFlippers::setupCtreDrive()
     rear_right_drive_->ConfigNominalOutputReverse(0, timeout_ms_);
 
     double rear_right_peak_output_forward, rear_right_peak_output_reverse = 0;
-    nh_.getParam("/markhor/markhor_flippers_node/rear_right_drive_peak_output_forward", rear_right_peak_output_forward);
-    nh_.getParam("/markhor/markhor_flippers_node/rear_right_drive_peak_output_reverse", rear_right_peak_output_reverse);
+    nh_.getParam("/markhor/flippers/markhor_flippers_node/rear_right_drive_peak_output_forward", rear_right_peak_output_forward);
+    nh_.getParam("/markhor/flippers/markhor_flippers_node/rear_right_drive_peak_output_reverse", rear_right_peak_output_reverse);
 
     rear_right_drive_->ConfigPeakOutputForward(rear_right_peak_output_forward, timeout_ms_);
     rear_right_drive_->ConfigPeakOutputReverse(rear_right_peak_output_reverse, timeout_ms_);
@@ -174,8 +174,8 @@ void MarkhorHWInterfaceFlippers::setupCtreDrive()
     rear_right_drive_->Config_kI(0, kI, timeout_ms_);
     rear_right_drive_->Config_kD(0, kD, timeout_ms_);
 
-    nh_.getParam("/markhor/markhor_flippers_node/rear_right_drive_upper_limit", rear_right_drive_upper_limit_);
-    nh_.getParam("/markhor/markhor_flippers_node/rear_right_drive_lower_limit", rear_right_drive_lower_limit_);
+    nh_.getParam("/markhor/flippers/markhor_flippers_node/rear_right_drive_upper_limit", rear_right_drive_upper_limit_);
+    nh_.getParam("/markhor/flippers/markhor_flippers_node/rear_right_drive_lower_limit", rear_right_drive_lower_limit_);
   }
 }
 
