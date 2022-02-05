@@ -155,12 +155,12 @@ void MarkhorHWInterface::write()
   double diff_ang_speed_rear_left = cmd[2] * 125 * 4;
   double diff_ang_speed_rear_right = cmd[3] * 125 * 4;
 
-  ROS_INFO("\n\rCommand :");
-  ROS_INFO("FWD_L: %lf, FWD_R: %lf", diff_ang_speed_front_right, diff_ang_speed_front_left);
-  ROS_INFO("AFT_L: %lf, AFT_R: %lf", diff_ang_speed_rear_right, diff_ang_speed_rear_left);
-  ROS_INFO("Encoder Velocity:");
-  ROS_INFO("FWD_L: %d, FWD_R: %d", front_left_drive->GetSensorCollection().GetQuadratureVelocity(),front_right_drive->GetSensorCollection().GetQuadratureVelocity());
-  ROS_INFO("AFT_L: %d, AFT_R: %d", rear_left_drive->GetSensorCollection().GetQuadratureVelocity(),rear_right_drive->GetSensorCollection().GetQuadratureVelocity());
+  ROS_DEBUG_THROTTLE(1,"\n\rCommand :");
+  ROS_DEBUG_THROTTLE(1,"FWD_L: %lf, FWD_R: %lf", diff_ang_speed_front_right, diff_ang_speed_front_left);
+  ROS_DEBUG_THROTTLE(1,"AFT_L: %lf, AFT_R: %lf", diff_ang_speed_rear_right, diff_ang_speed_rear_left);
+  ROS_DEBUG_THROTTLE(1,"Encoder Velocity:");
+  ROS_DEBUG_THROTTLE(1,"FWD_L: %d, FWD_R: %d", front_left_drive->GetSensorCollection().GetQuadratureVelocity(),front_right_drive->GetSensorCollection().GetQuadratureVelocity());
+  ROS_DEBUG_THROTTLE(1,"AFT_L: %d, AFT_R: %d", rear_left_drive->GetSensorCollection().GetQuadratureVelocity(),rear_right_drive->GetSensorCollection().GetQuadratureVelocity());
 
   ctre::phoenix::unmanaged::FeedEnable(timeout_ms_);
 
