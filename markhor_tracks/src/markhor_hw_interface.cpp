@@ -155,7 +155,7 @@ void MarkhorHWInterface::write()
   double diff_ang_speed_rear_left = cmd[2] * 125 * 4;
   double diff_ang_speed_rear_right = cmd[3] * 125 * 4;
 
-  ROS_INFO_THROTTLE(1,"\n\rCommand :");
+  ROS_INFO_THROTTLE(1,"Command :");
   ROS_INFO_THROTTLE(1,"FWD_L: %lf, FWD_R: %lf", diff_ang_speed_front_right, diff_ang_speed_front_left);
   ROS_INFO_THROTTLE(1,"AFT_L: %lf, AFT_R: %lf", diff_ang_speed_rear_right, diff_ang_speed_rear_left);
   ROS_INFO_THROTTLE(1,"Encoder Velocity:");
