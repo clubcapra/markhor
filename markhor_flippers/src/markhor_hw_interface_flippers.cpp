@@ -215,7 +215,7 @@ void MarkhorHWInterfaceFlippers::write()
   {
     accumulator_fl_ += joint_position_command_[0];
     float target = front_left_drive_base_position_ + accumulator_fl_;
-    ROS_DEBUG_THROTTLE(1,"target = [%f]", target);
+    ROS_INFO_THROTTLE(1,"target = [%f]", target);
     front_left_drive_->Set(ControlMode::Position, target);
   }
 
@@ -225,7 +225,7 @@ void MarkhorHWInterfaceFlippers::write()
   {
     accumulator_fr_ += joint_position_command_[1];
     float target = front_right_drive_base_position_ + accumulator_fr_;
-    ROS_DEBUG_THROTTLE(1,"target = [%f]", target);
+    ROS_INFO_THROTTLE(1,"target = [%f]", target);
     front_right_drive_->Set(ControlMode::Position, target);
   }
 
@@ -235,7 +235,7 @@ void MarkhorHWInterfaceFlippers::write()
   {
     accumulator_rl_ += joint_position_command_[2];
     float target = rear_left_drive_base_position_ + accumulator_rl_;
-    ROS_DEBUG_THROTTLE(1,"target = [%f]", target);
+    ROS_INFO_THROTTLE(1,"target = [%f]", target);
     rear_left_drive_->Set(ControlMode::Position, target);
   }
 
@@ -245,7 +245,7 @@ void MarkhorHWInterfaceFlippers::write()
   {
     accumulator_rr_ += joint_position_command_[3];
     float target = rear_right_drive_base_position_ + accumulator_rr_;
-    ROS_DEBUG_THROTTLE(1,"target = [%f]", target);
+    ROS_INFO_THROTTLE(1,"target = [%f]", target);
     rear_right_drive_->Set(ControlMode::Position, target);
   }
   saveDrivePosition();
@@ -258,61 +258,61 @@ void MarkhorHWInterfaceFlippers::read()
 
 void MarkhorHWInterfaceFlippers::printDriveInfo(std::unique_ptr<TalonSRX>& drive)
 {
-  ROS_DEBUG_THROTTLE(1,"-------------");
+  ROS_INFO_THROTTLE(1,"-------------");
   if (drive->GetDeviceID() == drive_fl_id_)
   {
-    ROS_DEBUG_THROTTLE(1,"position FL command : %f", joint_position_command_[0]);
-    ROS_DEBUG_THROTTLE(1,"FL lower limit : %f", front_left_drive_lower_limit_);
-    ROS_DEBUG_THROTTLE(1,"FL upper limit : %f", front_left_drive_upper_limit_);
-    ROS_DEBUG_THROTTLE(1,"front_left_drive_base_position : %f", front_left_drive_base_position_);
-    ROS_DEBUG_THROTTLE(1,"accumulator_fl : %f", accumulator_fl_);
-    ROS_DEBUG_THROTTLE(1,"Target : %f", front_left_drive_base_position_ + accumulator_fl_ + joint_position_command_[0]);
-    ROS_DEBUG_THROTTLE(1,"Drive %d : output voltage : %f", front_left_drive_->GetDeviceID(),
+    ROS_INFO_THROTTLE(1,"position FL command : %f", joint_position_command_[0]);
+    ROS_INFO_THROTTLE(1,"FL lower limit : %f", front_left_drive_lower_limit_);
+    ROS_INFO_THROTTLE(1,"FL upper limit : %f", front_left_drive_upper_limit_);
+    ROS_INFO_THROTTLE(1,"front_left_drive_base_position : %f", front_left_drive_base_position_);
+    ROS_INFO_THROTTLE(1,"accumulator_fl : %f", accumulator_fl_);
+    ROS_INFO_THROTTLE(1,"Target : %f", front_left_drive_base_position_ + accumulator_fl_ + joint_position_command_[0]);
+    ROS_INFO_THROTTLE(1,"Drive %d : output voltage : %f", front_left_drive_->GetDeviceID(),
              front_left_drive_->GetMotorOutputVoltage());
   }
   else if (drive->GetDeviceID() == drive_fr_id_)
   {
-    ROS_DEBUG_THROTTLE(1,"position FR command : %f", joint_position_command_[1]);
-    ROS_DEBUG_THROTTLE(1,"FR lower limit : %f", front_right_drive_lower_limit_);
-    ROS_DEBUG_THROTTLE(1,"FR upper limit : %f", front_right_drive_upper_limit_);
-    ROS_DEBUG_THROTTLE(1,"front_right_drive_base_position : %f", front_right_drive_base_position_);
-    ROS_DEBUG_THROTTLE(1,"accumulator_fr : %f", accumulator_fr_);
-    ROS_DEBUG_THROTTLE(1,"Target : %f", front_right_drive_base_position_ + accumulator_fr_ + joint_position_command_[1]);
-    ROS_DEBUG_THROTTLE(1,"Drive %d : output voltage : %f", front_right_drive_->GetDeviceID(),
+    ROS_INFO_THROTTLE(1,"position FR command : %f", joint_position_command_[1]);
+    ROS_INFO_THROTTLE(1,"FR lower limit : %f", front_right_drive_lower_limit_);
+    ROS_INFO_THROTTLE(1,"FR upper limit : %f", front_right_drive_upper_limit_);
+    ROS_INFO_THROTTLE(1,"front_right_drive_base_position : %f", front_right_drive_base_position_);
+    ROS_INFO_THROTTLE(1,"accumulator_fr : %f", accumulator_fr_);
+    ROS_INFO_THROTTLE(1,"Target : %f", front_right_drive_base_position_ + accumulator_fr_ + joint_position_command_[1]);
+    ROS_INFO_THROTTLE(1,"Drive %d : output voltage : %f", front_right_drive_->GetDeviceID(),
              front_right_drive_->GetMotorOutputVoltage());
   }
   else if (drive->GetDeviceID() == drive_rl_id_)
   {
-    ROS_DEBUG_THROTTLE(1,"position RL command : %f", joint_position_command_[2]);
-    ROS_DEBUG_THROTTLE(1,"RL lower limit : %f", rear_left_drive_lower_limit_);
-    ROS_DEBUG_THROTTLE(1,"RL upper limit : %f", rear_left_drive_upper_limit_);
-    ROS_DEBUG_THROTTLE(1,"rear_left_drive_base_position : %f", rear_left_drive_base_position_);
-    ROS_DEBUG_THROTTLE(1,"accumulator_rl : %f", accumulator_rl_);
-    ROS_DEBUG_THROTTLE(1,"Target : %f", rear_left_drive_base_position_ + accumulator_rl_ + joint_position_command_[2]);
-    ROS_DEBUG_THROTTLE(1,"Drive %d : output voltage : %f", rear_left_drive_->GetDeviceID(),
+    ROS_INFO_THROTTLE(1,"position RL command : %f", joint_position_command_[2]);
+    ROS_INFO_THROTTLE(1,"RL lower limit : %f", rear_left_drive_lower_limit_);
+    ROS_INFO_THROTTLE(1,"RL upper limit : %f", rear_left_drive_upper_limit_);
+    ROS_INFO_THROTTLE(1,"rear_left_drive_base_position : %f", rear_left_drive_base_position_);
+    ROS_INFO_THROTTLE(1,"accumulator_rl : %f", accumulator_rl_);
+    ROS_INFO_THROTTLE(1,"Target : %f", rear_left_drive_base_position_ + accumulator_rl_ + joint_position_command_[2]);
+    ROS_INFO_THROTTLE(1,"Drive %d : output voltage : %f", rear_left_drive_->GetDeviceID(),
              rear_left_drive_->GetMotorOutputVoltage());
   }
   else if (drive->GetDeviceID() == drive_rr_id_)
   {
-    ROS_DEBUG_THROTTLE(1,"position RR command : %f", joint_position_command_[3]);
-    ROS_DEBUG_THROTTLE(1,"RR lower limit : %f", rear_right_drive_lower_limit_);
-    ROS_DEBUG_THROTTLE(1,"RR upper limit : %f", rear_right_drive_upper_limit_);
-    ROS_DEBUG_THROTTLE(1,"rear_right_drive_base_position : %f", rear_right_drive_base_position_);
-    ROS_DEBUG_THROTTLE(1,"accumulator_rr : %f", accumulator_rl_);
-    ROS_DEBUG_THROTTLE(1,"Target : %f", rear_right_drive_base_position_ + accumulator_rr_ + joint_position_command_[3]);
-    ROS_DEBUG_THROTTLE(1,"Drive %d : output voltage : %f", rear_right_drive_->GetDeviceID(),
+    ROS_INFO_THROTTLE(1,"position RR command : %f", joint_position_command_[3]);
+    ROS_INFO_THROTTLE(1,"RR lower limit : %f", rear_right_drive_lower_limit_);
+    ROS_INFO_THROTTLE(1,"RR upper limit : %f", rear_right_drive_upper_limit_);
+    ROS_INFO_THROTTLE(1,"rear_right_drive_base_position : %f", rear_right_drive_base_position_);
+    ROS_INFO_THROTTLE(1,"accumulator_rr : %f", accumulator_rl_);
+    ROS_INFO_THROTTLE(1,"Target : %f", rear_right_drive_base_position_ + accumulator_rr_ + joint_position_command_[3]);
+    ROS_INFO_THROTTLE(1,"Drive %d : output voltage : %f", rear_right_drive_->GetDeviceID(),
              rear_right_drive_->GetMotorOutputVoltage());
   }
   else
   {
-    ROS_DEBUG_THROTTLE(1,"Device ID is not found");
+    ROS_INFO_THROTTLE(1,"Device ID is not found");
     return;
   }
 
-  ROS_DEBUG_THROTTLE(1,"GetStatorCurrent %f", drive->GetStatorCurrent());
-  ROS_DEBUG_THROTTLE(1,"GetPulseWidthPosition %d", drive->GetSensorCollection().GetPulseWidthPosition());
-  ROS_DEBUG_THROTTLE(1,"GetClosedLoopError %d", drive->GetClosedLoopError(0));
-  ROS_DEBUG_THROTTLE(1,"GetClosedLoopTarget %f", drive->GetClosedLoopTarget(0));
+  ROS_INFO_THROTTLE(1,"GetStatorCurrent %f", drive->GetStatorCurrent());
+  ROS_INFO_THROTTLE(1,"GetPulseWidthPosition %d", drive->GetSensorCollection().GetPulseWidthPosition());
+  ROS_INFO_THROTTLE(1,"GetClosedLoopError %d", drive->GetClosedLoopError(0));
+  ROS_INFO_THROTTLE(1,"GetClosedLoopTarget %f", drive->GetClosedLoopTarget(0));
 }
 
 void MarkhorHWInterfaceFlippers::saveDrivePosition()
@@ -562,7 +562,7 @@ void MarkhorHWInterfaceFlippers::applyDrivePosition(std::unique_ptr<TalonSRX>& d
   do
   {
     error = drive->GetSensorCollection().SetPulseWidthPosition(drive_position, timeout_ms_);
-    ROS_DEBUG_THROTTLE(1,"SetPulseWidthPosition error code : %d for drive %d", error, drive->GetDeviceID());
+    ROS_INFO_THROTTLE(1,"SetPulseWidthPosition error code : %d for drive %d", error, drive->GetDeviceID());
   } while (error != ErrorCode::OKAY);
 }
 
