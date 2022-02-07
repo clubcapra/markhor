@@ -1,4 +1,4 @@
 <launch>
-    <include file="$(find markhor_estop)/launch/estop.launch"/>
+    <include file="$(find capra_estop)/launch/estop.launch"/>
     <include file="$(find markhor_flippers)/launch/flippers.launch" />
 </launch>
