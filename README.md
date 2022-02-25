@@ -4,6 +4,8 @@
 You can use this command inside the `markhor_ws` to install the project dependancies. This might not take into account the Gazebo upgrade that we need to do to run the simulation correctly.
 `rosdep install --from-paths src --rosdistro melodic -y`
 
+Markhor also depends on ros_astra_camera (MAKE SURE TO USE THE FORKED REPO)
+
 
 # markhor gazebo
 To use the gazebo simulation you need to update the gazebo version on your machine to atleast `9.14`.
