@@ -1,10 +1,15 @@
 # markhor
 
-## Installing dependancies
-You can use this command inside the `markhor_ws` to install the project dependancies. This might not take into account the Gazebo upgrade that we need to do to run the simulation correctly.
+## Installing dependencies
+You can use this command inside the `markhor_ws` to install the project dependencies. This might not take into account the Gazebo upgrade that we need to do to run the simulation correctly.
 `rosdep install --from-paths src --rosdistro melodic -y`
 
-Markhor also depends on ros_astra_camera (MAKE SURE TO USE THE FORKED REPO)
+The ros_package `capra_estop` is essential to launch markhor. It should be located in the `markhor_ws/src` directory.
+If the module is not there, markhor will not launch and you will see the following error message : `Resource not found: capra_estop`
+
+### Package dependancies
+- [ros_astra_camera](https://github.com/clubcapra/ros_astra_camera) (our fork)
+- [capra_estop](https://github.com/clubcapra/capra_estop)
 
 
 # markhor gazebo
@@ -16,7 +21,7 @@ For this you need to follow the `step-by-step` alternative installation method o
 
 
 
-Also make sure you have the dependancies download. You can make sure by using the command : `rosdep install --from-paths src --ignore-src -r -y `
+Also make sure you have the dependencies download. You can make sure by using the command : `rosdep install --from-paths src --ignore-src -r -y `
 
 
 # Running the simulation 
