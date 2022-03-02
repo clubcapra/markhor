@@ -194,8 +194,6 @@ void MarkhorHWInterfaceFlippers::write()
 
   ctre::phoenix::unmanaged::FeedEnable(100);
 
-  printDriveInfo(front_left_drive_);
-
   /*
   The lines :
     Lower limit :
@@ -210,6 +208,7 @@ void MarkhorHWInterfaceFlippers::write()
   be above or under the limit of the flipper.
  */
 
+  printDriveInfo(front_left_drive_);
   if (front_left_drive_lower_limit_ <= front_left_drive_base_position_ + accumulator_fl_ + joint_position_command_[0] &&
       front_left_drive_base_position_ + accumulator_fl_ + joint_position_command_[0] < front_left_drive_upper_limit_)
   {
