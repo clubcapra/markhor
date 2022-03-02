@@ -49,7 +49,7 @@ void joyCallback(const sensor_msgs::Joy::ConstPtr& joy)
 bool flipperModeFREnable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Response& res)
 {
   flipper_mode_fr = true;
-  res.message = "successfully enable flipper mode front right";
+  res.message = "successfully enabled flipper mode front right";
   res.success = static_cast<unsigned char>(true);
   return true;
 }
@@ -57,7 +57,7 @@ bool flipperModeFREnable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Res
 bool flipperModeFLEnable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Response& res)
 {
   flipper_mode_fl = true;
-  res.message = "successfully enable flipper mode front left";
+  res.message = "successfully enabled flipper mode front left";
   res.success = static_cast<unsigned char>(true);
   return true;
 }
@@ -65,7 +65,7 @@ bool flipperModeFLEnable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Res
 bool flipperModeRREnable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Response& res)
 {
   flipper_mode_rr = true;
-  res.message = "successfully enable flipper mode rear right";
+  res.message = "successfully enabled flipper mode rear right";
   res.success = static_cast<unsigned char>(true);
   return true;
 }
@@ -73,7 +73,7 @@ bool flipperModeRREnable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Res
 bool flipperModeRLEnable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Response& res)
 {
   flipper_mode_rl = true;
-  res.message = "successfully enable flipper mode rear left";
+  res.message = "successfully enabled flipper mode rear left";
   res.success = static_cast<unsigned char>(true);
   return true;
 }
@@ -82,37 +82,37 @@ bool flipperModeFRDisable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Re
 {
   flipper_mode_fr = false;
   res.message = "successfully disabled flipper mode front right";
-  res.success = static_cast<unsigned char>(false);
-  return false;
+  res.success = static_cast<unsigned char>(true);
+  return true;
 }
 
 bool flipperModeFLDisable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Response& res)
 {
   flipper_mode_fl = false;
   res.message = "successfully disabled flipper mode front left";
-  res.success = static_cast<unsigned char>(false);
-  return false;
+  res.success = static_cast<unsigned char>(true);
+  return true;
 }
 
 bool flipperModeRRDisable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Response& res)
 {
   flipper_mode_rr = false;
   res.message = "successfully disabled flipper mode rear right";
-  res.success = static_cast<unsigned char>(false);
-  return false;
+  res.success = static_cast<unsigned char>(true);
+  return true;
 }
 
 bool flipperModeRLDisable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Response& res)
 {
   flipper_mode_rl = false;
   res.message = "successfully disabled flipper mode rear left";
-  res.success = static_cast<unsigned char>(false);
-  return false;
+  res.success = static_cast<unsigned char>(true);
+  return true;
 }
 
 int main(int argc, char** argv)
 {
-  ros::init(argc, argv, "markhor_flippers_node");
+  ros::init(argc, argv, "markhor_flippers_debug_node");
   ros::NodeHandle nh;
 
   if(nh.getParam("/markhor/markhor_flippers_node/multiplicator", multiplicator) == false)

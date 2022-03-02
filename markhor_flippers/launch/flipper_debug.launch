@@ -2,7 +2,7 @@
     <arg name="robot_namespace" default="/markhor" />
 
     <!-- Load hardware interface-->
-    <node name="markhor_flippers_node" pkg="markhor_flippers_debug" type="markhor_flippers_node" ns="$(arg robot_namespace)" output="screen">
+    <node name="markhor_flippers_debug_node" pkg="markhor_flippers" type="markhor_flippers_debug_node" ns="$(arg robot_namespace)" output="screen">
         <param name="front_left" type="int" value="11" />
         <param name="front_left_drive_upper_limit" type="double" value="85000" />
         <param name="front_left_drive_lower_limit" type="double" value="15000" />
