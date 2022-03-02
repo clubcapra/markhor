@@ -56,7 +56,8 @@ private:
   void setupPublisher();
   void setupRosControl();
   void setupCTREDrive();
-
+  void setupParam();
+  
   const int timeout_ms_ = 30;
   const int integral_max = 6000;
   const int integral_zone = 1500;
@@ -93,6 +94,6 @@ private:
   std::unique_ptr<TalonSRX> rear_left_drive;
   std::unique_ptr<TalonSRX> rear_right_drive;
 
-  uint8_t log_throttle_speed = 1;
+  int log_throttle_speed = 1;
 };
 #endif  // MARKHOR_HW_INTERFACE_H

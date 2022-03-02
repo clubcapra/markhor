@@ -2,6 +2,7 @@
 
 std::string drives_name[] = { "flipper_fl_motor_j", "flipper_fr_motor_j", "flipper_rl_motor_j", "flipper_rr_motor_j" };
 
+
 MarkhorHWInterface::MarkhorHWInterface()
   : running_(true)
   , private_nh("~")
@@ -13,13 +14,18 @@ MarkhorHWInterface::MarkhorHWInterface()
   std::fill(eff, eff + NUM_JOINTS, 0.0);
   std::fill(cmd, cmd + NUM_JOINTS, 0.0);
 
-  if (nh.getParam("/markhor/tracks/markhor_tracks_node/log_throttle_speed", log_throttle_speed) != true)
-  {
-    ROS_WARN("log_throttle_speed not configure");
-  }
   setupRosControl();
   setupCTREDrive();
   setupPublisher();
+  setupParam();
+}
+
+void MarkhorHWInterface::setupParam()
+{
+  if(!nh.getParam("/markhor/tracks/markhor_tracks_node/log_throttle_speed", log_throttle_speed))
+  {
+    ROS_WARN("log_throttle_speed not set");
+  }
 }
 
 void MarkhorHWInterface::setupPublisher()
@@ -169,7 +175,7 @@ void MarkhorHWInterface::write()
   ROS_INFO_THROTTLE(1, "AFT_L: %d, AFT_R: %d", rear_left_drive->GetSensorCollection().GetQuadratureVelocity(),
                     rear_right_drive->GetSensorCollection().GetQuadratureVelocity());
   ROS_INFO_THROTTLE(1, "Encoder Position:");
-  ROS_INFO_THROTTLE(1, "FL: %lf FR: %lf RL: %lf RR: %lf",
+  ROS_INFO_THROTTLE(1, "FL: %d FR: %d RL: %d RR: %d",
                     front_left_drive->GetSensorCollection().GetPulseWidthPosition(),
                     front_right_drive->GetSensorCollection().GetPulseWidthPosition(),
                     rear_left_drive->GetSensorCollection().GetPulseWidthPosition(),
