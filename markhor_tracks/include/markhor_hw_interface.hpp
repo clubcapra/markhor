@@ -92,5 +92,7 @@ private:
   std::unique_ptr<TalonSRX> front_right_drive;
   std::unique_ptr<TalonSRX> rear_left_drive;
   std::unique_ptr<TalonSRX> rear_right_drive;
+
+  uint8_t log_throttle_speed = 1;
 };
 #endif  // MARKHOR_HW_INTERFACE_H

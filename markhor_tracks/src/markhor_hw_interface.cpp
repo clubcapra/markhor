@@ -13,6 +13,10 @@ MarkhorHWInterface::MarkhorHWInterface()
   std::fill(eff, eff + NUM_JOINTS, 0.0);
   std::fill(cmd, cmd + NUM_JOINTS, 0.0);
 
+  if (nh.getParam("/markhor/tracks/markhor_tracks_node/log_throttle_speed", log_throttle_speed) != true)
+  {
+    ROS_WARN("log_throttle_speed not configure");
+  }
   setupRosControl();
   setupCTREDrive();
   setupPublisher();
@@ -60,7 +64,7 @@ void MarkhorHWInterface::setupCTREDrive()
     front_left_drive->SetNeutralMode(NeutralMode::Coast);
     front_left_drive->SetInverted(true);
     front_left_drive->ConfigFactoryDefault();
-    front_left_drive->ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Relative , 0, timeout_ms_);
+    front_left_drive->ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Relative, 0, timeout_ms_);
     front_left_drive->SetSensorPhase(false);
     front_left_drive->ConfigSupplyCurrentLimit(current_limit_config);
     front_left_drive->ConfigNominalOutputForward(0, timeout_ms_);
@@ -82,7 +86,7 @@ void MarkhorHWInterface::setupCTREDrive()
     rear_left_drive = std::make_unique<TalonSRX>(drive_rl_id);
     rear_left_drive->SetNeutralMode(NeutralMode::Coast);
     rear_left_drive->ConfigFactoryDefault();
-    rear_left_drive->ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Relative , 0, timeout_ms_);
+    rear_left_drive->ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Relative, 0, timeout_ms_);
     rear_left_drive->SetSensorPhase(true);
     rear_left_drive->ConfigSupplyCurrentLimit(current_limit_config);
     rear_left_drive->ConfigNominalOutputForward(0, timeout_ms_);
@@ -105,7 +109,7 @@ void MarkhorHWInterface::setupCTREDrive()
     front_right_drive->SetNeutralMode(NeutralMode::Coast);
     front_right_drive->SetInverted(true);
     front_right_drive->ConfigFactoryDefault();
-    front_right_drive->ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Relative , 0, timeout_ms_);
+    front_right_drive->ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Relative, 0, timeout_ms_);
     front_right_drive->SetSensorPhase(true);
     front_right_drive->ConfigSupplyCurrentLimit(current_limit_config);
     front_right_drive->ConfigNominalOutputForward(0, timeout_ms_);
@@ -127,7 +131,7 @@ void MarkhorHWInterface::setupCTREDrive()
     rear_right_drive = std::make_unique<TalonSRX>(drive_rr_id);
     rear_right_drive->SetNeutralMode(NeutralMode::Coast);
     rear_right_drive->ConfigFactoryDefault();
-    rear_right_drive->ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Relative , 0, timeout_ms_);
+    rear_right_drive->ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Relative, 0, timeout_ms_);
     rear_right_drive->SetSensorPhase(false);
     rear_right_drive->ConfigSupplyCurrentLimit(current_limit_config);
     rear_right_drive->ConfigNominalOutputForward(0, timeout_ms_);
@@ -141,7 +145,8 @@ void MarkhorHWInterface::setupCTREDrive()
     rear_right_drive->ConfigMaxIntegralAccumulator(0, integral_max, timeout_ms_);
     rear_right_drive->Config_IntegralZone(0, integral_zone, timeout_ms_);
 
-    rear_right_drive->ConfigSelectedFeedbackCoefficient(1.0/3.0, 0, timeout_ms_);//HOTFIX for the encoder that returned 3x more steps than the others
+    rear_right_drive->ConfigSelectedFeedbackCoefficient(
+        1.0 / 3.0, 0, timeout_ms_);  // HOTFIX for the encoder that returned 3x more steps than the others
 
     ctre::phoenix::unmanaged::FeedEnable(timeout_ms_);
     rear_right_drive->Set(ControlMode::Velocity, 0);
@@ -155,12 +160,20 @@ void MarkhorHWInterface::write()
   double diff_ang_speed_rear_left = cmd[2] * 125 * 4;
   double diff_ang_speed_rear_right = cmd[3] * 125 * 4;
 
-  ROS_INFO_THROTTLE(1,"Command :");
-  ROS_INFO_THROTTLE(1,"FWD_L: %lf, FWD_R: %lf", diff_ang_speed_front_right, diff_ang_speed_front_left);
-  ROS_INFO_THROTTLE(1,"AFT_L: %lf, AFT_R: %lf", diff_ang_speed_rear_right, diff_ang_speed_rear_left);
-  ROS_INFO_THROTTLE(1,"Encoder Velocity:");
-  ROS_INFO_THROTTLE(1,"FWD_L: %d, FWD_R: %d", front_left_drive->GetSensorCollection().GetQuadratureVelocity(),front_right_drive->GetSensorCollection().GetQuadratureVelocity());
-  ROS_INFO_THROTTLE(1,"AFT_L: %d, AFT_R: %d", rear_left_drive->GetSensorCollection().GetQuadratureVelocity(),rear_right_drive->GetSensorCollection().GetQuadratureVelocity());
+  ROS_INFO_THROTTLE(1, "Command :");
+  ROS_INFO_THROTTLE(1, "FWD_L: %lf, FWD_R: %lf", diff_ang_speed_front_right, diff_ang_speed_front_left);
+  ROS_INFO_THROTTLE(1, "AFT_L: %lf, AFT_R: %lf", diff_ang_speed_rear_right, diff_ang_speed_rear_left);
+  ROS_INFO_THROTTLE(1, "Encoder Velocity:");
+  ROS_INFO_THROTTLE(1, "FWD_L: %d, FWD_R: %d", front_left_drive->GetSensorCollection().GetQuadratureVelocity(),
+                    front_right_drive->GetSensorCollection().GetQuadratureVelocity());
+  ROS_INFO_THROTTLE(1, "AFT_L: %d, AFT_R: %d", rear_left_drive->GetSensorCollection().GetQuadratureVelocity(),
+                    rear_right_drive->GetSensorCollection().GetQuadratureVelocity());
+  ROS_INFO_THROTTLE(1, "Encoder Position:");
+  ROS_INFO_THROTTLE(1, "FL: %lf FR: %lf RL: %lf RR: %lf",
+                    front_left_drive->GetSensorCollection().GetPulseWidthPosition(),
+                    front_right_drive->GetSensorCollection().GetPulseWidthPosition(),
+                    rear_left_drive->GetSensorCollection().GetPulseWidthPosition(),
+                    rear_right_drive->GetSensorCollection().GetPulseWidthPosition());
 
   ctre::phoenix::unmanaged::FeedEnable(timeout_ms_);
 
@@ -169,7 +182,6 @@ void MarkhorHWInterface::write()
   front_right_track_vel_msg.data = diff_ang_speed_front_right;
   rear_left_track_vel_msg.data = diff_ang_speed_rear_left;
   rear_right_track_vel_msg.data = diff_ang_speed_rear_right;
-
 
   // Write to drive
   front_left_drive->Set(ControlMode::Velocity, front_left_track_vel_msg.data);
@@ -186,8 +198,9 @@ void MarkhorHWInterface::write()
 
 void MarkhorHWInterface::read(const ros::Duration& period)
 {
-    // Read from the motor API, going to read from the TalonSRX objects
-    //ROS_INFO("Vel: %d, %d", rear_right_drive->GetSensorCollection().GetQuadratureVelocity(),rear_left_drive->GetSensorCollection().GetQuadratureVelocity());
+  // Read from the motor API, going to read from the TalonSRX objects
+  // ROS_INFO("Vel: %d, %d",
+  // rear_right_drive->GetSensorCollection().GetQuadratureVelocity(),rear_left_drive->GetSensorCollection().GetQuadratureVelocity());
 }
 
 ros::Time MarkhorHWInterface::get_time()

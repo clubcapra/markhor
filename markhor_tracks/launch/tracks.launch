@@ -9,6 +9,7 @@
         <param name="front_right" type="int" value="22" />
         <param name="rear_left" type="int" value="23" />
         <param name="rear_right" type="int" value="24" />
+        <param name="log_throttle_speed" type="int" value="1"/>
     </node>
 
     <!-- Load controller config -->
