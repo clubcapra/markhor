@@ -2,7 +2,6 @@
 
 std::string drives_name[] = { "flipper_fl_motor_j", "flipper_fr_motor_j", "flipper_rl_motor_j", "flipper_rr_motor_j" };
 
-
 MarkhorHWInterface::MarkhorHWInterface()
   : running_(true)
   , private_nh("~")
@@ -22,7 +21,7 @@ MarkhorHWInterface::MarkhorHWInterface()
 
 void MarkhorHWInterface::setupParam()
 {
-  if(!nh.getParam("/markhor/tracks/markhor_tracks_node/log_throttle_speed", log_throttle_speed))
+  if (!nh.getParam("/markhor/tracks/markhor_tracks_node/log_throttle_speed", log_throttle_speed))
   {
     ROS_WARN("log_throttle_speed not set");
   }
@@ -166,20 +165,27 @@ void MarkhorHWInterface::write()
   double diff_ang_speed_rear_left = cmd[2] * 125 * 4;
   double diff_ang_speed_rear_right = cmd[3] * 125 * 4;
 
-  ROS_INFO_THROTTLE(1, "Command :");
-  ROS_INFO_THROTTLE(1, "FWD_L: %lf, FWD_R: %lf", diff_ang_speed_front_right, diff_ang_speed_front_left);
-  ROS_INFO_THROTTLE(1, "AFT_L: %lf, AFT_R: %lf", diff_ang_speed_rear_right, diff_ang_speed_rear_left);
-  ROS_INFO_THROTTLE(1, "Encoder Velocity:");
-  ROS_INFO_THROTTLE(1, "FWD_L: %d, FWD_R: %d", front_left_drive->GetSensorCollection().GetQuadratureVelocity(),
+  ROS_INFO_THROTTLE(log_throttle_speed, "Command :");
+  ROS_INFO_THROTTLE(log_throttle_speed, "FWD_L: %lf, FWD_R: %lf", diff_ang_speed_front_right,
+                    diff_ang_speed_front_left);
+  ROS_INFO_THROTTLE(log_throttle_speed, "AFT_L: %lf, AFT_R: %lf", diff_ang_speed_rear_right, diff_ang_speed_rear_left);
+  ROS_INFO_THROTTLE(log_throttle_speed, "Encoder Velocity:");
+  ROS_INFO_THROTTLE(log_throttle_speed, "FWD_L: %d, FWD_R: %d",
+                    front_left_drive->GetSensorCollection().GetQuadratureVelocity(),
                     front_right_drive->GetSensorCollection().GetQuadratureVelocity());
-  ROS_INFO_THROTTLE(1, "AFT_L: %d, AFT_R: %d", rear_left_drive->GetSensorCollection().GetQuadratureVelocity(),
+  ROS_INFO_THROTTLE(log_throttle_speed, "AFT_L: %d, AFT_R: %d",
+                    rear_left_drive->GetSensorCollection().GetQuadratureVelocity(),
                     rear_right_drive->GetSensorCollection().GetQuadratureVelocity());
-  ROS_INFO_THROTTLE(1, "Encoder Position:");
-  ROS_INFO_THROTTLE(1, "FL: %d FR: %d RL: %d RR: %d",
+  ROS_INFO_THROTTLE(log_throttle_speed, "Encoder Position:");
+  ROS_INFO_THROTTLE(log_throttle_speed, "FL: %d FR: %d RL: %d RR: %d",
                     front_left_drive->GetSensorCollection().GetPulseWidthPosition(),
                     front_right_drive->GetSensorCollection().GetPulseWidthPosition(),
                     rear_left_drive->GetSensorCollection().GetPulseWidthPosition(),
                     rear_right_drive->GetSensorCollection().GetPulseWidthPosition());
+  ROS_INFO_THROTTLE(log_throttle_speed, "Drive output current: ");
+  ROS_INFO_THROTTLE(log_throttle_speed, "FL: %f FR: %f RL: %f RR: %f", front_left_drive->GetOutputCurrent(),
+                    front_right_drive->GetOutputCurrent(), rear_left_drive->GetOutputCurrent(),
+                    rear_right_drive->GetOutputCurrent());
 
   ctre::phoenix::unmanaged::FeedEnable(timeout_ms_);
 
