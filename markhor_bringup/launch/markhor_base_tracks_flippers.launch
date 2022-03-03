@@ -1,0 +1,6 @@
+<launch>
+  <include file="$(find markhor_estop)/launch/estop.launch" />
+  <include file="$(find markhor_tracks)/launch/tracks.launch" />
+  <include file="$(find markhor_flippers)/launch/flippers.launch" />
+  <include file="$(find markhor_bringup)/launch/teleop_twist_joy.launch" />
+</launch>

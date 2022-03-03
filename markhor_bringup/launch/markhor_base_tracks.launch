@@ -1,4 +1,5 @@
 <launch>
     <include file="$(find capra_estop)/launch/estop.launch"/>
     <include file="$(find markhor_tracks)/launch/tracks.launch" />
+    <include file="$(find markhor_bringup)/launch/teleop_twist_joy.launch" />
 </launch>
