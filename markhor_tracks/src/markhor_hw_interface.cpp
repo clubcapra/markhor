@@ -61,7 +61,7 @@ void MarkhorHWInterface::setupCTREDrive()
 
   SupplyCurrentLimitConfiguration current_limit_config;
   current_limit_config.enable = true;
-  current_limit_config.currentLimit = 30;
+  current_limit_config.currentLimit = 33;
 
   if (nh.getParam("/markhor/tracks/markhor_tracks_node/front_left", drive_fl_id) == true)
   {
