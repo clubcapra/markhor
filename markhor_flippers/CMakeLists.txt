@@ -30,7 +30,7 @@ include_directories(
     ${catkin_INCLUDE_DIRS}
 )
 
-set(source src/markhor_flippers.cpp src/markhor_hw_interface_flippers.cpp)
+set(source src/markhor_flippers.cpp src/markhor_hw_interface_flippers.cpp src/markhor_flippers_debug.cpp)
 
 add_executable(${PROJECT_NAME}_node ${source})
 
