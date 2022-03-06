@@ -33,7 +33,7 @@ include_directories(
 set(source src/markhor_flippers.cpp src/markhor_hw_interface_flippers.cpp)
 
 add_executable(${PROJECT_NAME}_node ${source})
-add_executable(${PROJECT_NAME}_debug_node src/markhor_flippers_debug.cpp)
+add_executable(${PROJECT_NAME}_debug_node src/markhor_flippers_debug.cpp src/markhor_hw_interface_flippers.cpp)
 
 #Regular node section
 target_link_libraries(${PROJECT_NAME}_node 
@@ -70,7 +70,7 @@ add_dependencies(${PROJECT_NAME}_node
 )
 
 #Debug node section
-target_link_libraries(${PROJECT_NAME}_debug_node 
+target_link_libraries(${PROJECT_NAME}_debug_node
     ${catkin_LIBRARIES}
     )
 
