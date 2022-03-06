@@ -71,9 +71,9 @@ int main(int argc, char** argv)
   ros::init(argc, argv, "markhor_flippers_node");
   ros::NodeHandle nh;
 
-  if(nh.getParam("/markhor/flippers/markhor_flippers_node/multiplicator", multiplicator) == false)
+  if (nh.getParam("/markhor/flippers/markhor_flippers_node/multiplicator", multiplicator) == false)
   {
-    ROS_ERROR("Missing multiplicator value from launch files."); 
+    ROS_ERROR("Missing multiplicator value from launch files.");
     ros::shutdown();
     return 1;
   }
@@ -89,6 +89,11 @@ int main(int argc, char** argv)
   ros::ServiceServer flipper_mode_front_disable = nh.advertiseService("flipper_mode_front_disable", flipperModeFrontDisable);
   ros::ServiceServer flipper_mode_back_enable = nh.advertiseService("flipper_mode_back_enable", flipperModeBackEnable);
   ros::ServiceServer flipper_mode_back_disable = nh.advertiseService("flipper_mode_back_disable", flipperModeBackDisable);
+
+  ros::ServiceServer fr_target;
+  ros::ServiceServer fl_target;
+  ros::ServiceServer rr_target;
+  ros::ServiceServer rl_target;
 
   MarkhorHWInterfaceFlippers hw;
   controller_manager::ControllerManager cm(&hw);
@@ -107,6 +112,11 @@ int main(int argc, char** argv)
     hw.read();
     cm.update(time, period);
     hw.write();
+
+    fr_target = nh.advertiseService("flipper_fr_position_controller/target", hw.getFRTarget());
+    fl_target = nh.advertiseService("flipper_fl_position_controller/target", hw.getFLTarget());
+    rr_target = nh.advertiseService("flipper_rl_position_controller/target", hw.getRRTarget());
+    rl_target = nh.advertiseService("flipper_rl_position_controller/target", hw.getRLTarget());
 
     rate.sleep();
   }
