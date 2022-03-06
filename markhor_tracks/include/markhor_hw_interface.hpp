@@ -56,12 +56,13 @@ private:
   void setupPublisher();
   void setupRosControl();
   void setupCTREDrive();
-
+  void setupParam();
+  
   const int timeout_ms_ = 30;
-  const int integral_max = 6000;
+  const int integral_max = 10000;
   const int integral_zone = 1500;
 
-  const double tracks_kp = 0.3;
+  const double tracks_kp = 0.2;
   const double tracks_ki = 0.01;
 
   hardware_interface::JointStateInterface jnt_state_interface;
@@ -92,5 +93,7 @@ private:
   std::unique_ptr<TalonSRX> front_right_drive;
   std::unique_ptr<TalonSRX> rear_left_drive;
   std::unique_ptr<TalonSRX> rear_right_drive;
+
+  int log_throttle_speed = 1;
 };
 #endif  // MARKHOR_HW_INTERFACE_H

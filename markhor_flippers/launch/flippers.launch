@@ -1,5 +1,5 @@
 <launch>
-    <arg name="robot_namespace" default="/markhor" />
+    <arg name="robot_namespace" default="/markhor/flippers" />
 
     <!-- Load hardware interface-->
     <node name="markhor_flippers_node" pkg="markhor_flippers" type="markhor_flippers_node" ns="$(arg robot_namespace)" output="screen">
@@ -30,11 +30,11 @@
         <param name="kP" type="double" value="1.27" />
         <param name="kI" type="double" value="0" />
         <param name="kD" type="double" value="0" />
-        <param name="config_folder_location" type="string" value="/home/markhor/Code/markhor_ws/src/markhor/markhor_flippers/config" />
+        <param name="config_folder_location" type="string" value="/home/markhor/SSD/config/markhor_flippers" />
         <param name="config_file_1" type="string" value="/drives_calibration_1.cfg" />
         <param name="config_file_2" type="string" value="/drives_calibration_2.cfg" />
 
-        <param name="multiplicator" type="int" value="-1350"/>
+        <param name="multiplicator" type="int" value="-1350" />
     </node>
 
     <!-- Load controller config -->
