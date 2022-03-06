@@ -115,7 +115,7 @@ int main(int argc, char** argv)
   ros::init(argc, argv, "markhor_flippers_debug_node");
   ros::NodeHandle nh;
 
-  if(nh.getParam("/markhor/markhor_flippers_node/multiplicator", multiplicator) == false)
+  if(nh.getParam("/markhor/markhor_flippers_debug_node/multiplicator", multiplicator) == false)
   {
     ROS_ERROR("Missing multiplicator value from launch files."); 
     ros::shutdown();
