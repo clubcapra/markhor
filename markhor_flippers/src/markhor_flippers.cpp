@@ -15,6 +15,12 @@ static ros::Publisher flipper_rr_pub;
 static bool flipper_mode_front = false;
 static bool flipper_mode_back = false;
 
+static bool diagnostic_mode = false;
+static bool flipper_mode_fl = false;
+static bool flipper_mode_fr = false;
+static bool flipper_mode_rl = false;
+static bool flipper_mode_rr = false;
+
 static int multiplicator = 0;
 
 void joyCallback(const sensor_msgs::Joy::ConstPtr& joy)
@@ -32,12 +38,37 @@ void joyCallback(const sensor_msgs::Joy::ConstPtr& joy)
     flipper_rl_pub.publish(msg);
     flipper_rr_pub.publish(msg);
   }
+  if (diagnostic_mode == true)
+  {
+    ROS_INFO("Test successful"); 
+
+    if (flipper_mode_fl == true)
+    {
+      msg.data = joy->axes[4] * multiplicator;
+      flipper_fl_pub.publish(msg);
+    }
+    if (flipper_mode_fr == true)
+    {
+      msg.data = joy->axes[4] * multiplicator;
+      flipper_fr_pub.publish(msg);
+    }
+    if (flipper_mode_rl == true)
+    {
+      msg.data = joy->axes[4] * multiplicator;
+      flipper_rl_pub.publish(msg);
+    }
+    if (flipper_mode_rr == true)
+    {
+      msg.data = joy->axes[4] * multiplicator;
+      flipper_rr_pub.publish(msg);
+    }
+  }
 }
 
 bool flipperModeFrontEnable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Response& res)
 {
   flipper_mode_front = true;
-  res.message = "successfully enable flipper mode front";
+  res.message = "successfully enabled flipper mode front";
   res.success = static_cast<unsigned char>(true);
   return true;
 }
@@ -45,7 +76,7 @@ bool flipperModeFrontEnable(std_srvs::Trigger::Request& req, std_srvs::Trigger::
 bool flipperModeFrontDisable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Response& res)
 {
   flipper_mode_front = false;
-  res.message = "successfully disable flipper mode front";
+  res.message = "successfully disabled flipper mode front";
   res.success = static_cast<unsigned char>(true);
   return true;
 }
@@ -53,7 +84,7 @@ bool flipperModeFrontDisable(std_srvs::Trigger::Request& req, std_srvs::Trigger:
 bool flipperModeBackEnable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Response& res)
 {
   flipper_mode_back = true;
-  res.message = "successfully enable flipper mode back";
+  res.message = "successfully enabled flipper mode back";
   res.success = static_cast<unsigned char>(true);
   return true;
 }
@@ -61,7 +92,23 @@ bool flipperModeBackEnable(std_srvs::Trigger::Request& req, std_srvs::Trigger::R
 bool flipperModeBackDisable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Response& res)
 {
   flipper_mode_back = false;
-  res.message = "successfully disable flipper mode back";
+  res.message = "successfully disabled flipper mode back";
+  res.success = static_cast<unsigned char>(true);
+  return true;
+}
+
+bool diagnosticModeEnable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Response& res)
+{
+  diagnostic_mode = true;
+  res.message = "successfully enabled diagnostic mode";
+  res.success = static_cast<unsigned char>(true);
+  return true;
+}
+
+bool diagnosticModeDisable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Response& res)
+{
+  diagnostic_mode = false;
+  res.message = "successfully disabled diagnostic mode";
   res.success = static_cast<unsigned char>(true);
   return true;
 }
@@ -89,6 +136,9 @@ int main(int argc, char** argv)
   ros::ServiceServer flipper_mode_front_disable = nh.advertiseService("flipper_mode_front_disable", flipperModeFrontDisable);
   ros::ServiceServer flipper_mode_back_enable = nh.advertiseService("flipper_mode_back_enable", flipperModeBackEnable);
   ros::ServiceServer flipper_mode_back_disable = nh.advertiseService("flipper_mode_back_disable", flipperModeBackDisable);
+
+  ros::ServiceServer diagnostic_mode_enable = nh.advertiseService("diagnostic_mode_enable", diagnosticModeEnable);
+  ros::ServiceServer diagnostic_mode_disable = nh.advertiseService("diagnostic_mode_disable", diagnosticModeDisable);
 
   MarkhorHWInterfaceFlippers hw;
   controller_manager::ControllerManager cm(&hw);
