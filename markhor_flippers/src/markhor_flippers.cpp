@@ -118,69 +118,6 @@ bool diagnosticModeDisable(std_srvs::Trigger::Request& req, std_srvs::Trigger::R
   return true;
 }
 
-int main(int argc, char** argv)
-{
-  ros::init(argc, argv, "markhor_flippers_node");
-  ros::NodeHandle nh;
-
-  if(nh.getParam("/markhor/flippers/markhor_flippers_node/multiplicator", multiplicator) == false)
-  {
-    ROS_ERROR("Missing multiplicator value from launch files."); 
-    ros::shutdown();
-    return 1;
-  }
-
-  flipper_fl_pub = nh.advertise<std_msgs::Float64>("flipper_fl_position_controller/command", 1000);
-  flipper_fr_pub = nh.advertise<std_msgs::Float64>("flipper_fr_position_controller/command", 1000);
-  flipper_rl_pub = nh.advertise<std_msgs::Float64>("flipper_rl_position_controller/command", 1000);
-  flipper_rr_pub = nh.advertise<std_msgs::Float64>("flipper_rr_position_controller/command", 1000);
-
-  ros::Subscriber joy_sub = nh.subscribe("/joy", 1000, joyCallback);
-
-  ros::ServiceServer flipper_mode_front_enable = nh.advertiseService("flipper_mode_front_enable", flipperModeFrontEnable);
-  ros::ServiceServer flipper_mode_front_disable = nh.advertiseService("flipper_mode_front_disable", flipperModeFrontDisable);
-  ros::ServiceServer flipper_mode_back_enable = nh.advertiseService("flipper_mode_back_enable", flipperModeBackEnable);
-  ros::ServiceServer flipper_mode_back_disable = nh.advertiseService("flipper_mode_back_disable", flipperModeBackDisable);
-
-  ros::ServiceServer diagnostic_mode_enable = nh.advertiseService("diagnostic_mode_enable", diagnosticModeEnable);
-  ros::ServiceServer diagnostic_mode_disable = nh.advertiseService("diagnostic_mode_disable", diagnosticModeDisable);
-
-  ros::ServiceServer flipper_mode_fl_enable = nh.advertiseService("flipper_mode_fl_enable", flipperModeFLEnable);
-  ros::ServiceServer flipper_mode_fl_disable = nh.advertiseService("flipper_mode_fl_disable", flipperModeFLDisable);
-
-  ros::ServiceServer flipper_mode_fr_enable = nh.advertiseService("flipper_mode_fr_enable", flipperModeFREnable);
-  ros::ServiceServer flipper_mode_fr_disable = nh.advertiseService("flipper_mode_fr_disable", flipperModeFRDisable);
-
-  ros::ServiceServer flipper_mode_rl_enable = nh.advertiseService("flipper_mode_rl_enable", flipperModeRLEnable);
-  ros::ServiceServer flipper_mode_rl_disable = nh.advertiseService("flipper_mode_rl_disable", flipperModeRLDisable);
-
-  ros::ServiceServer flipper_mode_rr_enable = nh.advertiseService("flipper_mode_rr_enable", flipperModeRREnable);
-  ros::ServiceServer flipper_mode_rr_disable = nh.advertiseService("flipper_mode_rr_disable", flipperModeRRDisable);
-
-  MarkhorHWInterfaceFlippers hw;
-  controller_manager::ControllerManager cm(&hw);
-
-  ros::AsyncSpinner spinner(1);
-  spinner.start();
-
-  ros::Time prev_time = ros::Time::now();
-  ros::Rate rate(10.0);
-
-  while (ros::ok())
-  {
-    const ros::Time time = ros::Time::now();
-    const ros::Duration period = time - prev_time;
-
-    hw.read();
-    cm.update(time, period);
-    hw.write();
-
-    rate.sleep();
-  }
-
-  return 0;
-}
-
 bool flipperModeFLEnable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Response& res)
 {
   if (diagnostic_mode == true)
@@ -275,4 +212,67 @@ bool flipperModeRRDisable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Re
     return true;
   }
   return false;
+}
+
+int main(int argc, char** argv)
+{
+  ros::init(argc, argv, "markhor_flippers_node");
+  ros::NodeHandle nh;
+
+  if(nh.getParam("/markhor/flippers/markhor_flippers_node/multiplicator", multiplicator) == false)
+  {
+    ROS_ERROR("Missing multiplicator value from launch files."); 
+    ros::shutdown();
+    return 1;
+  }
+
+  flipper_fl_pub = nh.advertise<std_msgs::Float64>("flipper_fl_position_controller/command", 1000);
+  flipper_fr_pub = nh.advertise<std_msgs::Float64>("flipper_fr_position_controller/command", 1000);
+  flipper_rl_pub = nh.advertise<std_msgs::Float64>("flipper_rl_position_controller/command", 1000);
+  flipper_rr_pub = nh.advertise<std_msgs::Float64>("flipper_rr_position_controller/command", 1000);
+
+  ros::Subscriber joy_sub = nh.subscribe("/joy", 1000, joyCallback);
+
+  ros::ServiceServer flipper_mode_front_enable = nh.advertiseService("flipper_mode_front_enable", flipperModeFrontEnable);
+  ros::ServiceServer flipper_mode_front_disable = nh.advertiseService("flipper_mode_front_disable", flipperModeFrontDisable);
+  ros::ServiceServer flipper_mode_back_enable = nh.advertiseService("flipper_mode_back_enable", flipperModeBackEnable);
+  ros::ServiceServer flipper_mode_back_disable = nh.advertiseService("flipper_mode_back_disable", flipperModeBackDisable);
+
+  ros::ServiceServer diagnostic_mode_enable = nh.advertiseService("diagnostic_mode_enable", diagnosticModeEnable);
+  ros::ServiceServer diagnostic_mode_disable = nh.advertiseService("diagnostic_mode_disable", diagnosticModeDisable);
+
+  ros::ServiceServer flipper_mode_fl_enable = nh.advertiseService("flipper_mode_fl_enable", flipperModeFLEnable);
+  ros::ServiceServer flipper_mode_fl_disable = nh.advertiseService("flipper_mode_fl_disable", flipperModeFLDisable);
+
+  ros::ServiceServer flipper_mode_fr_enable = nh.advertiseService("flipper_mode_fr_enable", flipperModeFREnable);
+  ros::ServiceServer flipper_mode_fr_disable = nh.advertiseService("flipper_mode_fr_disable", flipperModeFRDisable);
+
+  ros::ServiceServer flipper_mode_rl_enable = nh.advertiseService("flipper_mode_rl_enable", flipperModeRLEnable);
+  ros::ServiceServer flipper_mode_rl_disable = nh.advertiseService("flipper_mode_rl_disable", flipperModeRLDisable);
+
+  ros::ServiceServer flipper_mode_rr_enable = nh.advertiseService("flipper_mode_rr_enable", flipperModeRREnable);
+  ros::ServiceServer flipper_mode_rr_disable = nh.advertiseService("flipper_mode_rr_disable", flipperModeRRDisable);
+
+  MarkhorHWInterfaceFlippers hw;
+  controller_manager::ControllerManager cm(&hw);
+
+  ros::AsyncSpinner spinner(1);
+  spinner.start();
+
+  ros::Time prev_time = ros::Time::now();
+  ros::Rate rate(10.0);
+
+  while (ros::ok())
+  {
+    const ros::Time time = ros::Time::now();
+    const ros::Duration period = time - prev_time;
+
+    hw.read();
+    cm.update(time, period);
+    hw.write();
+
+    rate.sleep();
+  }
+
+  return 0;
 }
