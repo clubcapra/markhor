@@ -108,6 +108,11 @@ bool diagnosticModeEnable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Re
 bool diagnosticModeDisable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Response& res)
 {
   diagnostic_mode = false;
+  flipper_mode_fl = false;
+  flipper_mode_fr = false;
+  flipper_mode_rl = false;
+  flipper_mode_rr = false;
+
   res.message = "successfully disabled diagnostic mode";
   res.success = static_cast<unsigned char>(true);
   return true;
@@ -140,6 +145,18 @@ int main(int argc, char** argv)
   ros::ServiceServer diagnostic_mode_enable = nh.advertiseService("diagnostic_mode_enable", diagnosticModeEnable);
   ros::ServiceServer diagnostic_mode_disable = nh.advertiseService("diagnostic_mode_disable", diagnosticModeDisable);
 
+  ros::ServiceServer flipper_mode_fl_enable = nh.advertiseService("flipper_mode_fl_enable", flipperModeFLEnable);
+  ros::ServiceServer flipper_mode_fl_disable = nh.advertiseService("flipper_mode_fl_disable", flipperModeFLDisable);
+
+  ros::ServiceServer flipper_mode_fr_enable = nh.advertiseService("flipper_mode_fr_enable", flipperModeFREnable);
+  ros::ServiceServer flipper_mode_fr_disable = nh.advertiseService("flipper_mode_fr_disable", flipperModeFRDisable);
+
+  ros::ServiceServer flipper_mode_rl_enable = nh.advertiseService("flipper_mode_rl_enable", flipperModeRLEnable);
+  ros::ServiceServer flipper_mode_rl_disable = nh.advertiseService("flipper_mode_rl_disable", flipperModeRLDisable);
+
+  ros::ServiceServer flipper_mode_rr_enable = nh.advertiseService("flipper_mode_rr_enable", flipperModeRREnable);
+  ros::ServiceServer flipper_mode_rr_disable = nh.advertiseService("flipper_mode_rr_disable", flipperModeRRDisable);
+
   MarkhorHWInterfaceFlippers hw;
   controller_manager::ControllerManager cm(&hw);
 
@@ -162,4 +179,100 @@ int main(int argc, char** argv)
   }
 
   return 0;
+}
+
+bool flipperModeFLEnable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Response& res)
+{
+  if (diagnostic_mode == true)
+  {
+    flipper_mode_fl = true;
+    res.message = "successfully enabled flipper mode front left";
+    res.success = static_cast<unsigned char>(true);
+    return true;
+  }
+  return false;
+}
+
+bool flipperModeFLDisable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Response& res)
+{
+  if (diagnostic_mode == true)
+  {
+    flipper_mode_fl = false;
+    res.message = "successfully disabled flipper mode front left";
+    res.success = static_cast<unsigned char>(true);
+    return true;
+  }
+  return false;
+}
+
+bool flipperModeFREnable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Response& res)
+{
+  if (diagnostic_mode == true)
+  {
+    flipper_mode_fr = true;
+    res.message = "successfully enabled flipper mode front right";
+    res.success = static_cast<unsigned char>(true);
+    return true;
+  }
+  return false;
+}
+
+bool flipperModeFRDisable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Response& res)
+{
+  if (diagnostic_mode == true)
+  {
+    flipper_mode_fr = false;
+    res.message = "successfully disabled flipper mode front right";
+    res.success = static_cast<unsigned char>(true);
+    return true;
+  }
+  return false;
+}
+
+bool flipperModeRLEnable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Response& res)
+{
+  if (diagnostic_mode == true)
+  {
+    flipper_mode_rl = true;
+    res.message = "successfully enabled flipper mode rear left";
+    res.success = static_cast<unsigned char>(true);
+    return true;
+  }
+  return false;
+}
+
+bool flipperModeRLDisable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Response& res)
+{
+  if (diagnostic_mode == true)
+  {
+    flipper_mode_rl = false;
+    res.message = "successfully disabled flipper mode rear left";
+    res.success = static_cast<unsigned char>(true);
+    return true;
+  }
+  return false;
+}
+
+bool flipperModeRREnable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Response& res)
+{
+  if (diagnostic_mode == true)
+  {
+    flipper_mode_rr = true;
+    res.message = "successfully enabled flipper mode rear right";
+    res.success = static_cast<unsigned char>(true);
+    return true;
+  }
+  return false;
+}
+
+bool flipperModeRRDisable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Response& res)
+{
+  if (diagnostic_mode == true)
+  {
+    flipper_mode_rr = false;
+    res.message = "successfully disabled flipper mode rear right";
+    res.success = static_cast<unsigned char>(true);
+    return true;
+  }
+  return false;
 }
