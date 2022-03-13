@@ -41,6 +41,10 @@ public:
   MarkhorHWInterfaceFlippers();
   void write();
   void read();
+  float getFRTarget();
+  float getFLTarget();
+  float getRRTarget();
+  float getRLTarget();
 
   ros::NodeHandle nh_;
   int num_joints_ = 0;
