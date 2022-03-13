@@ -15,7 +15,7 @@ static ros::Publisher flipper_rr_pub;
 static bool flipper_mode_front = false;
 static bool flipper_mode_back = false;
 
-static bool diagnostic_mode = false;
+static bool individual_mode = false;
 static bool flipper_mode_fl = false;
 static bool flipper_mode_fr = false;
 static bool flipper_mode_rl = false;
@@ -38,9 +38,9 @@ void joyCallback(const sensor_msgs::Joy::ConstPtr& joy)
     flipper_rl_pub.publish(msg);
     flipper_rr_pub.publish(msg);
   }
-  if (diagnostic_mode == true)
+  if (individual_mode == true)
   {
-    ROS_INFO("Test successful"); 
+    ROS_INFO("individual mode is successful"); 
 
     if (flipper_mode_fl == true)
     {
@@ -99,28 +99,30 @@ bool flipperModeBackDisable(std_srvs::Trigger::Request& req, std_srvs::Trigger::
 
 bool diagnosticModeEnable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Response& res)
 {
-  diagnostic_mode = true;
-  res.message = "successfully enabled diagnostic mode";
+  individual_mode = true;
+  flipper_mode_front = false;
+  flipper_mode_back = false;
+  res.message = "successfully enabled individual mode";
   res.success = static_cast<unsigned char>(true);
   return true;
 }
 
 bool diagnosticModeDisable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Response& res)
 {
-  diagnostic_mode = false;
+  individual_mode = false;
   flipper_mode_fl = false;
   flipper_mode_fr = false;
   flipper_mode_rl = false;
   flipper_mode_rr = false;
 
-  res.message = "successfully disabled diagnostic mode";
+  res.message = "successfully disabled individual mode";
   res.success = static_cast<unsigned char>(true);
   return true;
 }
 
 bool flipperModeFLEnable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Response& res)
 {
-  if (diagnostic_mode == true)
+  if (individual_mode == true)
   {
     flipper_mode_fl = true;
     res.message = "successfully enabled flipper mode front left";
@@ -132,7 +134,7 @@ bool flipperModeFLEnable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Res
 
 bool flipperModeFLDisable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Response& res)
 {
-  if (diagnostic_mode == true)
+  if (individual_mode == true)
   {
     flipper_mode_fl = false;
     res.message = "successfully disabled flipper mode front left";
@@ -144,7 +146,7 @@ bool flipperModeFLDisable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Re
 
 bool flipperModeFREnable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Response& res)
 {
-  if (diagnostic_mode == true)
+  if (individual_mode == true)
   {
     flipper_mode_fr = true;
     res.message = "successfully enabled flipper mode front right";
@@ -156,7 +158,7 @@ bool flipperModeFREnable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Res
 
 bool flipperModeFRDisable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Response& res)
 {
-  if (diagnostic_mode == true)
+  if (individual_mode == true)
   {
     flipper_mode_fr = false;
     res.message = "successfully disabled flipper mode front right";
@@ -168,7 +170,7 @@ bool flipperModeFRDisable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Re
 
 bool flipperModeRLEnable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Response& res)
 {
-  if (diagnostic_mode == true)
+  if (individual_mode == true)
   {
     flipper_mode_rl = true;
     res.message = "successfully enabled flipper mode rear left";
@@ -180,7 +182,7 @@ bool flipperModeRLEnable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Res
 
 bool flipperModeRLDisable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Response& res)
 {
-  if (diagnostic_mode == true)
+  if (individual_mode == true)
   {
     flipper_mode_rl = false;
     res.message = "successfully disabled flipper mode rear left";
@@ -192,7 +194,7 @@ bool flipperModeRLDisable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Re
 
 bool flipperModeRREnable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Response& res)
 {
-  if (diagnostic_mode == true)
+  if (individual_mode == true)
   {
     flipper_mode_rr = true;
     res.message = "successfully enabled flipper mode rear right";
@@ -204,7 +206,7 @@ bool flipperModeRREnable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Res
 
 bool flipperModeRRDisable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Response& res)
 {
-  if (diagnostic_mode == true)
+  if (individual_mode == true)
   {
     flipper_mode_rr = false;
     res.message = "successfully disabled flipper mode rear right";
@@ -238,8 +240,8 @@ int main(int argc, char** argv)
   ros::ServiceServer flipper_mode_back_enable = nh.advertiseService("flipper_mode_back_enable", flipperModeBackEnable);
   ros::ServiceServer flipper_mode_back_disable = nh.advertiseService("flipper_mode_back_disable", flipperModeBackDisable);
 
-  ros::ServiceServer diagnostic_mode_enable = nh.advertiseService("diagnostic_mode_enable", diagnosticModeEnable);
-  ros::ServiceServer diagnostic_mode_disable = nh.advertiseService("diagnostic_mode_disable", diagnosticModeDisable);
+  ros::ServiceServer individual_mode_enable = nh.advertiseService("individual_mode_enable", diagnosticModeEnable);
+  ros::ServiceServer individual_mode_disable = nh.advertiseService("individual_mode_disable", diagnosticModeDisable);
 
   ros::ServiceServer flipper_mode_fl_enable = nh.advertiseService("flipper_mode_fl_enable", flipperModeFLEnable);
   ros::ServiceServer flipper_mode_fl_disable = nh.advertiseService("flipper_mode_fl_disable", flipperModeFLDisable);
