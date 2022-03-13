@@ -40,7 +40,6 @@ void joyCallback(const sensor_msgs::Joy::ConstPtr& joy)
   }
   if (individual_mode == true)
   {
-    ROS_INFO("individual mode is successful"); 
 
     if (flipper_mode_fl == true)
     {
@@ -97,7 +96,7 @@ bool flipperModeBackDisable(std_srvs::Trigger::Request& req, std_srvs::Trigger::
   return true;
 }
 
-bool diagnosticModeEnable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Response& res)
+bool individualModeEnable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Response& res)
 {
   individual_mode = true;
   flipper_mode_front = false;
@@ -107,7 +106,7 @@ bool diagnosticModeEnable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Re
   return true;
 }
 
-bool diagnosticModeDisable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Response& res)
+bool individualModeDisable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Response& res)
 {
   individual_mode = false;
   flipper_mode_fl = false;
@@ -129,6 +128,8 @@ bool flipperModeFLEnable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Res
     res.success = static_cast<unsigned char>(true);
     return true;
   }
+
+  res.message = "requires individual mode to interact with single flipper"
   return false;
 }
 
@@ -141,6 +142,8 @@ bool flipperModeFLDisable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Re
     res.success = static_cast<unsigned char>(true);
     return true;
   }
+
+  res.message = "requires individual mode to interact with single flipper"
   return false;
 }
 
@@ -153,6 +156,8 @@ bool flipperModeFREnable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Res
     res.success = static_cast<unsigned char>(true);
     return true;
   }
+
+  res.message = "requires individual mode to interact with single flipper"
   return false;
 }
 
@@ -165,6 +170,8 @@ bool flipperModeFRDisable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Re
     res.success = static_cast<unsigned char>(true);
     return true;
   }
+
+  res.message = "requires individual mode to interact with single flipper"
   return false;
 }
 
@@ -177,6 +184,8 @@ bool flipperModeRLEnable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Res
     res.success = static_cast<unsigned char>(true);
     return true;
   }
+
+  res.message = "requires individual mode to interact with single flipper"
   return false;
 }
 
@@ -189,6 +198,8 @@ bool flipperModeRLDisable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Re
     res.success = static_cast<unsigned char>(true);
     return true;
   }
+
+  res.message = "requires individual mode to interact with single flipper"
   return false;
 }
 
@@ -201,6 +212,8 @@ bool flipperModeRREnable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Res
     res.success = static_cast<unsigned char>(true);
     return true;
   }
+
+  res.message = "requires individual mode to interact with single flipper"
   return false;
 }
 
@@ -213,6 +226,8 @@ bool flipperModeRRDisable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Re
     res.success = static_cast<unsigned char>(true);
     return true;
   }
+
+  res.message = "requires individual mode to interact with single flipper"
   return false;
 }
 
@@ -240,8 +255,8 @@ int main(int argc, char** argv)
   ros::ServiceServer flipper_mode_back_enable = nh.advertiseService("flipper_mode_back_enable", flipperModeBackEnable);
   ros::ServiceServer flipper_mode_back_disable = nh.advertiseService("flipper_mode_back_disable", flipperModeBackDisable);
 
-  ros::ServiceServer individual_mode_enable = nh.advertiseService("individual_mode_enable", diagnosticModeEnable);
-  ros::ServiceServer individual_mode_disable = nh.advertiseService("individual_mode_disable", diagnosticModeDisable);
+  ros::ServiceServer individual_mode_enable = nh.advertiseService("individual_mode_enable", individualModeEnable);
+  ros::ServiceServer individual_mode_disable = nh.advertiseService("individual_mode_disable", individualModeDisable);
 
   ros::ServiceServer flipper_mode_fl_enable = nh.advertiseService("flipper_mode_fl_enable", flipperModeFLEnable);
   ros::ServiceServer flipper_mode_fl_disable = nh.advertiseService("flipper_mode_fl_disable", flipperModeFLDisable);
