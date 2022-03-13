@@ -26,7 +26,7 @@ float MarkhorHWInterfaceFlippers::getRRTarget()
 
 float MarkhorHWInterfaceFlippers::getRLTarget()
 {
-  return fl_target;
+  return rl_target;
 }
 
 MarkhorHWInterfaceFlippers::MarkhorHWInterfaceFlippers()
