@@ -12,9 +12,6 @@ static ros::Publisher flipper_fr_pub;
 static ros::Publisher flipper_rl_pub;
 static ros::Publisher flipper_rr_pub;
 
-static bool flipper_mode_front = false;
-static bool flipper_mode_back = false;
-
 static bool individual_mode = false;
 static bool flipper_mode_fl = false;
 static bool flipper_mode_fr = false;
@@ -26,21 +23,21 @@ static int multiplicator = 0;
 void joyCallback(const sensor_msgs::Joy::ConstPtr& joy)
 {
   std_msgs::Float64 msg;
-  if (flipper_mode_front == true)
+  if (individual_mode == false)
   {
-    msg.data = joy->axes[4] * multiplicator;
-    flipper_fl_pub.publish(msg);
-    flipper_fr_pub.publish(msg);
-  }
-  if (flipper_mode_back == true)
-  {
-    msg.data = joy->axes[4] * multiplicator;
-    flipper_rl_pub.publish(msg);
-    flipper_rr_pub.publish(msg);
-  }
-  if (individual_mode == true)
-  {
-
+    if (flipper_mode_fl == true && flipper_mode_fl ==true)
+    {
+      msg.data = joy->axes[4] * multiplicator;
+      flipper_fl_pub.publish(msg);
+      flipper_fr_pub.publish(msg);
+    }
+    if (flipper_mode_rl == true && flipper_mode_rr == true)
+    {
+      msg.data = joy->axes[4] * multiplicator;
+      flipper_rl_pub.publish(msg);
+      flipper_rr_pub.publish(msg);
+    }
+  } else {
     if (flipper_mode_fl == true)
     {
       msg.data = joy->axes[4] * multiplicator;
@@ -66,7 +63,8 @@ void joyCallback(const sensor_msgs::Joy::ConstPtr& joy)
 
 bool flipperModeFrontEnable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Response& res)
 {
-  flipper_mode_front = true;
+  flipper_mode_fl = true;
+  flipper_mode_fr = true;
   res.message = "successfully enabled flipper mode front";
   res.success = static_cast<unsigned char>(true);
   return true;
@@ -74,7 +72,8 @@ bool flipperModeFrontEnable(std_srvs::Trigger::Request& req, std_srvs::Trigger::
 
 bool flipperModeFrontDisable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Response& res)
 {
-  flipper_mode_front = false;
+  flipper_mode_fl = false;
+  flipper_mode_fr = false;
   res.message = "successfully disabled flipper mode front";
   res.success = static_cast<unsigned char>(true);
   return true;
@@ -82,7 +81,8 @@ bool flipperModeFrontDisable(std_srvs::Trigger::Request& req, std_srvs::Trigger:
 
 bool flipperModeBackEnable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Response& res)
 {
-  flipper_mode_back = true;
+  flipper_mode_rl = true;
+  flipper_mode_rr = true;
   res.message = "successfully enabled flipper mode back";
   res.success = static_cast<unsigned char>(true);
   return true;
@@ -90,7 +90,8 @@ bool flipperModeBackEnable(std_srvs::Trigger::Request& req, std_srvs::Trigger::R
 
 bool flipperModeBackDisable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Response& res)
 {
-  flipper_mode_back = false;
+  flipper_mode_rl = false;
+  flipper_mode_rr = false;
   res.message = "successfully disabled flipper mode back";
   res.success = static_cast<unsigned char>(true);
   return true;
@@ -99,9 +100,11 @@ bool flipperModeBackDisable(std_srvs::Trigger::Request& req, std_srvs::Trigger::
 bool individualModeEnable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Response& res)
 {
   individual_mode = true;
-  flipper_mode_front = false;
-  flipper_mode_back = false;
-  res.message = "successfully enabled individual mode";
+  flipper_mode_fl = false;
+  flipper_mode_fr = false;
+  flipper_mode_rl = false;
+  flipper_mode_rr = false;
+  res.message = "successfully enabled individual mode, all flippers are disabled";
   res.success = static_cast<unsigned char>(true);
   return true;
 }
@@ -114,7 +117,7 @@ bool individualModeDisable(std_srvs::Trigger::Request& req, std_srvs::Trigger::R
   flipper_mode_rl = false;
   flipper_mode_rr = false;
 
-  res.message = "successfully disabled individual mode";
+  res.message = "successfully disabled individual mode, all flippers are disabled";
   res.success = static_cast<unsigned char>(true);
   return true;
 }
@@ -129,7 +132,7 @@ bool flipperModeFLEnable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Res
     return true;
   }
 
-  res.message = "requires individual mode to interact with single flipper"
+  res.message = "requires individual mode to interact with single flipper";
   return false;
 }
 
@@ -143,7 +146,7 @@ bool flipperModeFLDisable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Re
     return true;
   }
 
-  res.message = "requires individual mode to interact with single flipper"
+  res.message = "requires individual mode to interact with single flipper";
   return false;
 }
 
@@ -157,7 +160,7 @@ bool flipperModeFREnable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Res
     return true;
   }
 
-  res.message = "requires individual mode to interact with single flipper"
+  res.message = "requires individual mode to interact with single flipper";
   return false;
 }
 
@@ -171,7 +174,7 @@ bool flipperModeFRDisable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Re
     return true;
   }
 
-  res.message = "requires individual mode to interact with single flipper"
+  res.message = "requires individual mode to interact with single flipper";
   return false;
 }
 
@@ -185,7 +188,7 @@ bool flipperModeRLEnable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Res
     return true;
   }
 
-  res.message = "requires individual mode to interact with single flipper"
+  res.message = "requires individual mode to interact with single flipper";
   return false;
 }
 
@@ -199,7 +202,7 @@ bool flipperModeRLDisable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Re
     return true;
   }
 
-  res.message = "requires individual mode to interact with single flipper"
+  res.message = "requires individual mode to interact with single flipper";
   return false;
 }
 
@@ -213,7 +216,7 @@ bool flipperModeRREnable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Res
     return true;
   }
 
-  res.message = "requires individual mode to interact with single flipper"
+  res.message = "requires individual mode to interact with single flipper";
   return false;
 }
 
@@ -227,7 +230,7 @@ bool flipperModeRRDisable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Re
     return true;
   }
 
-  res.message = "requires individual mode to interact with single flipper"
+  res.message = "requires individual mode to interact with single flipper";
   return false;
 }
 
