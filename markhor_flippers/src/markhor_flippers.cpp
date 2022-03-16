@@ -12,7 +12,6 @@ static ros::Publisher flipper_fr_pub;
 static ros::Publisher flipper_rl_pub;
 static ros::Publisher flipper_rr_pub;
 
-static bool individual_mode = false;
 static bool flipper_mode_fl = false;
 static bool flipper_mode_fr = false;
 static bool flipper_mode_rl = false;
@@ -82,141 +81,68 @@ bool flipperModeBackDisable(std_srvs::Trigger::Request& req, std_srvs::Trigger::
   return true;
 }
 
-bool individualModeEnable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Response& res)
-{
-  individual_mode = true;
-  flipper_mode_fl = false;
-  flipper_mode_fr = false;
-  flipper_mode_rl = false;
-  flipper_mode_rr = false;
-  res.message = "successfully enabled individual mode, all flippers are disabled";
-  res.success = static_cast<unsigned char>(true);
-  return true;
-}
-
-bool individualModeDisable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Response& res)
-{
-  individual_mode = false;
-  flipper_mode_fl = false;
-  flipper_mode_fr = false;
-  flipper_mode_rl = false;
-  flipper_mode_rr = false;
-
-  res.message = "successfully disabled individual mode, all flippers are disabled";
-  res.success = static_cast<unsigned char>(true);
-  return true;
-}
-
 bool flipperModeFLEnable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Response& res)
 {
-  if (individual_mode == true)
-  {
-    flipper_mode_fl = true;
-    res.message = "successfully enabled flipper mode front left";
-    res.success = static_cast<unsigned char>(true);
-    return true;
-  }
-
-  res.message = "requires individual mode to interact with single flipper";
-  return false;
+  flipper_mode_fl = true;
+  res.message = "successfully enabled flipper mode front left";
+  res.success = static_cast<unsigned char>(true);
+  return true;
 }
 
 bool flipperModeFLDisable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Response& res)
 {
-  if (individual_mode == true)
-  {
-    flipper_mode_fl = false;
-    res.message = "successfully disabled flipper mode front left";
-    res.success = static_cast<unsigned char>(true);
-    return true;
-  }
-
-  res.message = "requires individual mode to interact with single flipper";
-  return false;
+  flipper_mode_fl = false;
+  res.message = "successfully disabled flipper mode front left";
+  res.success = static_cast<unsigned char>(true);
+  return true;
 }
 
 bool flipperModeFREnable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Response& res)
 {
-  if (individual_mode == true)
-  {
-    flipper_mode_fr = true;
-    res.message = "successfully enabled flipper mode front right";
-    res.success = static_cast<unsigned char>(true);
-    return true;
-  }
-
-  res.message = "requires individual mode to interact with single flipper";
-  return false;
+  flipper_mode_fr = true;
+  res.message = "successfully enabled flipper mode front right";
+  res.success = static_cast<unsigned char>(true);
+  return true;
 }
 
 bool flipperModeFRDisable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Response& res)
 {
-  if (individual_mode == true)
-  {
-    flipper_mode_fr = false;
-    res.message = "successfully disabled flipper mode front right";
-    res.success = static_cast<unsigned char>(true);
-    return true;
-  }
-
-  res.message = "requires individual mode to interact with single flipper";
-  return false;
+  flipper_mode_fr = false;
+  res.message = "successfully disabled flipper mode front right";
+  res.success = static_cast<unsigned char>(true);
+  return true;
 }
 
 bool flipperModeRLEnable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Response& res)
 {
-  if (individual_mode == true)
-  {
-    flipper_mode_rl = true;
-    res.message = "successfully enabled flipper mode rear left";
-    res.success = static_cast<unsigned char>(true);
-    return true;
-  }
-
-  res.message = "requires individual mode to interact with single flipper";
-  return false;
+  flipper_mode_rl = true;
+  res.message = "successfully enabled flipper mode rear left";
+  res.success = static_cast<unsigned char>(true);
+  return true;
 }
 
 bool flipperModeRLDisable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Response& res)
 {
-  if (individual_mode == true)
-  {
-    flipper_mode_rl = false;
-    res.message = "successfully disabled flipper mode rear left";
-    res.success = static_cast<unsigned char>(true);
-    return true;
-  }
-
-  res.message = "requires individual mode to interact with single flipper";
-  return false;
+  flipper_mode_rl = false;
+  res.message = "successfully disabled flipper mode rear left";
+  res.success = static_cast<unsigned char>(true);
+  return true;
 }
 
 bool flipperModeRREnable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Response& res)
 {
-  if (individual_mode == true)
-  {
-    flipper_mode_rr = true;
-    res.message = "successfully enabled flipper mode rear right";
-    res.success = static_cast<unsigned char>(true);
-    return true;
-  }
-
-  res.message = "requires individual mode to interact with single flipper";
-  return false;
+  flipper_mode_rr = true;
+  res.message = "successfully enabled flipper mode rear right";
+  res.success = static_cast<unsigned char>(true);
+  return true;
 }
 
 bool flipperModeRRDisable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Response& res)
 {
-  if (individual_mode == true)
-  {
-    flipper_mode_rr = false;
-    res.message = "successfully disabled flipper mode rear right";
-    res.success = static_cast<unsigned char>(true);
-    return true;
-  }
-
-  res.message = "requires individual mode to interact with single flipper";
-  return false;
+  flipper_mode_rr = false;
+  res.message = "successfully disabled flipper mode rear right";
+  res.success = static_cast<unsigned char>(true);
+  return true;
 }
 
 int main(int argc, char** argv)
@@ -242,9 +168,6 @@ int main(int argc, char** argv)
   ros::ServiceServer flipper_mode_front_disable = nh.advertiseService("flipper_mode_front_disable", flipperModeFrontDisable);
   ros::ServiceServer flipper_mode_back_enable = nh.advertiseService("flipper_mode_back_enable", flipperModeBackEnable);
   ros::ServiceServer flipper_mode_back_disable = nh.advertiseService("flipper_mode_back_disable", flipperModeBackDisable);
-
-  ros::ServiceServer individual_mode_enable = nh.advertiseService("individual_mode_enable", individualModeEnable);
-  ros::ServiceServer individual_mode_disable = nh.advertiseService("individual_mode_disable", individualModeDisable);
 
   ros::ServiceServer flipper_mode_fl_enable = nh.advertiseService("flipper_mode_fl_enable", flipperModeFLEnable);
   ros::ServiceServer flipper_mode_fl_disable = nh.advertiseService("flipper_mode_fl_disable", flipperModeFLDisable);
