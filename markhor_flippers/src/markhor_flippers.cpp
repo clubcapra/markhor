@@ -49,6 +49,8 @@ bool flipperModeFrontEnable(std_srvs::Trigger::Request& req, std_srvs::Trigger::
 {
   flipper_mode_fl = true;
   flipper_mode_fr = true;
+  flipper_mode_rl = false;
+  flipper_mode_rr = false;
   res.message = "successfully enabled flipper mode front";
   res.success = static_cast<unsigned char>(true);
   return true;
@@ -67,6 +69,8 @@ bool flipperModeBackEnable(std_srvs::Trigger::Request& req, std_srvs::Trigger::R
 {
   flipper_mode_rl = true;
   flipper_mode_rr = true;
+  flipper_mode_fl = false;
+  flipper_mode_fr = false;
   res.message = "successfully enabled flipper mode back";
   res.success = static_cast<unsigned char>(true);
   return true;
