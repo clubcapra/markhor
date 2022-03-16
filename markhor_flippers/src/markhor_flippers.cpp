@@ -23,41 +23,26 @@ static int multiplicator = 0;
 void joyCallback(const sensor_msgs::Joy::ConstPtr& joy)
 {
   std_msgs::Float64 msg;
-  if (individual_mode == false)
+
+  if (flipper_mode_fl == true)
   {
-    if (flipper_mode_fl == true && flipper_mode_fl ==true)
-    {
-      msg.data = joy->axes[4] * multiplicator;
-      flipper_fl_pub.publish(msg);
-      flipper_fr_pub.publish(msg);
-    }
-    if (flipper_mode_rl == true && flipper_mode_rr == true)
-    {
-      msg.data = joy->axes[4] * multiplicator;
-      flipper_rl_pub.publish(msg);
-      flipper_rr_pub.publish(msg);
-    }
-  } else {
-    if (flipper_mode_fl == true)
-    {
-      msg.data = joy->axes[4] * multiplicator;
-      flipper_fl_pub.publish(msg);
-    }
-    if (flipper_mode_fr == true)
-    {
-      msg.data = joy->axes[4] * multiplicator;
-      flipper_fr_pub.publish(msg);
-    }
-    if (flipper_mode_rl == true)
-    {
-      msg.data = joy->axes[4] * multiplicator;
-      flipper_rl_pub.publish(msg);
-    }
-    if (flipper_mode_rr == true)
-    {
-      msg.data = joy->axes[4] * multiplicator;
-      flipper_rr_pub.publish(msg);
-    }
+    msg.data = joy->axes[4] * multiplicator;
+    flipper_fl_pub.publish(msg);
+  }
+  if (flipper_mode_fr == true)
+  {
+    msg.data = joy->axes[4] * multiplicator;
+    flipper_fr_pub.publish(msg);
+  }
+  if (flipper_mode_rl == true)
+  {
+    msg.data = joy->axes[4] * multiplicator;
+    flipper_rl_pub.publish(msg);
+  }
+  if (flipper_mode_rr == true)
+  {
+    msg.data = joy->axes[4] * multiplicator;
+    flipper_rr_pub.publish(msg);
   }
 }
 
