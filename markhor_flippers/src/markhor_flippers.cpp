@@ -65,22 +65,22 @@ bool flipperModeFrontDisable(std_srvs::Trigger::Request& req, std_srvs::Trigger:
   return true;
 }
 
-bool flipperModeBackEnable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Response& res)
+bool flipperModeRearEnable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Response& res)
 {
   flipper_mode_rl = true;
   flipper_mode_rr = true;
   flipper_mode_fl = false;
   flipper_mode_fr = false;
-  res.message = "successfully enabled flipper mode back";
+  res.message = "successfully enabled flipper mode rear";
   res.success = static_cast<unsigned char>(true);
   return true;
 }
 
-bool flipperModeBackDisable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Response& res)
+bool flipperModeRearDisable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Response& res)
 {
   flipper_mode_rl = false;
   flipper_mode_rr = false;
-  res.message = "successfully disabled flipper mode back";
+  res.message = "successfully disabled flipper mode rear";
   res.success = static_cast<unsigned char>(true);
   return true;
 }
@@ -170,8 +170,8 @@ int main(int argc, char** argv)
 
   ros::ServiceServer flipper_mode_front_enable = nh.advertiseService("flipper_mode_front_enable", flipperModeFrontEnable);
   ros::ServiceServer flipper_mode_front_disable = nh.advertiseService("flipper_mode_front_disable", flipperModeFrontDisable);
-  ros::ServiceServer flipper_mode_back_enable = nh.advertiseService("flipper_mode_back_enable", flipperModeBackEnable);
-  ros::ServiceServer flipper_mode_back_disable = nh.advertiseService("flipper_mode_back_disable", flipperModeBackDisable);
+  ros::ServiceServer flipper_mode_rear_enable = nh.advertiseService("flipper_mode_rear_enable", flipperModeRearEnable);
+  ros::ServiceServer flipper_mode_rear_disable = nh.advertiseService("flipper_mode_rear_disable", flipperModeRearDisable);
 
   ros::ServiceServer flipper_mode_fl_enable = nh.advertiseService("flipper_mode_fl_enable", flipperModeFLEnable);
   ros::ServiceServer flipper_mode_fl_disable = nh.advertiseService("flipper_mode_fl_disable", flipperModeFLDisable);
