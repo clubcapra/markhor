@@ -77,7 +77,6 @@ bool publishFRTarget(float target)
   std::stringstream ss;
   ss << target;
   msg.data = ss.str();
-  ROS_INFO("publishFRTarget: %f \n", target);
   fr_target_pub.publish(msg);
   return true;
 }
@@ -88,7 +87,6 @@ bool publishFLTarget(float target)
   std::stringstream ss;
   ss << target;
   msg.data = ss.str();
-  ROS_INFO("publishFLTarget: %f \n", target);
   fl_target_pub.publish(msg);
   return true;
 }
@@ -99,7 +97,6 @@ bool publishRRTarget(float target)
   std::stringstream ss;
   ss << target;
   msg.data = ss.str();
-  ROS_INFO("publishRRTarget: %f \n", target);
   rr_target_pub.publish(msg);
   return true;
 }
@@ -110,7 +107,6 @@ bool publishRLTarget(float target)
   std::stringstream ss;
   ss << target;
   msg.data = ss.str();
-  ROS_INFO("publishRLTarget: %f \n", target);
   rl_target_pub.publish(msg);
   return true;
 }
@@ -132,10 +128,10 @@ int main(int argc, char** argv)
   flipper_rl_pub = nh.advertise<std_msgs::Float64>("flipper_rl_position_controller/command", 1000);
   flipper_rr_pub = nh.advertise<std_msgs::Float64>("flipper_rr_position_controller/command", 1000);
 
-  fr_target_pub = nh.advertise<std_msgs::String>("flippers/flipper_fr_position_target", 1000);
-  fl_target_pub = nh.advertise<std_msgs::String>("flippers/flipper_fl_position_target", 1000);
-  rr_target_pub = nh.advertise<std_msgs::String>("flippers/flipper_rr_position_target", 1000);
-  rl_target_pub = nh.advertise<std_msgs::String>("flippers/flipper_rl_position_target", 1000);
+  fr_target_pub = nh.advertise<std_msgs::String>("flipper_fr_position_target", 1000);
+  fl_target_pub = nh.advertise<std_msgs::String>("flipper_fl_position_target", 1000);
+  rr_target_pub = nh.advertise<std_msgs::String>("flipper_rr_position_target", 1000);
+  rl_target_pub = nh.advertise<std_msgs::String>("flipper_rl_position_target", 1000);
 
   ros::Subscriber joy_sub = nh.subscribe("/joy", 1000, joyCallback);
 
