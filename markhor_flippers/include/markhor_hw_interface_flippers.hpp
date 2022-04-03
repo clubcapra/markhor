@@ -41,22 +41,18 @@ public:
   MarkhorHWInterfaceFlippers();
   void write();
   void read();
-  float getFRTarget();
-  float getFLTarget();
-  float getRRTarget();
-  float getRLTarget();
 
   ros::NodeHandle nh_;
   int num_joints_ = 0;
 
   int current_limit_ = 30;
-  
+
 private:
   void setupRosControl();
   void setupCtreDrive();
   bool hasResetOccurred();
   void printDriveInfo(std::unique_ptr<TalonSRX>& drive);
-  
+
   void saveDrivePosition();
   void writeDrivePositionToFile(std::string config_file_name);
 
@@ -67,8 +63,18 @@ private:
 
   int getEncoderPosition(std::unique_ptr<TalonSRX>& drive);
 
+  bool publishFLTarget(float target);
+  bool publishFRTarget(float target);
+  bool publishRLTarget(float target);
+  bool publishRRTarget(float target);
+
+  bool publishFLMotorCurrent(float motor_current);
+  bool publishFRMotorCurrent(float motor_current);
+  bool publishRLMotorCurrent(float motor_current);
+  bool publishRRMotorCurrent(float motor_current);
+
   const int timeout_ms_ = 30;
-  
+
   int drive_fl_id_, drive_fr_id_, drive_rl_id_, drive_rr_id_ = 0;
 
   hardware_interface::JointStateInterface joint_state_interface_;
@@ -112,5 +118,10 @@ private:
   float accumulator_fl_ = 0;
   float accumulator_rl_ = 0;
   float accumulator_rr_ = 0;
+
+  float target_fl_ = 0;
+  float target_fr_ = 0;
+  float target_rl_ = 0;
+  float target_rr_ = 0;
 };
 #endif  // MARKHOR_HW_INTERFACE_H

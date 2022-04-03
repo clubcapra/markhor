@@ -1,32 +1,85 @@
 #include <ctre/phoenix/motorcontrol/SupplyCurrentLimitConfiguration.h>
 #include <unistd.h>
 #include <string>
+#include <std_msgs/Float64.h>
 
 #include "markhor_hw_interface_flippers.hpp"
 
-static float fr_target = 0;
-static float fl_target = 0;
-static float rr_target = 0;
-static float rl_target = 0;
+static ros::Publisher fr_target_pub;
+static ros::Publisher fl_target_pub;
+static ros::Publisher rr_target_pub;
+static ros::Publisher rl_target_pub;
 
-float MarkhorHWInterfaceFlippers::getFRTarget()
+static ros::Publisher fr_motor_current_pub;
+static ros::Publisher fl_motor_current_pub;
+static ros::Publisher rr_motor_current_pub;
+static ros::Publisher rl_motor_current_pub;
+
+bool MarkhorHWInterfaceFlippers::publishFRTarget(float target)
 {
-  return fr_target;
+  std_msgs::Float64 msg;
+  msg.data = target;
+  ROS_INFO("publishFRTarget: %f \n", target);
+  fr_target_pub.publish(msg);
+  return true;
 }
 
-float MarkhorHWInterfaceFlippers::getFLTarget()
+bool MarkhorHWInterfaceFlippers::publishFLTarget(float target)
 {
-  return fl_target;
+  std_msgs::Float64 msg;
+  msg.data = target;
+  ROS_INFO("publishFLTarget: %f \n", target);
+  fl_target_pub.publish(msg);
+  return true;
 }
 
-float MarkhorHWInterfaceFlippers::getRRTarget()
+bool MarkhorHWInterfaceFlippers::publishRRTarget(float target)
 {
-  return rr_target;
+  std_msgs::Float64 msg;
+  msg.data = target;
+  ROS_INFO("publishRRTarget: %f \n", target);
+  rr_target_pub.publish(msg);
+  return true;
 }
 
-float MarkhorHWInterfaceFlippers::getRLTarget()
+bool MarkhorHWInterfaceFlippers::MarkhorHWInterfaceFlippers::publishRLTarget(float target)
 {
-  return rl_target;
+  std_msgs::Float64 msg;
+  msg.data = target;
+  rl_target_pub.publish(msg);
+  return true;
+}
+
+bool MarkhorHWInterfaceFlippers::publishFRMotorCurrent(float motor_current)
+{
+  std_msgs::Float64 msg;
+  msg.data = motor_current;
+  fr_motor_current_pub.publish(msg);
+  return true;
+}
+
+bool MarkhorHWInterfaceFlippers::publishFLMotorCurrent(float motor_current)
+{
+  std_msgs::Float64 msg;
+  msg.data = motor_current;
+  fl_motor_current_pub.publish(msg);
+  return true;
+}
+
+bool MarkhorHWInterfaceFlippers::publishRRMotorCurrent(float motor_current)
+{
+  std_msgs::Float64 msg;
+  msg.data = motor_current;
+  rr_motor_current_pub.publish(msg);
+  return true;
+}
+
+bool MarkhorHWInterfaceFlippers::publishRLMotorCurrent(float motor_current)
+{
+  std_msgs::Float64 msg;
+  msg.data = motor_current;
+  rl_motor_current_pub.publish(msg);
+  return true;
 }
 
 MarkhorHWInterfaceFlippers::MarkhorHWInterfaceFlippers()
@@ -54,6 +107,16 @@ MarkhorHWInterfaceFlippers::MarkhorHWInterfaceFlippers()
   nh_.getParam("/markhor/flippers/markhor_flippers_node/config_folder_location", config_folder_str_);
   nh_.getParam("/markhor/flippers/markhor_flippers_node/config_file_1", config_file_1_);
   nh_.getParam("/markhor/flippers/markhor_flippers_node/config_file_2", config_file_2_);
+
+  fr_target_pub = nh_.advertise<std_msgs::Float64>("flipper_fr_position_target", 1000);
+  fl_target_pub = nh_.advertise<std_msgs::Float64>("flipper_fl_position_target", 1000);
+  rr_target_pub = nh_.advertise<std_msgs::Float64>("flipper_rr_position_target", 1000);
+  rl_target_pub = nh_.advertise<std_msgs::Float64>("flipper_rl_position_target", 1000);
+
+  fr_motor_current_pub = nh_.advertise<std_msgs::Float64>("flipper_fr_motor_current", 1000);
+  fl_motor_current_pub = nh_.advertise<std_msgs::Float64>("flipper_fl_motor_current", 1000);
+  rr_motor_current_pub = nh_.advertise<std_msgs::Float64>("flipper_rr_motor_current", 1000);
+  rl_motor_current_pub = nh_.advertise<std_msgs::Float64>("flipper_rl_motor_current", 1000);
 
   loadDrivePosition();
 }
@@ -246,9 +309,9 @@ void MarkhorHWInterfaceFlippers::write()
       front_left_drive_base_position_ + accumulator_fl_ + joint_position_command_[0] < front_left_drive_upper_limit_)
   {
     accumulator_fl_ += joint_position_command_[0];
-    float target = front_left_drive_base_position_ + accumulator_fl_;
-    ROS_INFO_THROTTLE(1, "target = [%f]", target);
-    front_left_drive_->Set(ControlMode::Position, target);
+    target_fl_ = front_left_drive_base_position_ + accumulator_fl_;
+    ROS_INFO_THROTTLE(1, "target = [%f]", target_fl_);
+    front_left_drive_->Set(ControlMode::Position, target_fl_);
   }
 
   printDriveInfo(front_right_drive_);
@@ -257,9 +320,9 @@ void MarkhorHWInterfaceFlippers::write()
       front_right_drive_base_position_ + accumulator_fr_ + joint_position_command_[1] < front_right_drive_upper_limit_)
   {
     accumulator_fr_ += joint_position_command_[1];
-    float target = front_right_drive_base_position_ + accumulator_fr_;
-    ROS_INFO_THROTTLE(1, "target = [%f]", target);
-    front_right_drive_->Set(ControlMode::Position, target);
+    target_fr_ = front_right_drive_base_position_ + accumulator_fr_;
+    ROS_INFO_THROTTLE(1, "target = [%f]", target_fr_);
+    front_right_drive_->Set(ControlMode::Position, target_fr_);
   }
 
   printDriveInfo(rear_left_drive_);
@@ -267,9 +330,9 @@ void MarkhorHWInterfaceFlippers::write()
       rear_left_drive_base_position_ + accumulator_rl_ + joint_position_command_[2] < rear_left_drive_upper_limit_)
   {
     accumulator_rl_ += joint_position_command_[2];
-    float target = rear_left_drive_base_position_ + accumulator_rl_;
-    ROS_INFO_THROTTLE(1, "target = [%f]", target);
-    rear_left_drive_->Set(ControlMode::Position, target);
+    target_rl_ = rear_left_drive_base_position_ + accumulator_rl_;
+    ROS_INFO_THROTTLE(1, "target = [%f]", target_rl_);
+    rear_left_drive_->Set(ControlMode::Position, target_rl_);
   }
 
   printDriveInfo(rear_right_drive_);
@@ -277,9 +340,9 @@ void MarkhorHWInterfaceFlippers::write()
       rear_right_drive_base_position_ + accumulator_rr_ + joint_position_command_[3] < rear_right_drive_upper_limit_)
   {
     accumulator_rr_ += joint_position_command_[3];
-    float target = rear_right_drive_base_position_ + accumulator_rr_;
-    ROS_INFO_THROTTLE(1, "target = [%f]", target);
-    rear_right_drive_->Set(ControlMode::Position, target);
+    target_rr_ = rear_right_drive_base_position_ + accumulator_rr_;
+    ROS_INFO_THROTTLE(1, "target = [%f]", target_rr_);
+    rear_right_drive_->Set(ControlMode::Position, target_rr_);
   }
   saveDrivePosition();
 }
@@ -287,6 +350,15 @@ void MarkhorHWInterfaceFlippers::write()
 void MarkhorHWInterfaceFlippers::read()
 {
   // Read from the motor API, going to read from the TalonSRX objects
+  publishFRTarget(target_fr_);
+  publishFLTarget(target_fl_);
+  publishRRTarget(target_rr_);
+  publishRLTarget(target_rl_);
+
+  publishFRMotorCurrent(front_left_drive_->GetOutputCurrent());
+  publishFLMotorCurrent(front_right_drive_->GetOutputCurrent());
+  publishRRMotorCurrent(rear_right_drive_->GetOutputCurrent());
+  publishRLMotorCurrent(rear_left_drive_->GetOutputCurrent());
 }
 
 void MarkhorHWInterfaceFlippers::printDriveInfo(std::unique_ptr<TalonSRX>& drive)
@@ -294,53 +366,45 @@ void MarkhorHWInterfaceFlippers::printDriveInfo(std::unique_ptr<TalonSRX>& drive
   ROS_INFO_THROTTLE(1, "-------------");
   if (drive->GetDeviceID() == drive_fl_id_)
   {
-    fl_target = front_left_drive_base_position_ + accumulator_fl_ + joint_position_command_[0];
-
     ROS_INFO_THROTTLE(1, "position FL command : %f", joint_position_command_[0]);
     ROS_INFO_THROTTLE(1, "FL lower limit : %f", front_left_drive_lower_limit_);
     ROS_INFO_THROTTLE(1, "FL upper limit : %f", front_left_drive_upper_limit_);
     ROS_INFO_THROTTLE(1, "front_left_drive_base_position : %f", front_left_drive_base_position_);
     ROS_INFO_THROTTLE(1, "accumulator_fl : %f", accumulator_fl_);
-    ROS_INFO_THROTTLE(1, "Target : %f", fl_target);
+    ROS_INFO_THROTTLE(1, "Target : %f", target_fl_);
     ROS_INFO_THROTTLE(1, "Drive %d : output voltage : %f", front_left_drive_->GetDeviceID(),
                       front_left_drive_->GetMotorOutputVoltage());
   }
   else if (drive->GetDeviceID() == drive_fr_id_)
   {
-    fr_target = front_right_drive_base_position_ + accumulator_fr_ + joint_position_command_[1];
-
     ROS_INFO_THROTTLE(1, "position FR command : %f", joint_position_command_[1]);
     ROS_INFO_THROTTLE(1, "FR lower limit : %f", front_right_drive_lower_limit_);
     ROS_INFO_THROTTLE(1, "FR upper limit : %f", front_right_drive_upper_limit_);
     ROS_INFO_THROTTLE(1, "front_right_drive_base_position : %f", front_right_drive_base_position_);
     ROS_INFO_THROTTLE(1, "accumulator_fr : %f", accumulator_fr_);
-    ROS_INFO_THROTTLE(1, "Target : %f", fr_target);
+    ROS_INFO_THROTTLE(1, "Target : %f", target_fr_);
     ROS_INFO_THROTTLE(1, "Drive %d : output voltage : %f", front_right_drive_->GetDeviceID(),
                       front_right_drive_->GetMotorOutputVoltage());
   }
   else if (drive->GetDeviceID() == drive_rl_id_)
   {
-    rl_target = rear_left_drive_base_position_ + accumulator_rl_ + joint_position_command_[2];
-
     ROS_INFO_THROTTLE(1, "position RL command : %f", joint_position_command_[2]);
     ROS_INFO_THROTTLE(1, "RL lower limit : %f", rear_left_drive_lower_limit_);
     ROS_INFO_THROTTLE(1, "RL upper limit : %f", rear_left_drive_upper_limit_);
     ROS_INFO_THROTTLE(1, "rear_left_drive_base_position : %f", rear_left_drive_base_position_);
     ROS_INFO_THROTTLE(1, "accumulator_rl : %f", accumulator_rl_);
-    ROS_INFO_THROTTLE(1, "Target : %f", rl_target);
+    ROS_INFO_THROTTLE(1, "Target : %f", target_rl_);
     ROS_INFO_THROTTLE(1, "Drive %d : output voltage : %f", rear_left_drive_->GetDeviceID(),
                       rear_left_drive_->GetMotorOutputVoltage());
   }
   else if (drive->GetDeviceID() == drive_rr_id_)
   {
-    rr_target = rear_right_drive_base_position_ + accumulator_rr_ + joint_position_command_[3];
-
     ROS_INFO_THROTTLE(1, "position RR command : %f", joint_position_command_[3]);
     ROS_INFO_THROTTLE(1, "RR lower limit : %f", rear_right_drive_lower_limit_);
     ROS_INFO_THROTTLE(1, "RR upper limit : %f", rear_right_drive_upper_limit_);
     ROS_INFO_THROTTLE(1, "rear_right_drive_base_position : %f", rear_right_drive_base_position_);
     ROS_INFO_THROTTLE(1, "accumulator_rr : %f", accumulator_rl_);
-    ROS_INFO_THROTTLE(1, "Target : %f", rr_target);
+    ROS_INFO_THROTTLE(1, "Target : %f", target_rr_);
     ROS_INFO_THROTTLE(1, "Drive %d : output voltage : %f", rear_right_drive_->GetDeviceID(),
                       rear_right_drive_->GetMotorOutputVoltage());
   }

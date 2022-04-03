@@ -12,13 +12,6 @@ static ros::Publisher flipper_fr_pub;
 static ros::Publisher flipper_rl_pub;
 static ros::Publisher flipper_rr_pub;
 
-static ros::Publisher fr_target_pub;
-static ros::Publisher fl_target_pub;
-static ros::Publisher rr_target_pub;
-static ros::Publisher rl_target_pub;
-
-static bool flipper_mode_front = false;
-static bool flipper_mode_back = false;
 static bool flipper_mode_fl = false;
 static bool flipper_mode_fr = false;
 static bool flipper_mode_rl = false;
@@ -156,46 +149,6 @@ bool flipperModeRRDisable(std_srvs::Trigger::Request& req, std_srvs::Trigger::Re
   return true;
 }
 
-bool publishFRTarget(float target)
-{
-  std_msgs::String msg;
-  std::stringstream ss;
-  ss << target;
-  msg.data = ss.str();
-  fr_target_pub.publish(msg);
-  return true;
-}
-
-bool publishFLTarget(float target)
-{
-  std_msgs::String msg;
-  std::stringstream ss;
-  ss << target;
-  msg.data = ss.str();
-  fl_target_pub.publish(msg);
-  return true;
-}
-
-bool publishRRTarget(float target)
-{
-  std_msgs::String msg;
-  std::stringstream ss;
-  ss << target;
-  msg.data = ss.str();
-  rr_target_pub.publish(msg);
-  return true;
-}
-
-bool publishRLTarget(float target)
-{
-  std_msgs::String msg;
-  std::stringstream ss;
-  ss << target;
-  msg.data = ss.str();
-  rl_target_pub.publish(msg);
-  return true;
-}
-
 int main(int argc, char** argv)
 {
   ros::init(argc, argv, "markhor_flippers_node");
@@ -212,11 +165,6 @@ int main(int argc, char** argv)
   flipper_fr_pub = nh.advertise<std_msgs::Float64>("flipper_fr_position_controller/command", 1000);
   flipper_rl_pub = nh.advertise<std_msgs::Float64>("flipper_rl_position_controller/command", 1000);
   flipper_rr_pub = nh.advertise<std_msgs::Float64>("flipper_rr_position_controller/command", 1000);
-
-  fr_target_pub = nh.advertise<std_msgs::String>("flipper_fr_position_target", 1000);
-  fl_target_pub = nh.advertise<std_msgs::String>("flipper_fl_position_target", 1000);
-  rr_target_pub = nh.advertise<std_msgs::String>("flipper_rr_position_target", 1000);
-  rl_target_pub = nh.advertise<std_msgs::String>("flipper_rl_position_target", 1000);
 
   ros::Subscriber joy_sub = nh.subscribe("/joy", 1000, joyCallback);
 
@@ -254,11 +202,6 @@ int main(int argc, char** argv)
     hw.read();
     cm.update(time, period);
     hw.write();
-
-    publishFRTarget(hw.getFRTarget());
-    publishFLTarget(hw.getFLTarget());
-    publishRRTarget(hw.getRRTarget());
-    publishRLTarget(hw.getRLTarget());
 
     rate.sleep();
   }
