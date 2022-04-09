@@ -5,8 +5,6 @@
 
 #include "markhor_hw_interface_flippers.hpp"
 
-static std_msgs::Float64 msg;
-
 static ros::Publisher flipper_fl_pub;
 static ros::Publisher flipper_fr_pub;
 static ros::Publisher flipper_rl_pub;
@@ -168,10 +166,13 @@ int main(int argc, char** argv)
 
   ros::Subscriber joy_sub = nh.subscribe("/joy", 1000, joyCallback);
 
-  ros::ServiceServer flipper_mode_front_enable = nh.advertiseService("flipper_mode_front_enable", flipperModeFrontEnable);
-  ros::ServiceServer flipper_mode_front_disable = nh.advertiseService("flipper_mode_front_disable", flipperModeFrontDisable);
+  ros::ServiceServer flipper_mode_front_enable =
+      nh.advertiseService("flipper_mode_front_enable", flipperModeFrontEnable);
+  ros::ServiceServer flipper_mode_front_disable =
+      nh.advertiseService("flipper_mode_front_disable", flipperModeFrontDisable);
   ros::ServiceServer flipper_mode_rear_enable = nh.advertiseService("flipper_mode_rear_enable", flipperModeRearEnable);
-  ros::ServiceServer flipper_mode_rear_disable = nh.advertiseService("flipper_mode_rear_disable", flipperModeRearDisable);
+  ros::ServiceServer flipper_mode_rear_disable =
+      nh.advertiseService("flipper_mode_rear_disable", flipperModeRearDisable);
 
   ros::ServiceServer flipper_mode_fl_enable = nh.advertiseService("flipper_mode_fl_enable", flipperModeFLEnable);
   ros::ServiceServer flipper_mode_fl_disable = nh.advertiseService("flipper_mode_fl_disable", flipperModeFLDisable);

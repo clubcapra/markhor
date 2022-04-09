@@ -5,83 +5,6 @@
 
 #include "markhor_hw_interface_flippers.hpp"
 
-static ros::Publisher fr_target_pub;
-static ros::Publisher fl_target_pub;
-static ros::Publisher rr_target_pub;
-static ros::Publisher rl_target_pub;
-
-static ros::Publisher fr_motor_current_pub;
-static ros::Publisher fl_motor_current_pub;
-static ros::Publisher rr_motor_current_pub;
-static ros::Publisher rl_motor_current_pub;
-
-bool MarkhorHWInterfaceFlippers::publishFRTarget(float target)
-{
-  std_msgs::Float64 msg;
-  msg.data = target;
-  ROS_INFO("publishFRTarget: %f \n", target);
-  fr_target_pub.publish(msg);
-  return true;
-}
-
-bool MarkhorHWInterfaceFlippers::publishFLTarget(float target)
-{
-  std_msgs::Float64 msg;
-  msg.data = target;
-  ROS_INFO("publishFLTarget: %f \n", target);
-  fl_target_pub.publish(msg);
-  return true;
-}
-
-bool MarkhorHWInterfaceFlippers::publishRRTarget(float target)
-{
-  std_msgs::Float64 msg;
-  msg.data = target;
-  ROS_INFO("publishRRTarget: %f \n", target);
-  rr_target_pub.publish(msg);
-  return true;
-}
-
-bool MarkhorHWInterfaceFlippers::MarkhorHWInterfaceFlippers::publishRLTarget(float target)
-{
-  std_msgs::Float64 msg;
-  msg.data = target;
-  rl_target_pub.publish(msg);
-  return true;
-}
-
-bool MarkhorHWInterfaceFlippers::publishFRMotorCurrent(float motor_current)
-{
-  std_msgs::Float64 msg;
-  msg.data = motor_current;
-  fr_motor_current_pub.publish(msg);
-  return true;
-}
-
-bool MarkhorHWInterfaceFlippers::publishFLMotorCurrent(float motor_current)
-{
-  std_msgs::Float64 msg;
-  msg.data = motor_current;
-  fl_motor_current_pub.publish(msg);
-  return true;
-}
-
-bool MarkhorHWInterfaceFlippers::publishRRMotorCurrent(float motor_current)
-{
-  std_msgs::Float64 msg;
-  msg.data = motor_current;
-  rr_motor_current_pub.publish(msg);
-  return true;
-}
-
-bool MarkhorHWInterfaceFlippers::publishRLMotorCurrent(float motor_current)
-{
-  std_msgs::Float64 msg;
-  msg.data = motor_current;
-  rl_motor_current_pub.publish(msg);
-  return true;
-}
-
 MarkhorHWInterfaceFlippers::MarkhorHWInterfaceFlippers()
 {
   joint_names_.push_back("flipper_fl_j");
@@ -108,15 +31,15 @@ MarkhorHWInterfaceFlippers::MarkhorHWInterfaceFlippers()
   nh_.getParam("/markhor/flippers/markhor_flippers_node/config_file_1", config_file_1_);
   nh_.getParam("/markhor/flippers/markhor_flippers_node/config_file_2", config_file_2_);
 
-  fr_target_pub = nh_.advertise<std_msgs::Float64>("flipper_fr_position_target", 1000);
-  fl_target_pub = nh_.advertise<std_msgs::Float64>("flipper_fl_position_target", 1000);
-  rr_target_pub = nh_.advertise<std_msgs::Float64>("flipper_rr_position_target", 1000);
-  rl_target_pub = nh_.advertise<std_msgs::Float64>("flipper_rl_position_target", 1000);
+  fr_target_pub_ = nh_.advertise<std_msgs::Float64>("flipper_fr_position_target", 1000);
+  fl_target_pub_ = nh_.advertise<std_msgs::Float64>("flipper_fl_position_target", 1000);
+  rr_target_pub_ = nh_.advertise<std_msgs::Float64>("flipper_rr_position_target", 1000);
+  rl_target_pub_ = nh_.advertise<std_msgs::Float64>("flipper_rl_position_target", 1000);
 
-  fr_motor_current_pub = nh_.advertise<std_msgs::Float64>("flipper_fr_motor_current", 1000);
-  fl_motor_current_pub = nh_.advertise<std_msgs::Float64>("flipper_fl_motor_current", 1000);
-  rr_motor_current_pub = nh_.advertise<std_msgs::Float64>("flipper_rr_motor_current", 1000);
-  rl_motor_current_pub = nh_.advertise<std_msgs::Float64>("flipper_rl_motor_current", 1000);
+  fr_motor_current_pub_ = nh_.advertise<std_msgs::Float64>("flipper_fr_motor_current", 1000);
+  fl_motor_current_pub_ = nh_.advertise<std_msgs::Float64>("flipper_fl_motor_current", 1000);
+  rr_motor_current_pub_ = nh_.advertise<std_msgs::Float64>("flipper_rr_motor_current", 1000);
+  rl_motor_current_pub_ = nh_.advertise<std_msgs::Float64>("flipper_rl_motor_current", 1000);
 
   loadDrivePosition();
 }
@@ -355,8 +278,8 @@ void MarkhorHWInterfaceFlippers::read()
   publishRRTarget(target_rr_);
   publishRLTarget(target_rl_);
 
-  publishFRMotorCurrent(front_left_drive_->GetOutputCurrent());
-  publishFLMotorCurrent(front_right_drive_->GetOutputCurrent());
+  publishFRMotorCurrent(front_right_drive_->GetOutputCurrent());
+  publishFLMotorCurrent(front_left_drive_->GetOutputCurrent());
   publishRRMotorCurrent(rear_right_drive_->GetOutputCurrent());
   publishRLMotorCurrent(rear_left_drive_->GetOutputCurrent());
 }
@@ -708,4 +631,68 @@ bool MarkhorHWInterfaceFlippers::hasResetOccurred()
     }
   }
   return false;
+}
+
+bool MarkhorHWInterfaceFlippers::publishFRTarget(float target)
+{
+  std_msgs::Float64 msg;
+  msg.data = target;
+  fr_target_pub_.publish(msg);
+  return true;
+}
+
+bool MarkhorHWInterfaceFlippers::publishFLTarget(float target)
+{
+  std_msgs::Float64 msg;
+  msg.data = target;
+  fl_target_pub_.publish(msg);
+  return true;
+}
+
+bool MarkhorHWInterfaceFlippers::publishRRTarget(float target)
+{
+  std_msgs::Float64 msg;
+  msg.data = target;
+  rr_target_pub_.publish(msg);
+  return true;
+}
+
+bool MarkhorHWInterfaceFlippers::publishRLTarget(float target)
+{
+  std_msgs::Float64 msg;
+  msg.data = target;
+  rl_target_pub_.publish(msg);
+  return true;
+}
+
+bool MarkhorHWInterfaceFlippers::publishFRMotorCurrent(float motor_current)
+{
+  std_msgs::Float64 msg;
+  msg.data = motor_current;
+  fr_motor_current_pub_.publish(msg);
+  return true;
+}
+
+bool MarkhorHWInterfaceFlippers::publishFLMotorCurrent(float motor_current)
+{
+  std_msgs::Float64 msg;
+  msg.data = motor_current;
+  fl_motor_current_pub_.publish(msg);
+  return true;
+}
+
+bool MarkhorHWInterfaceFlippers::publishRRMotorCurrent(float motor_current)
+{
+  std_msgs::Float64 msg;
+  msg.data = motor_current;
+  rr_motor_current_pub_.publish(msg);
+  return true;
+}
+
+bool MarkhorHWInterfaceFlippers::publishRLMotorCurrent(float motor_current)
+{
+  std_msgs::Float64 msg;
+  msg.data = motor_current;
+  rl_motor_current_pub_.publish(msg);
+  return true;
 }

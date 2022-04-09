@@ -123,5 +123,15 @@ private:
   float target_fr_ = 0;
   float target_rl_ = 0;
   float target_rr_ = 0;
+
+  ros::Publisher fr_target_pub_;
+  ros::Publisher fl_target_pub_;
+  ros::Publisher rr_target_pub_;
+  ros::Publisher rl_target_pub_;
+
+  ros::Publisher fr_motor_current_pub_;
+  ros::Publisher fl_motor_current_pub_;
+  ros::Publisher rr_motor_current_pub_;
+  ros::Publisher rl_motor_current_pub_;
 };
 #endif  // MARKHOR_HW_INTERFACE_H
