@@ -337,7 +337,6 @@ void MarkhorHWInterfaceFlippers::printDriveInfo(std::unique_ptr<TalonSRX>& drive
     return;
   }
 
-  ROS_INFO_THROTTLE(1, "GetStatorCurrent %f", drive->GetStatorCurrent());
   ROS_INFO_THROTTLE(1, "GetPulseWidthPosition %d", drive->GetSensorCollection().GetPulseWidthPosition());
   ROS_INFO_THROTTLE(1, "GetClosedLoopError %d", drive->GetClosedLoopError(0));
   ROS_INFO_THROTTLE(1, "GetClosedLoopTarget %f", drive->GetClosedLoopTarget(0));
