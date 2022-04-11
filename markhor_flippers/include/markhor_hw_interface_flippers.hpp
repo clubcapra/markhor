@@ -63,15 +63,11 @@ private:
 
   int getEncoderPosition(std::unique_ptr<TalonSRX>& drive);
 
-  bool publishFLTarget(float target);
-  bool publishFRTarget(float target);
-  bool publishRLTarget(float target);
-  bool publishRRTarget(float target);
+  std_msgs::Float64 createMessage(float value);
 
-  bool publishFLMotorCurrent(float motor_current);
-  bool publishFRMotorCurrent(float motor_current);
-  bool publishRLMotorCurrent(float motor_current);
-  bool publishRRMotorCurrent(float motor_current);
+  bool publishTarget();
+  bool publishMotorCurrent();
+  bool publishMotorBusVoltage();
 
   const int timeout_ms_ = 30;
 
@@ -124,14 +120,19 @@ private:
   float target_rl_ = 0;
   float target_rr_ = 0;
 
-  ros::Publisher fr_target_pub_;
   ros::Publisher fl_target_pub_;
-  ros::Publisher rr_target_pub_;
+  ros::Publisher fr_target_pub_;
   ros::Publisher rl_target_pub_;
+  ros::Publisher rr_target_pub_;
 
-  ros::Publisher fr_motor_current_pub_;
   ros::Publisher fl_motor_current_pub_;
-  ros::Publisher rr_motor_current_pub_;
+  ros::Publisher fr_motor_current_pub_;
   ros::Publisher rl_motor_current_pub_;
+  ros::Publisher rr_motor_current_pub_;
+
+  ros::Publisher fl_motor_bus_voltage_pub_;
+  ros::Publisher fr_motor_bus_voltage_pub_;
+  ros::Publisher rl_motor_bus_voltage_pub_;
+  ros::Publisher rr_motor_bus_voltage_pub_;
 };
 #endif  // MARKHOR_HW_INTERFACE_H

@@ -41,6 +41,11 @@ MarkhorHWInterfaceFlippers::MarkhorHWInterfaceFlippers()
   rr_motor_current_pub_ = nh_.advertise<std_msgs::Float64>("flipper_rr_motor_current", 1000);
   rl_motor_current_pub_ = nh_.advertise<std_msgs::Float64>("flipper_rl_motor_current", 1000);
 
+  fr_motor_bus_voltage_pub_ = nh_.advertise<std_msgs::Float64>("flipper_fr_bus_voltage", 1000);
+  fl_motor_bus_voltage_pub_ = nh_.advertise<std_msgs::Float64>("flipper_fl_bus_voltage", 1000);
+  rr_motor_bus_voltage_pub_ = nh_.advertise<std_msgs::Float64>("flipper_rr_bus_voltage", 1000);
+  rl_motor_bus_voltage_pub_ = nh_.advertise<std_msgs::Float64>("flipper_rl_bus_voltage", 1000);
+
   loadDrivePosition();
 }
 
@@ -273,15 +278,10 @@ void MarkhorHWInterfaceFlippers::write()
 void MarkhorHWInterfaceFlippers::read()
 {
   // Read from the motor API, going to read from the TalonSRX objects
-  publishFRTarget(target_fr_);
-  publishFLTarget(target_fl_);
-  publishRRTarget(target_rr_);
-  publishRLTarget(target_rl_);
 
-  publishFRMotorCurrent(front_right_drive_->GetOutputCurrent());
-  publishFLMotorCurrent(front_left_drive_->GetOutputCurrent());
-  publishRRMotorCurrent(rear_right_drive_->GetOutputCurrent());
-  publishRLMotorCurrent(rear_left_drive_->GetOutputCurrent());
+  publishTarget();
+  publishMotorCurrent();
+  publishMotorBusVoltage();
 }
 
 void MarkhorHWInterfaceFlippers::printDriveInfo(std::unique_ptr<TalonSRX>& drive)
@@ -633,66 +633,36 @@ bool MarkhorHWInterfaceFlippers::hasResetOccurred()
   return false;
 }
 
-bool MarkhorHWInterfaceFlippers::publishFRTarget(float target)
+bool MarkhorHWInterfaceFlippers::publishTarget()
 {
-  std_msgs::Float64 msg;
-  msg.data = target;
-  fr_target_pub_.publish(msg);
+  fl_target_pub_.publish(createMessage(target_fl_));
+  fr_target_pub_.publish(createMessage(target_fr_));
+  rl_target_pub_.publish(createMessage(target_rl_));
+  rr_target_pub_.publish(createMessage(target_rr_));
   return true;
 }
 
-bool MarkhorHWInterfaceFlippers::publishFLTarget(float target)
+bool MarkhorHWInterfaceFlippers::publishMotorCurrent()
 {
-  std_msgs::Float64 msg;
-  msg.data = target;
-  fl_target_pub_.publish(msg);
+  fl_motor_current_pub_.publish(createMessage(front_left_drive_->GetOutputCurrent()));
+  fr_motor_current_pub_.publish(createMessage(front_right_drive_->GetOutputCurrent()));
+  rl_motor_current_pub_.publish(createMessage(rear_left_drive_->GetOutputCurrent()));
+  rr_motor_current_pub_.publish(createMessage(rear_right_drive_->GetOutputCurrent()));
   return true;
 }
 
-bool MarkhorHWInterfaceFlippers::publishRRTarget(float target)
+bool MarkhorHWInterfaceFlippers::publishMotorBusVoltage()
 {
-  std_msgs::Float64 msg;
-  msg.data = target;
-  rr_target_pub_.publish(msg);
+  fl_motor_bus_voltage_pub_.publish(createMessage(front_left_drive_->GetBusVoltage()));
+  fr_motor_bus_voltage_pub_.publish(createMessage(front_right_drive_->GetBusVoltage()));
+  rl_motor_bus_voltage_pub_.publish(createMessage(rear_left_drive_->GetBusVoltage()));
+  rr_motor_bus_voltage_pub_.publish(createMessage(rear_right_drive_->GetBusVoltage()));
   return true;
 }
 
-bool MarkhorHWInterfaceFlippers::publishRLTarget(float target)
+std_msgs::Float64 MarkhorHWInterfaceFlippers::createMessage(float value)
 {
   std_msgs::Float64 msg;
-  msg.data = target;
-  rl_target_pub_.publish(msg);
-  return true;
-}
-
-bool MarkhorHWInterfaceFlippers::publishFRMotorCurrent(float motor_current)
-{
-  std_msgs::Float64 msg;
-  msg.data = motor_current;
-  fr_motor_current_pub_.publish(msg);
-  return true;
-}
-
-bool MarkhorHWInterfaceFlippers::publishFLMotorCurrent(float motor_current)
-{
-  std_msgs::Float64 msg;
-  msg.data = motor_current;
-  fl_motor_current_pub_.publish(msg);
-  return true;
-}
-
-bool MarkhorHWInterfaceFlippers::publishRRMotorCurrent(float motor_current)
-{
-  std_msgs::Float64 msg;
-  msg.data = motor_current;
-  rr_motor_current_pub_.publish(msg);
-  return true;
-}
-
-bool MarkhorHWInterfaceFlippers::publishRLMotorCurrent(float motor_current)
-{
-  std_msgs::Float64 msg;
-  msg.data = motor_current;
-  rl_motor_current_pub_.publish(msg);
-  return true;
+  msg.data = value;
+  return msg;
 }
