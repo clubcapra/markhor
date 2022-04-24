@@ -4,6 +4,6 @@
         <param name="ros_threads" type="int" value="2" />
         <param name="server_threads" type="int" value="2" />
         <param name="quality" type="int" value="25" />
-        <param name="default_transport" type="string" value="compressed" />
+        <param name="default_transport" type="string" value="raw" />
     </node>
 </launch>
