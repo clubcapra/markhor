@@ -2,6 +2,7 @@
     <include file="$(find capra_estop)/launch/estop.launch" />
 
     <include file="$(find markhor_bringup)/launch/markhor_web_ui.launch" />
+    <include file="$(find markhor_bringup)/launch/markhor_sensors.launch" />
     
     <include file="$(find markhor_tracks)/launch/tracks.launch" />
     <include file="$(find markhor_flippers)/launch/flippers.launch" />
