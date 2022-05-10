@@ -7,10 +7,21 @@ You can use this command inside the `markhor_ws` to install the project dependen
 The ros_package `capra_estop` is essential to launch markhor. It should be located in the `markhor_ws/src` directory.
 If the module is not there, markhor will not launch and you will see the following error message : `Resource not found: capra_estop`
 
-### Package dependancies
+### Package dependencies
 - [ros_astra_camera](https://github.com/clubcapra/ros_astra_camera) (our fork)
 - [capra_estop](https://github.com/clubcapra/capra_estop)
 
+### Other intented use packages
+Altough not required, these packages are also expected to be installed alongside markhor. If not present, error messages will appear when launching this package.
+- [capra_audio_common](https://github.com/clubcapra/capra_audio_common)
+- [TPV_controller](https://github.com/clubcapra/TPV_controller)
+<!-- Launch files not updated for these packages
+- [capra_vision_visp](https://github.com/clubcapra/capra_vision_visp) 
+- [capra_thermal_cam](https://github.com/clubcapra/capra_thermal_cam)
+- [capra_hazmat_detection](https://github.com/clubcapra/capra_hazmat_detection) currently named yolo_hazmat
+- [ovis](https://github.com/clubcapra/ovis)
+- [ovis_robotiq_gripper](https://github.com/clubcapra/ovis_robotiq_gripper)
+-->
 
 # markhor gazebo
 To use the gazebo simulation you need to update the gazebo version on your machine to atleast `9.14`.
