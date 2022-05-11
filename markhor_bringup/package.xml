@@ -4,20 +4,25 @@
   <version>0.0.0</version>
   <description>The markhor_bringup package</description>
 
-  <maintainer email="capra@clubcapra.com">Capra</maintainer>
+  <maintainer email="capra@ens.etsmtl.ca">Capra</maintainer>
 
   <license>GPLv3</license>
 
   <buildtool_depend>catkin</buildtool_depend>
   
   <build_depend>visp_auto_tracker</build_depend>
-
   <build_depend>joy</build_depend>
   <build_depend>teleop_twist_joy</build_depend>
   <build_depend>web_video_server</build_depend>
+  <build_depend>image_transport</build_depend>
+  <build_depend>compressed_image_transport</build_depend>
+
   <exec_depend>joy</exec_depend>
   <exec_depend>teleop_twist_joy</exec_depend>
   <exec_depend>web_video_server</exec_depend>
   <exec_depend>visp_auto_tracker</exec_depend>
+
+  <run_depend>image_transport</run_depend>
+  <run_depend>compressed_image_transport</run_depend>
 
 </package>
