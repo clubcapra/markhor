@@ -21,8 +21,7 @@
   <exec_depend>teleop_twist_joy</exec_depend>
   <exec_depend>web_video_server</exec_depend>
   <exec_depend>visp_auto_tracker</exec_depend>
-
-  <run_depend>image_transport</run_depend>
-  <run_depend>compressed_image_transport</run_depend>
+  <exec_depend>image_transport</exec_depend>
+  <exec_depend>compressed_image_transport</exec_depend>
 
 </package>
