@@ -82,6 +82,7 @@ void MarkhorHWInterface::setupCTREDrive()
     front_left_drive->Config_kD(0, 0, timeout_ms_);
     front_left_drive->ConfigMaxIntegralAccumulator(0, integral_max, timeout_ms_);
     front_left_drive->Config_IntegralZone(0, integral_zone, timeout_ms_);
+    front_left_drive->ConfigSelectedFeedbackCoefficient(1.0 / 25.0, 0, timeout_ms_); 
 
     ctre::phoenix::unmanaged::FeedEnable(timeout_ms_);
     front_left_drive->Set(ControlMode::Velocity, 0);
@@ -104,6 +105,7 @@ void MarkhorHWInterface::setupCTREDrive()
     rear_left_drive->Config_kD(0, 0, timeout_ms_);
     rear_left_drive->ConfigMaxIntegralAccumulator(0, integral_max, timeout_ms_);
     rear_left_drive->Config_IntegralZone(0, integral_zone, timeout_ms_);
+    rear_left_drive->ConfigSelectedFeedbackCoefficient(1.0 / 25.0, 0, timeout_ms_); 
 
     ctre::phoenix::unmanaged::FeedEnable(timeout_ms_);
     rear_left_drive->Set(ControlMode::Velocity, 0);
@@ -127,6 +129,7 @@ void MarkhorHWInterface::setupCTREDrive()
     front_right_drive->Config_kD(0, 0, timeout_ms_);
     front_right_drive->ConfigMaxIntegralAccumulator(0, integral_max, timeout_ms_);
     front_right_drive->Config_IntegralZone(0, integral_zone, timeout_ms_);
+    front_right_drive->ConfigSelectedFeedbackCoefficient(1.0 / 25.0, 0, timeout_ms_); 
 
     ctre::phoenix::unmanaged::FeedEnable(timeout_ms_);
     front_right_drive->Set(ControlMode::Velocity, 0);
@@ -150,8 +153,7 @@ void MarkhorHWInterface::setupCTREDrive()
     rear_right_drive->ConfigMaxIntegralAccumulator(0, integral_max, timeout_ms_);
     rear_right_drive->Config_IntegralZone(0, integral_zone, timeout_ms_);
 
-    rear_right_drive->ConfigSelectedFeedbackCoefficient(
-        1.0 / 3.0, 0, timeout_ms_);  // HOTFIX for the encoder that returned 3x more steps than the others
+    rear_right_drive->ConfigSelectedFeedbackCoefficient(1.0 / 25.0, 0, timeout_ms_); 
 
     ctre::phoenix::unmanaged::FeedEnable(timeout_ms_);
     rear_right_drive->Set(ControlMode::Velocity, 0);
