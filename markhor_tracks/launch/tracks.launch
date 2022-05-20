@@ -13,8 +13,8 @@
         <param name="kp" type="double" value="0.2" />
         <param name="ki" type="double" value="0.01" />
         <param name="kd" type="double" value="0" />
-        <param name="integral_max" type="double" value="0" />
-        <param name="integral_zone" type="double" value="0" />
+        <param name="integral_max" type="double" value="10000" />
+        <param name="integral_zone" type="double" value="1500" />
         <param name="fb_coeff" type="double" value="0.04" />
     </node>
 
