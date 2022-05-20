@@ -63,6 +63,26 @@ void MarkhorHWInterface::setupCTREDrive()
   current_limit_config.enable = true;
   current_limit_config.currentLimit = 33;
 
+  if(!nh.getParam("/markhor/tracks/markhor_tracks_node/kp", tracks_kp)){
+    ROS_WARN("TRACKS : Missing argument kp, assuming 0");
+  }
+  if(!nh.getParam("/markhor/tracks/markhor_tracks_node/ki", tracks_ki)){
+    ROS_WARN("TRACKS : Missing argument ki, assuming 0");
+  }
+  if(!nh.getParam("/markhor/tracks/markhor_tracks_node/kd", tracks_kd)){
+    ROS_WARN("TRACKS : Missing argument kd, assuming 0");
+  }
+  if(!nh.getParam("/markhor/tracks/markhor_tracks_node/integral_max", tracks_i_max)){
+    ROS_WARN("TRACKS : Missing argument integral_max, assuming 0");
+  }
+  if(!nh.getParam("/markhor/tracks/markhor_tracks_node/integral_zone", tracks_i_zone)){
+    ROS_WARN("TRACKS : Missing argument integral_zone, assuming 0");
+  }
+  if(!nh.getParam("/markhor/tracks/markhor_tracks_node/fb_coeff", tracks_fb_coeff)){
+    ROS_WARN("TRACKS : Missing argument fb_coeff, assuming 1");
+  }
+
+
   if (nh.getParam("/markhor/tracks/markhor_tracks_node/front_left", drive_fl_id) == true)
   {
     front_left_drive = std::make_unique<TalonSRX>(drive_fl_id);
@@ -79,9 +99,9 @@ void MarkhorHWInterface::setupCTREDrive()
     front_left_drive->Config_kF(0, 0, timeout_ms_);
     front_left_drive->Config_kP(0, tracks_kp, timeout_ms_);
     front_left_drive->Config_kI(0, tracks_ki, timeout_ms_);
-    front_left_drive->Config_kD(0, 0, timeout_ms_);
-    front_left_drive->ConfigMaxIntegralAccumulator(0, integral_max, timeout_ms_);
-    front_left_drive->Config_IntegralZone(0, integral_zone, timeout_ms_);
+    front_left_drive->Config_kD(0, tracks_kd, timeout_ms_);
+    front_left_drive->ConfigMaxIntegralAccumulator(0, tracks_i_max, timeout_ms_);
+    front_left_drive->Config_IntegralZone(0, tracks_i_zone, timeout_ms_);
     front_left_drive->ConfigSelectedFeedbackCoefficient(1.0 / 25.0, 0, timeout_ms_); 
 
     ctre::phoenix::unmanaged::FeedEnable(timeout_ms_);
@@ -102,9 +122,9 @@ void MarkhorHWInterface::setupCTREDrive()
     rear_left_drive->Config_kF(0, 0, timeout_ms_);
     rear_left_drive->Config_kP(0, tracks_kp, timeout_ms_);
     rear_left_drive->Config_kI(0, tracks_ki, timeout_ms_);
-    rear_left_drive->Config_kD(0, 0, timeout_ms_);
-    rear_left_drive->ConfigMaxIntegralAccumulator(0, integral_max, timeout_ms_);
-    rear_left_drive->Config_IntegralZone(0, integral_zone, timeout_ms_);
+    rear_left_drive->Config_kD(0, tracks_kd, timeout_ms_);
+    rear_left_drive->ConfigMaxIntegralAccumulator(0, tracks_i_max, timeout_ms_);
+    rear_left_drive->Config_IntegralZone(0, tracks_i_zone, timeout_ms_);
     rear_left_drive->ConfigSelectedFeedbackCoefficient(1.0 / 25.0, 0, timeout_ms_); 
 
     ctre::phoenix::unmanaged::FeedEnable(timeout_ms_);
@@ -126,9 +146,9 @@ void MarkhorHWInterface::setupCTREDrive()
     front_right_drive->Config_kF(0, 0, timeout_ms_);
     front_right_drive->Config_kP(0, tracks_kp, timeout_ms_);
     front_right_drive->Config_kI(0, tracks_ki, timeout_ms_);
-    front_right_drive->Config_kD(0, 0, timeout_ms_);
-    front_right_drive->ConfigMaxIntegralAccumulator(0, integral_max, timeout_ms_);
-    front_right_drive->Config_IntegralZone(0, integral_zone, timeout_ms_);
+    front_right_drive->Config_kD(0, tracks_kd, timeout_ms_);
+    front_right_drive->ConfigMaxIntegralAccumulator(0, tracks_i_max, timeout_ms_);
+    front_right_drive->Config_IntegralZone(0, tracks_i_zone, timeout_ms_);
     front_right_drive->ConfigSelectedFeedbackCoefficient(1.0 / 25.0, 0, timeout_ms_); 
 
     ctre::phoenix::unmanaged::FeedEnable(timeout_ms_);
@@ -149,9 +169,9 @@ void MarkhorHWInterface::setupCTREDrive()
     rear_right_drive->Config_kF(0, 0, timeout_ms_);
     rear_right_drive->Config_kP(0, tracks_kp, timeout_ms_);
     rear_right_drive->Config_kI(0, tracks_ki, timeout_ms_);
-    rear_right_drive->Config_kD(0, 0, timeout_ms_);
-    rear_right_drive->ConfigMaxIntegralAccumulator(0, integral_max, timeout_ms_);
-    rear_right_drive->Config_IntegralZone(0, integral_zone, timeout_ms_);
+    rear_right_drive->Config_kD(0, tracks_kd, timeout_ms_);
+    rear_right_drive->ConfigMaxIntegralAccumulator(0, tracks_i_max, timeout_ms_);
+    rear_right_drive->Config_IntegralZone(0, tracks_i_zone, timeout_ms_);
 
     rear_right_drive->ConfigSelectedFeedbackCoefficient(1.0 / 25.0, 0, timeout_ms_); 
 

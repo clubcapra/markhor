@@ -10,6 +10,12 @@
         <param name="rear_left" type="int" value="23" />
         <param name="rear_right" type="int" value="24" />
         <param name="log_throttle_speed" type="int" value="1"/>
+        <param name="kp" type="double" value="0.2" />
+        <param name="ki" type="double" value="0.01" />
+        <param name="kd" type="double" value="0" />
+        <param name="integral_max" type="double" value="0" />
+        <param name="integral_zone" type="double" value="0" />
+        <param name="fb_coeff" type="double" value="0.04" />
     </node>
 
     <!-- Load controller config -->

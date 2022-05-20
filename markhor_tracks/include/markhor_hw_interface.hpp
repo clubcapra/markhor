@@ -59,11 +59,15 @@ private:
   void setupParam();
   
   const int timeout_ms_ = 30;
-  const int integral_max = 10000;
-  const int integral_zone = 1500;
 
-  const double tracks_kp = 0.2;
-  const double tracks_ki = 0.01;
+  int tracks_i_max = 0;
+  int tracks_i_zone = 0;
+
+  double tracks_kp = 0;
+  double tracks_ki = 0;
+  double tracks_kd = 0;
+
+  double tracks_fb_coeff = 1;
 
   hardware_interface::JointStateInterface jnt_state_interface;
   hardware_interface::VelocityJointInterface jnt_vel_interface;
