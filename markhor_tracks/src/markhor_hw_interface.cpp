@@ -155,7 +155,7 @@ void MarkhorHWInterface::setupCTREDrive()
     front_right_drive->Config_kD(0, tracks_kd, timeout_ms_);
     front_right_drive->ConfigMaxIntegralAccumulator(0, tracks_i_max, timeout_ms_);
     front_right_drive->Config_IntegralZone(0, tracks_i_zone, timeout_ms_);
-    front_right_drive->ConfigSelectedFeedbackCoefficient(tracks_fb_coeff 0, timeout_ms_); 
+    front_right_drive->ConfigSelectedFeedbackCoefficient(tracks_fb_coeff, 0, timeout_ms_); 
 
     ctre::phoenix::unmanaged::FeedEnable(timeout_ms_);
     front_right_drive->Set(ControlMode::Velocity, 0);
