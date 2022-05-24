@@ -10,5 +10,5 @@
     <include file="$(find astra_camera)/launch/multi_embedded.launch" />
     <include file="$(find markhor_bringup)/launch/teleop_twist_joy.launch" />
 
-    <include file="$(find markhor_bringup)/launch/tpv_controller.launch"
+    <include file="$(find markhor_bringup)/launch/tpv_controller.launch" />
 </launch>
