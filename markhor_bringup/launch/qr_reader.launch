@@ -1,5 +1,0 @@
-<launch>
-    <!-- Launch the launch file for visp-auto-tracker -->
-    <include file="$(find visp_auto_tracker)/launch/tracklive_usb.launch" />
-
-</launch>
