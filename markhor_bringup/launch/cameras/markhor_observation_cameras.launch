@@ -1,0 +1,5 @@
+<launch>
+<!-- Need to detemine which cameras are arm and TPV before implementing -->
+     <include file="$(find markhor_bringup)/launch/cameras/markhor_video0_cam.launch" />
+     <include file="$(find markhor_bringup)/launch/cameras/markhor_video1_cam.launch" />
+</launch>

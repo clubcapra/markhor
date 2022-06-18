@@ -8,25 +8,25 @@ The ros_package `capra_estop` is essential to launch markhor. It should be locat
 If the module is not there, markhor will not launch and you will see the following error message : `Resource not found: capra_estop`
 
 ### Package dependencies
-- [ros_astra_camera](https://github.com/clubcapra/ros_astra_camera) (our fork)
+- [usb_cam]
 - [capra_estop](https://github.com/clubcapra/capra_estop)
 
 ### Other intented use packages
-Altough not required, these packages are also expected to be installed alongside markhor. If not present, error messages will appear when launching this package.
+Altough not required, these packages are also expected to be installed alongside markhor. If not present, error messages will appear when launching the robot.
 - [capra_audio_common](https://github.com/clubcapra/capra_audio_common)
 - [TPV_controller](https://github.com/clubcapra/TPV_controller)
-<!-- Launch files not updated for these packages
-- [capra_vision_visp](https://github.com/clubcapra/capra_vision_visp) 
+- [capra_vision_visp](https://github.com/clubcapra/capra_vision_visp)
 - [capra_thermal_cam](https://github.com/clubcapra/capra_thermal_cam)
-- [capra_hazmat_detection](https://github.com/clubcapra/capra_hazmat_detection) currently named yolo_hazmat
 - [ovis](https://github.com/clubcapra/ovis)
 - [ovis_robotiq_gripper](https://github.com/clubcapra/ovis_robotiq_gripper)
+<!-- Launch files not updated for these packages
+- [capra_hazmat_detection](https://github.com/clubcapra/capra_hazmat_detection) currently named yolo_hazmat
 -->
 
 # markhor gazebo
 To use the gazebo simulation you need to update the gazebo version on your machine to atleast `9.14`.
 
-## In the tutorial instead of download `gazebo11` download `gazebo9`.
+## In the tutorial instead of downloading `gazebo11` download `gazebo9`.
 
 For this you need to follow the `step-by-step` alternative installation method over at : http://gazebosim.org/tutorials?tut=install_ubuntu&cat=install
 
@@ -40,7 +40,7 @@ The simulation suffers from a missing implementation of the link between the ros
 
 This necessitates a workaround when testing the robot with the UI or with a joystick. We repurpose the wheel from the Clearpath Husky robot in the simulation.
 
-**Note**: Make sure you have the repository build & source.
+**Note**: Make sure you have the repository built & sourced.
 
 ## Running the simulation with Markhor with husky wheels (joystick/keyboard with ROS)
 ### Start the simulation with husky wheels

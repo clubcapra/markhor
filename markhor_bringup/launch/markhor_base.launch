@@ -1,14 +1,9 @@
 <launch>
-    <include file="$(find capra_estop)/launch/estop.launch" />
-
-    <include file="$(find markhor_bringup)/launch/markhor_web_ui.launch" />
-    <include file="$(find markhor_bringup)/launch/markhor_sensors.launch" />
+    <include file="$(find markhor_bringup)/launch/markhor_observation.launch" />
     
+    <!-- Contents of the markhor_parkour.launch file, but without the repeat of markhor_common.launch-->
     <include file="$(find markhor_tracks)/launch/tracks.launch" />
     <include file="$(find markhor_flippers)/launch/flippers.launch" />
 
     <include file="$(find markhor_bringup)/launch/teleop_twist_joy.launch" />
-
-    <include file="$(find markhor_bringup)/launch/markhor_cameras.launch" />
-    <include file="$(find markhor_bringup)/launch/tpv_controller.launch" />
 </launch>

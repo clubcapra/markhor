@@ -1,0 +1,10 @@
+<launch>
+    <include file="$(find markhor_bringup)/launch/markhor_common.launch" />
+
+    <include file="$(find capra_audio)/launch/audio_robot.launch" />
+    <include file="$(find capra_thermal_cam)/launch/capra_thermal_cam.launch" />
+    <include file="$(find visp_auto_tracker)/launch/capra_qr_reader.launch" />
+
+    <!-- While waiting for updated markhor_observation.launch-->
+    <include file="$(find markhor_bringup)/launch/cameras/markhor_all_cameras.launch" />
+</launch>
