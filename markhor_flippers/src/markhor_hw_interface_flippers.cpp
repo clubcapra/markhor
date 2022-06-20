@@ -98,7 +98,7 @@ void MarkhorHWInterfaceFlippers::setupCtreDrive()
     front_left_drive_->ConfigNominalOutputForward(0, timeout_ms_);
     front_left_drive_->ConfigNominalOutputReverse(0, timeout_ms_);
     front_left_drive_->ConfigAllowableClosedloopError(0, 100, timeout_ms_);
-    front_left_drive->ConfigSelectedFeedbackCoefficient(fb_coeff, 0, timeout_ms_); 
+    front_left_drive_->ConfigSelectedFeedbackCoefficient(fb_coeff, 0, timeout_ms_); 
 
     double front_left_peak_output_forward, front_left_peak_output_reverse = 0;
     nh_.getParam("/markhor/flippers/markhor_flippers_node/front_left_drive_peak_output_forward",
@@ -128,7 +128,7 @@ void MarkhorHWInterfaceFlippers::setupCtreDrive()
     front_right_drive_->ConfigNominalOutputForward(0, timeout_ms_);
     front_right_drive_->ConfigNominalOutputReverse(0, timeout_ms_);
     front_right_drive_->ConfigAllowableClosedloopError(0, 100, timeout_ms_);
-    front_right_drive->ConfigSelectedFeedbackCoefficient(fb_coeff, 0, timeout_ms_); 
+    front_right_drive_->ConfigSelectedFeedbackCoefficient(fb_coeff, 0, timeout_ms_); 
 
     double front_right_peak_output_forward, front_right_peak_output_reverse = 0;
     nh_.getParam("/markhor/flippers/markhor_flippers_node/front_right_drive_peak_output_forward",
