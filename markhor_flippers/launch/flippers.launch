@@ -30,6 +30,8 @@
         <param name="kP" type="double" value="1.27" />
         <param name="kI" type="double" value="0" />
         <param name="kD" type="double" value="0" />
+        <param name="fb_coeff" type="double" value="0.225" />
+
         <param name="config_folder_location" type="string" value="/home/markhor/SSD/config/markhor_flippers" />
         <param name="config_file_1" type="string" value="/drives_calibration_1.cfg" />
         <param name="config_file_2" type="string" value="/drives_calibration_2.cfg" />
