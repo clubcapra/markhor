@@ -47,6 +47,17 @@ MarkhorHWInterfaceFlippers::MarkhorHWInterfaceFlippers()
   rl_motor_bus_voltage_pub_ = nh_.advertise<std_msgs::Float64>("flipper_rl_bus_voltage", 1000);
 
   loadDrivePosition();
+
+  joint_position_command_[0] = 0;
+  joint_position_command_[1] = 0;
+  joint_position_command_[2] = 0;
+  joint_position_command_[3] = 0;
+
+  front_left_drive_->Set(ControlMode::Position, front_left_drive_base_position_);
+  front_right_drive_->Set(ControlMode::Position, front_right_drive_base_position_);
+  rear_left_drive_->Set(ControlMode::Position, rear_left_drive_base_position_);
+  rear_right_drive_->Set(ControlMode::Position, rear_right_drive_base_position_);
+
 }
 
 void MarkhorHWInterfaceFlippers::setupRosControl()
@@ -210,6 +221,7 @@ void MarkhorHWInterfaceFlippers::setupCtreDrive()
     nh_.getParam("/markhor/flippers/markhor_flippers_node/rear_right_drive_upper_limit", rear_right_drive_upper_limit_);
     nh_.getParam("/markhor/flippers/markhor_flippers_node/rear_right_drive_lower_limit", rear_right_drive_lower_limit_);
   }
+  
 }
 
 void MarkhorHWInterfaceFlippers::write()
