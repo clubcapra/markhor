@@ -46,7 +46,8 @@ MarkhorHWInterfaceFlippers::MarkhorHWInterfaceFlippers()
   rr_motor_bus_voltage_pub_ = nh_.advertise<std_msgs::Float64>("flipper_rr_bus_voltage", 1000);
   rl_motor_bus_voltage_pub_ = nh_.advertise<std_msgs::Float64>("flipper_rl_bus_voltage", 1000);
 
-  loadDrivePosition();
+
+  //loadDrivePosition();
 
   joint_position_command_[0] = 0;
   joint_position_command_[1] = 0;
@@ -227,7 +228,7 @@ void MarkhorHWInterfaceFlippers::setupCtreDrive()
 void MarkhorHWInterfaceFlippers::write()
 {
   // Write to drive
-
+/*
   if (hasResetOccurred() == true)
   {
     loadDrivePosition();
@@ -236,7 +237,7 @@ void MarkhorHWInterfaceFlippers::write()
     accumulator_rl_ = 0;
     accumulator_rr_ = 0;
   }
-
+*/
   ctre::phoenix::unmanaged::FeedEnable(100);
 
   /*
@@ -253,7 +254,7 @@ void MarkhorHWInterfaceFlippers::write()
   be above or under the limit of the flipper.
  */
 
-  printDriveInfo(front_left_drive_);
+ // printDriveInfo(front_left_drive_);
   if (front_left_drive_lower_limit_ <= front_left_drive_base_position_ + accumulator_fl_ + joint_position_command_[0] &&
       front_left_drive_base_position_ + accumulator_fl_ + joint_position_command_[0] < front_left_drive_upper_limit_)
   {
@@ -263,7 +264,7 @@ void MarkhorHWInterfaceFlippers::write()
     front_left_drive_->Set(ControlMode::Position, target_fl_);
   }
 
-  printDriveInfo(front_right_drive_);
+ // printDriveInfo(front_right_drive_);
   if (front_right_drive_lower_limit_ <=
           front_right_drive_base_position_ + accumulator_fr_ + joint_position_command_[1] &&
       front_right_drive_base_position_ + accumulator_fr_ + joint_position_command_[1] < front_right_drive_upper_limit_)
@@ -274,7 +275,7 @@ void MarkhorHWInterfaceFlippers::write()
     front_right_drive_->Set(ControlMode::Position, target_fr_);
   }
 
-  printDriveInfo(rear_left_drive_);
+  //printDriveInfo(rear_left_drive_);
   if (rear_left_drive_lower_limit_ <= rear_left_drive_base_position_ + accumulator_rl_ + joint_position_command_[2] &&
       rear_left_drive_base_position_ + accumulator_rl_ + joint_position_command_[2] < rear_left_drive_upper_limit_)
   {
