@@ -46,7 +46,19 @@ MarkhorHWInterfaceFlippers::MarkhorHWInterfaceFlippers()
   rr_motor_bus_voltage_pub_ = nh_.advertise<std_msgs::Float64>("flipper_rr_bus_voltage", 1000);
   rl_motor_bus_voltage_pub_ = nh_.advertise<std_msgs::Float64>("flipper_rl_bus_voltage", 1000);
 
+
   loadDrivePosition();
+
+  joint_position_command_[0] = 0;
+  joint_position_command_[1] = 0;
+  joint_position_command_[2] = 0;
+  joint_position_command_[3] = 0;
+
+  front_left_drive_->Set(ControlMode::Position, front_left_drive_base_position_);
+  front_right_drive_->Set(ControlMode::Position, front_right_drive_base_position_);
+  rear_left_drive_->Set(ControlMode::Position, rear_left_drive_base_position_);
+  rear_right_drive_->Set(ControlMode::Position, rear_right_drive_base_position_);
+
 }
 
 void MarkhorHWInterfaceFlippers::setupRosControl()
@@ -92,7 +104,7 @@ void MarkhorHWInterfaceFlippers::setupCtreDrive()
   {
     front_left_drive_ = std::make_unique<TalonSRX>(drive_fl_id_);
     front_left_drive_->ConfigFactoryDefault();
-    front_left_drive_->ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Absolute, 0, timeout_ms_);
+    front_left_drive_->ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Relative, 0, timeout_ms_);
     front_left_drive_->SetSensorPhase(true);
     front_left_drive_->ConfigSupplyCurrentLimit(current_limit_config);
     front_left_drive_->ConfigNominalOutputForward(0, timeout_ms_);
@@ -122,7 +134,7 @@ void MarkhorHWInterfaceFlippers::setupCtreDrive()
   {
     front_right_drive_ = std::make_unique<TalonSRX>(drive_fr_id_);
     front_right_drive_->ConfigFactoryDefault();
-    front_right_drive_->ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Absolute, 0, 50);
+    front_right_drive_->ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Relative, 0, 50);
     front_right_drive_->SetSensorPhase(true);
     front_right_drive_->ConfigSupplyCurrentLimit(current_limit_config);
     front_right_drive_->ConfigNominalOutputForward(0, timeout_ms_);
@@ -154,7 +166,7 @@ void MarkhorHWInterfaceFlippers::setupCtreDrive()
   {
     rear_left_drive_ = std::make_unique<TalonSRX>(drive_rl_id_);
     rear_left_drive_->ConfigFactoryDefault();
-    rear_left_drive_->ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Absolute, 0, 50);
+    rear_left_drive_->ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Relative, 0, 50);
     rear_left_drive_->SetSensorPhase(true);
 
     double rear_left_peak_output_forward, rear_left_peak_output_reverse = 0;
@@ -184,7 +196,7 @@ void MarkhorHWInterfaceFlippers::setupCtreDrive()
   {
     rear_right_drive_ = std::make_unique<TalonSRX>(drive_rr_id_);
     rear_right_drive_->ConfigFactoryDefault();
-    rear_right_drive_->ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Absolute, 0, 50);
+    rear_right_drive_->ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Relative, 0, 50);
     rear_right_drive_->SetSensorPhase(true);
     rear_right_drive_->ConfigSupplyCurrentLimit(current_limit_config);
     rear_right_drive_->ConfigNominalOutputForward(0, timeout_ms_);
@@ -210,6 +222,7 @@ void MarkhorHWInterfaceFlippers::setupCtreDrive()
     nh_.getParam("/markhor/flippers/markhor_flippers_node/rear_right_drive_upper_limit", rear_right_drive_upper_limit_);
     nh_.getParam("/markhor/flippers/markhor_flippers_node/rear_right_drive_lower_limit", rear_right_drive_lower_limit_);
   }
+  
 }
 
 void MarkhorHWInterfaceFlippers::write()
@@ -241,7 +254,7 @@ void MarkhorHWInterfaceFlippers::write()
   be above or under the limit of the flipper.
  */
 
-  printDriveInfo(front_left_drive_);
+ // printDriveInfo(front_left_drive_);
   if (front_left_drive_lower_limit_ <= front_left_drive_base_position_ + accumulator_fl_ + joint_position_command_[0] &&
       front_left_drive_base_position_ + accumulator_fl_ + joint_position_command_[0] < front_left_drive_upper_limit_)
   {
@@ -251,7 +264,7 @@ void MarkhorHWInterfaceFlippers::write()
     front_left_drive_->Set(ControlMode::Position, target_fl_);
   }
 
-  printDriveInfo(front_right_drive_);
+ // printDriveInfo(front_right_drive_);
   if (front_right_drive_lower_limit_ <=
           front_right_drive_base_position_ + accumulator_fr_ + joint_position_command_[1] &&
       front_right_drive_base_position_ + accumulator_fr_ + joint_position_command_[1] < front_right_drive_upper_limit_)
@@ -262,7 +275,7 @@ void MarkhorHWInterfaceFlippers::write()
     front_right_drive_->Set(ControlMode::Position, target_fr_);
   }
 
-  printDriveInfo(rear_left_drive_);
+  //printDriveInfo(rear_left_drive_);
   if (rear_left_drive_lower_limit_ <= rear_left_drive_base_position_ + accumulator_rl_ + joint_position_command_[2] &&
       rear_left_drive_base_position_ + accumulator_rl_ + joint_position_command_[2] < rear_left_drive_upper_limit_)
   {
@@ -291,6 +304,11 @@ void MarkhorHWInterfaceFlippers::read()
   publishTarget();
   publishMotorCurrent();
   publishMotorBusVoltage();
+
+  joint_position_[0] = front_left_drive_->GetSensorCollection().GetPulseWidthPosition();
+  joint_position_[1] = front_right_drive_->GetSensorCollection().GetPulseWidthPosition();
+  joint_position_[2] = rear_left_drive_->GetSensorCollection().GetPulseWidthPosition();
+  joint_position_[3] = rear_right_drive_->GetSensorCollection().GetPulseWidthPosition();
 }
 
 void MarkhorHWInterfaceFlippers::printDriveInfo(std::unique_ptr<TalonSRX>& drive)
@@ -599,7 +617,7 @@ void MarkhorHWInterfaceFlippers::applyDrivePosition(std::unique_ptr<TalonSRX>& d
   }
   do
   {
-    error = drive->GetSensorCollection().SetPulseWidthPosition(drive_position, timeout_ms_);
+    error = drive->SetSelectedSensorPosition(-1 *drive_position, 0,timeout_ms_);
     ROS_INFO_THROTTLE(1, "SetPulseWidthPosition error code : %d for drive %d", error, drive->GetDeviceID());
   } while (error != ErrorCode::OKAY);
 }
