@@ -23,6 +23,17 @@ Altough not required, these packages are also expected to be installed alongside
 - [capra_hazmat_detection](https://github.com/clubcapra/capra_hazmat_detection) currently named yolo_hazmat
 -->
 
+# Launching the robot
+
+There are multiple launch configurations depending on your needs. The intended use being that you launch them through [capra_web_ui's](https://github.com/clubcapra/capra_web_ui) functionality that require the [capra_launch_handler](https://github.com/clubcapra/capra_launch_handler) installed on the platform. For reference, the terminal commands will also be added to each described configuration.
+
+**Note**: Make sure you have the repository built & sourced.
+
+- `markhor_parkour.launch` : This launch file launches every movement and camera related nodes.
+- `markhor_observation.launch` : This launch file aims to launch every sensor equipped and the robot arm with its gripper, ovis in this case.
+- `markhor_base.launch` : While the two other files are made to be an optimised for competition setup, the `base` version launches
+everything simultaneously for demonstration purposes.  
+
 # markhor gazebo
 To use the gazebo simulation you need to update the gazebo version on your machine to atleast `9.14`.
 
@@ -31,11 +42,10 @@ To use the gazebo simulation you need to update the gazebo version on your machi
 For this you need to follow the `step-by-step` alternative installation method over at : http://gazebosim.org/tutorials?tut=install_ubuntu&cat=install
 
 
+Also make sure you have the dependencies downloaded. You can make sure by using the command : `rosdep install --from-paths src --ignore-src -r -y `
 
-Also make sure you have the dependencies download. You can make sure by using the command : `rosdep install --from-paths src --ignore-src -r -y `
 
-
-# Running the simulation 
+# Running the simulation
 The simulation suffers from a missing implementation of the link between the ros_control and the SimpleTrackVehiculePlugin. Although it is fit to simulate and control the robot with the arrow keys it is not possible to control it through ROS.
 
 This necessitates a workaround when testing the robot with the UI or with a joystick. We repurpose the wheel from the Clearpath Husky robot in the simulation.
