@@ -617,7 +617,7 @@ void MarkhorHWInterfaceFlippers::applyDrivePosition(std::unique_ptr<TalonSRX>& d
   }
   do
   {
-    error = drive->GetSensorCollection().SetPulseWidthPosition(drive_position, timeout_ms_);
+    error = drive->SetSelectedSensorPosition(-1 *drive_position, 0,timeout_ms_);
     ROS_INFO_THROTTLE(1, "SetPulseWidthPosition error code : %d for drive %d", error, drive->GetDeviceID());
   } while (error != ErrorCode::OKAY);
 }
