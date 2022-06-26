@@ -1,5 +1,0 @@
-<launch>
-    <include file="$(find markhor_bringup)/launch/markhor_base.launch" />
-    <include file="$(find markhor_bringup)/launch/markhor_sensors.launch" />
-    <include file="$(find markhor_bringup)/launch/markhor_detection.launch" />
-</launch>

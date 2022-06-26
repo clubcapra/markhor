@@ -1,6 +1,6 @@
 <launch>
-    <node name="usb_cam" pkg="usb_cam" type="usb_cam_node" ns="markhor/video1" output="screen">
-        <param name="video_device" value="/dev/video1" />
+    <node name="usb_cam" pkg="usb_cam" type="usb_cam_node" ns="markhor/camera_03" output="screen">
+        <param name="video_device" value="/dev/video3" />
         <param name="image_width" value="640" />
         <param name="image_height" value="480" />
         <param name="pixel_format" value="mjpeg" />
