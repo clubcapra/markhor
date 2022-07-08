@@ -134,7 +134,7 @@ void MarkhorHWInterfaceFlippers::setupCtreDrive()
   {
     front_right_drive_ = std::make_unique<TalonSRX>(drive_fr_id_);
     front_right_drive_->ConfigFactoryDefault();
-    front_right_drive_->ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Relative, 0, 50);
+    front_right_drive_->ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Relative, 0, timeout_ms_);
     front_right_drive_->SetSensorPhase(true);
     front_right_drive_->ConfigSupplyCurrentLimit(current_limit_config);
     front_right_drive_->ConfigNominalOutputForward(0, timeout_ms_);
@@ -166,7 +166,7 @@ void MarkhorHWInterfaceFlippers::setupCtreDrive()
   {
     rear_left_drive_ = std::make_unique<TalonSRX>(drive_rl_id_);
     rear_left_drive_->ConfigFactoryDefault();
-    rear_left_drive_->ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Relative, 0, 50);
+    rear_left_drive_->ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Relative, 0, timeout_ms_);
     rear_left_drive_->SetSensorPhase(true);
 
     double rear_left_peak_output_forward, rear_left_peak_output_reverse = 0;
@@ -196,7 +196,7 @@ void MarkhorHWInterfaceFlippers::setupCtreDrive()
   {
     rear_right_drive_ = std::make_unique<TalonSRX>(drive_rr_id_);
     rear_right_drive_->ConfigFactoryDefault();
-    rear_right_drive_->ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Relative, 0, 50);
+    rear_right_drive_->ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Relative, 0, timeout_ms_);
     rear_right_drive_->SetSensorPhase(true);
     rear_right_drive_->ConfigSupplyCurrentLimit(current_limit_config);
     rear_right_drive_->ConfigNominalOutputForward(0, timeout_ms_);
