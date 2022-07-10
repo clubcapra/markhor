@@ -199,33 +199,27 @@ int main(int argc, char** argv)
   {
     const ros::Time time = ros::Time::now();
     const ros::Duration period = time - prev_time;
+    std_msgs::Float64 clear_queue_msg;
+    clear_queue_msg.data = 0;
 
     if (flipper_mode_fl == false)
     {
-      std_msgs::Float64 msg;
-      msg.data = 0;
-      flipper_fl_pub.publish(msg);
+      flipper_fl_pub.publish(clear_queue_msg);
     }
 
     if (flipper_mode_fr == false)
     {
-      std_msgs::Float64 msg;
-      msg.data = 0;
-      flipper_fr_pub.publish(msg);
+      flipper_fr_pub.publish(clear_queue_msg);
     }
 
     if (flipper_mode_rl == false)
     {
-      std_msgs::Float64 msg;
-      msg.data = 0;
-      flipper_rl_pub.publish(msg);
+      flipper_rl_pub.publish(clear_queue_msg);
     }
 
     if (flipper_mode_rr == false)
     {
-      std_msgs::Float64 msg;
-      msg.data = 0;
-      flipper_rr_pub.publish(msg);
+      flipper_rr_pub.publish(clear_queue_msg);
     }
 
     hw.read();
