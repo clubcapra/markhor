@@ -168,6 +168,10 @@ void MarkhorHWInterfaceFlippers::setupCtreDrive()
     rear_left_drive_->ConfigFactoryDefault();
     rear_left_drive_->ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Relative, 0, timeout_ms_);
     rear_left_drive_->SetSensorPhase(true);
+    rear_left_drive_->ConfigSupplyCurrentLimit(current_limit_config);
+    rear_left_drive_->ConfigNominalOutputForward(0, timeout_ms_);
+    rear_left_drive_->ConfigNominalOutputReverse(0, timeout_ms_);
+    rear_left_drive_->ConfigSelectedFeedbackCoefficient(fb_coeff, 0, timeout_ms_);
 
     double rear_left_peak_output_forward, rear_left_peak_output_reverse = 0;
     nh_.getParam("/markhor/flippers/markhor_flippers_node/rear_left_drive_peak_output_forward",
@@ -175,13 +179,9 @@ void MarkhorHWInterfaceFlippers::setupCtreDrive()
     nh_.getParam("/markhor/flippers/markhor_flippers_node/rear_left_drive_peak_output_reverse",
                  rear_left_peak_output_reverse);
 
-    rear_left_drive_->ConfigSupplyCurrentLimit(current_limit_config);
-    rear_left_drive_->ConfigNominalOutputForward(0, timeout_ms_);
-    rear_left_drive_->ConfigNominalOutputReverse(0, timeout_ms_);
     rear_left_drive_->ConfigPeakOutputForward(rear_left_peak_output_forward, timeout_ms_);
     rear_left_drive_->ConfigPeakOutputReverse(rear_left_peak_output_reverse, timeout_ms_);
     rear_left_drive_->ConfigAllowableClosedloopError(0, 100, timeout_ms_);
-    rear_left_drive_->ConfigSelectedFeedbackCoefficient(fb_coeff, 0, timeout_ms_);
 
     rear_left_drive_->SelectProfileSlot(0, 0);
     rear_left_drive_->Config_kF(0, 0, timeout_ms_);
