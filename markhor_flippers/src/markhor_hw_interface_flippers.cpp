@@ -149,6 +149,7 @@ void MarkhorHWInterfaceFlippers::setupCtreDrive()
 
     front_right_drive_->ConfigPeakOutputForward(front_right_peak_output_forward, timeout_ms_);
     front_right_drive_->ConfigPeakOutputReverse(front_right_peak_output_reverse, timeout_ms_);
+    rear_right_drive_->ConfigAllowableClosedloopError(0, 100, timeout_ms_);
 
     front_right_drive_->SelectProfileSlot(0, 0);
     front_right_drive_->Config_kF(0, 0, timeout_ms_);
