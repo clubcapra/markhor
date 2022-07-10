@@ -228,7 +228,6 @@ int main(int argc, char** argv)
       flipper_rr_pub.publish(msg);
     }
 
-
     hw.read();
     cm.update(time, period);
     hw.write();
