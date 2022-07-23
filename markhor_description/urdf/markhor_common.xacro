@@ -12,6 +12,7 @@
     <xacro:property name="track_velocity_limit" value="5.34" />
     <xacro:property name="track_torque_limit" value="94.5" />
 
+    <xacro:include filename="$(find markhor_description)/urdf/materials.xacro" />
     <xacro:include filename="$(find markhor_description)/urdf/markhor_inertial.xacro" />
 
     <xacro:macro name="flipper" params="flipper_name origin_xyz:='0 0 0' origin_rpy:='0 0 0'">
@@ -21,6 +22,7 @@
                     <mesh filename="package://markhor_description/meshes/mk_flip.stl"/>
                 </geometry>
                 <origin xyz="0 0 0" rpy="0 0 0"/>
+                <material name="grey"/>
             </visual>
             <collision>
                 <geometry>
