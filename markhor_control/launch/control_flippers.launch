@@ -1,5 +1,5 @@
 <launch>
-    <arg name="namespace" default="/markhor" />
+    <arg name="namespace" default="/markhor/flippers" />
 
     <!-- <include file="$(find markhor_description)/launch/markhor_ovis.launch" /> -->
 

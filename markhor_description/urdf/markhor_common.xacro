@@ -71,6 +71,7 @@
                 <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
             </joint>
             <actuator name="${flipper_name}_actuator">
+                <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
                 <mechanicalReduction>1</mechanicalReduction>
             </actuator>
         </transmission>
@@ -126,8 +127,8 @@
                         <format>R8G8B8</format>
                     </image>
                     <clip>
-                        <near>0.25</near>
-                        <far>1.5</far>
+                        <near>0.1</near>
+                        <far>10</far>
                     </clip>
                 </camera>
                 <plugin name="${link_name}_controller" filename="libgazebo_ros_openni_kinect.so">

@@ -85,17 +85,7 @@
             <robotNamespace>/$(arg robot_namespace)</robotNamespace>
         </plugin>
 
-        <plugin filename="libSimpleTrackedVehiclePlugin.so" name="simple_tracked_vehicle">
-            <body>base_link</body>
-            <left_track>flipper_fl</left_track>
-            <right_track>flipper_fr</right_track>
-            <left_flipper>flipper_rl</left_flipper>
-            <right_flipper>flipper_rr</right_flipper>
-            <track_mu>0.65</track_mu>
-            <track_mu2>0.85</track_mu2>
-            <tracks_separation>${tracks_seperation}</tracks_separation>
-            <robot_namespace>markhor</robot_namespace>
-        </plugin>
+        
 
         <plugin filename="libKeysToCmdVelPlugin.so" name="keyboard_control">
             <publish_as_twist>true</publish_as_twist>
