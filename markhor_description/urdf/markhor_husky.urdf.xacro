@@ -84,13 +84,6 @@
         <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
             <robotNamespace>/$(arg robot_namespace)</robotNamespace>
         </plugin>
-
-        
-
-        <plugin filename="libKeysToCmdVelPlugin.so" name="keyboard_control">
-            <publish_as_twist>true</publish_as_twist>
-            <cmd_vel_topic>~/markhor/cmd_vel_twist</cmd_vel_topic>
-        </plugin>
     </gazebo>
 
 </robot>
