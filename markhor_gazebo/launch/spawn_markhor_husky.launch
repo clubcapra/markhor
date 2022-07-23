@@ -6,7 +6,7 @@
     <arg name="z" default="0.0"/>
     <arg name="yaw" default="0.0"/>
 
-    <include file="$(find markhor_control)/launch/control_wheel.launch"/>
+    <include file="$(find markhor_control)/launch/control_wheels.launch"/>
 
     <!-- Spawn robot in gazebo -->
     <node name="spawn_markhor_model" pkg="gazebo_ros" type="spawn_model" args="
