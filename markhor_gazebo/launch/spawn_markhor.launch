@@ -1,5 +1,5 @@
 <launch>
-    <arg name="robot_namespace" default="marhkor" />
+    <arg name="robot_namespace" default="markhor" />
 
     <arg name="x" default="0.0" />
     <arg name="y" default="0.0" />
