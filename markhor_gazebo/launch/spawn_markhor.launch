@@ -8,7 +8,7 @@
 
     <!-- <include file="$(find markhor_control)/launch/control_track.launch" /> -->
 
-    <include file="$(find markhor_control)/launch/control_flipper.launch" />
+    <include file="$(find markhor_control)/launch/control_flippers.launch" />
 
     <!-- Spawn robot in gazebo -->
     <node name="spawn_markhor_model" pkg="gazebo_ros" type="spawn_model" args="

@@ -199,6 +199,28 @@ int main(int argc, char** argv)
   {
     const ros::Time time = ros::Time::now();
     const ros::Duration period = time - prev_time;
+    std_msgs::Float64 clear_queue_msg;
+    clear_queue_msg.data = 0;
+
+    if (flipper_mode_fl == false)
+    {
+      flipper_fl_pub.publish(clear_queue_msg);
+    }
+
+    if (flipper_mode_fr == false)
+    {
+      flipper_fr_pub.publish(clear_queue_msg);
+    }
+
+    if (flipper_mode_rl == false)
+    {
+      flipper_rl_pub.publish(clear_queue_msg);
+    }
+
+    if (flipper_mode_rr == false)
+    {
+      flipper_rr_pub.publish(clear_queue_msg);
+    }
 
     hw.read();
     cm.update(time, period);
