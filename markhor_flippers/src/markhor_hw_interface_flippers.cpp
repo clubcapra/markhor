@@ -96,6 +96,7 @@ void MarkhorHWInterfaceFlippers::setupCtreDrive()
   if(nh_.getParam("/markhor/flippers/markhor_flippers_node/allowable_closedloop_error", allowable_closedloop_error) == false)
   {
     ROS_WARN("Missing allowable_closedloop_error, assuming 100000");
+  }
 
   float fb_coeff = 1.0;
   if (!nh_.getParam("/markhor/flippers/markhor_flippers_node/fb_coeff", fb_coeff))
