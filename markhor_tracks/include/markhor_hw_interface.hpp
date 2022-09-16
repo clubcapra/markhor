@@ -69,7 +69,7 @@ private:
 
   double tracks_fb_coeff = 1;
 
-  int allowable_closedloop_error = 1;
+  int allowable_closedloop_error = 0;
 
   hardware_interface::JointStateInterface jnt_state_interface;
   hardware_interface::VelocityJointInterface jnt_vel_interface;
