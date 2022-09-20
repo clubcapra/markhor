@@ -16,6 +16,7 @@
         <param name="integral_max" type="double" value="10000" />
         <param name="integral_zone" type="double" value="1500" />
         <param name="fb_coeff" type="double" value="0.04" />
+        <param name="allowable_closedloop_error" type="int" value="0"/>
     </node>
 
     <!-- Load controller config -->
