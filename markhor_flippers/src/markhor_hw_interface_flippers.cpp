@@ -98,23 +98,16 @@ void MarkhorHWInterfaceFlippers::setupCtreDrive()
     ROS_WARN("Missing allowable_closedloop_error, assuming 100000");
   }
 
-  float fb_coeff = 1.0;
-  if (!nh_.getParam("/markhor/flippers/markhor_flippers_node/fb_coeff", fb_coeff))
-  {
-    ROS_WARN("TRACKS : Missing argument fb_coeff, assuming 1");
-  }
-
   if (nh_.getParam("/markhor/flippers/markhor_flippers_node/front_left", drive_fl_id_) == true)
   {
     front_left_drive_ = std::make_unique<TalonSRX>(drive_fl_id_);
     front_left_drive_->ConfigFactoryDefault();
-    front_left_drive_->ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Relative, 0, timeout_ms_);
+    front_left_drive_->ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Absolute, 0, timeout_ms_);
     front_left_drive_->SetSensorPhase(true);
     front_left_drive_->ConfigSupplyCurrentLimit(current_limit_config);
     front_left_drive_->ConfigNominalOutputForward(0, timeout_ms_);
     front_left_drive_->ConfigNominalOutputReverse(0, timeout_ms_);
     front_left_drive_->ConfigAllowableClosedloopError(0, allowable_closedloop_error, timeout_ms_);
-    front_left_drive_->ConfigSelectedFeedbackCoefficient(fb_coeff, 0, timeout_ms_);
 
     double front_left_peak_output_forward, front_left_peak_output_reverse = 0;
     nh_.getParam("/markhor/flippers/markhor_flippers_node/front_left_drive_peak_output_forward",
@@ -138,13 +131,12 @@ void MarkhorHWInterfaceFlippers::setupCtreDrive()
   {
     front_right_drive_ = std::make_unique<TalonSRX>(drive_fr_id_);
     front_right_drive_->ConfigFactoryDefault();
-    front_right_drive_->ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Relative, 0, timeout_ms_);
+    front_right_drive_->ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Absolute, 0, timeout_ms_);
     front_right_drive_->SetSensorPhase(true);
     front_right_drive_->ConfigSupplyCurrentLimit(current_limit_config);
     front_right_drive_->ConfigNominalOutputForward(0, timeout_ms_);
     front_right_drive_->ConfigNominalOutputReverse(0, timeout_ms_);
     front_right_drive_->ConfigAllowableClosedloopError(0, allowable_closedloop_error, timeout_ms_);
-    front_right_drive_->ConfigSelectedFeedbackCoefficient(fb_coeff, 0, timeout_ms_);
 
 
     double front_right_peak_output_forward, front_right_peak_output_reverse = 0;
@@ -172,12 +164,11 @@ void MarkhorHWInterfaceFlippers::setupCtreDrive()
   {
     rear_left_drive_ = std::make_unique<TalonSRX>(drive_rl_id_);
     rear_left_drive_->ConfigFactoryDefault();
-    rear_left_drive_->ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Relative, 0, timeout_ms_);
+    rear_left_drive_->ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Absolute, 0, timeout_ms_);
     rear_left_drive_->SetSensorPhase(true);
     rear_left_drive_->ConfigSupplyCurrentLimit(current_limit_config);
     rear_left_drive_->ConfigNominalOutputForward(0, timeout_ms_);
     rear_left_drive_->ConfigNominalOutputReverse(0, timeout_ms_);
-    rear_left_drive_->ConfigSelectedFeedbackCoefficient(fb_coeff, 0, timeout_ms_);
 
     double rear_left_peak_output_forward, rear_left_peak_output_reverse = 0;
     nh_.getParam("/markhor/flippers/markhor_flippers_node/rear_left_drive_peak_output_forward",
@@ -202,12 +193,11 @@ void MarkhorHWInterfaceFlippers::setupCtreDrive()
   {
     rear_right_drive_ = std::make_unique<TalonSRX>(drive_rr_id_);
     rear_right_drive_->ConfigFactoryDefault();
-    rear_right_drive_->ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Relative, 0, timeout_ms_);
+    rear_right_drive_->ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Absolute, 0, timeout_ms_);
     rear_right_drive_->SetSensorPhase(true);
     rear_right_drive_->ConfigSupplyCurrentLimit(current_limit_config);
     rear_right_drive_->ConfigNominalOutputForward(0, timeout_ms_);
     rear_right_drive_->ConfigNominalOutputReverse(0, timeout_ms_);
-    rear_right_drive_->ConfigSelectedFeedbackCoefficient(fb_coeff, 0, timeout_ms_);
 
     double rear_right_peak_output_forward, rear_right_peak_output_reverse = 0;
     nh_.getParam("/markhor/flippers/markhor_flippers_node/rear_right_drive_peak_output_forward",
