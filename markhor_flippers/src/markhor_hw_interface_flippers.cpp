@@ -47,16 +47,6 @@ MarkhorHWInterfaceFlippers::MarkhorHWInterfaceFlippers()
   rl_motor_bus_voltage_pub_ = nh_.advertise<std_msgs::Float64>("flipper_rl_bus_voltage", 1000);
 
   loadDrivePosition();
-
-  joint_position_command_[0] = 0;
-  joint_position_command_[1] = 0;
-  joint_position_command_[2] = 0;
-  joint_position_command_[3] = 0;
-
-  front_left_drive_->Set(ControlMode::Position, front_left_drive_base_position_);
-  front_right_drive_->Set(ControlMode::Position, front_right_drive_base_position_);
-  rear_left_drive_->Set(ControlMode::Position, rear_left_drive_base_position_);
-  rear_right_drive_->Set(ControlMode::Position, rear_right_drive_base_position_);
 }
 
 void MarkhorHWInterfaceFlippers::setupRosControl()
@@ -297,11 +287,6 @@ void MarkhorHWInterfaceFlippers::read()
   publishTarget();
   publishMotorCurrent();
   publishMotorBusVoltage();
-
-  joint_position_[0] = front_left_drive_->GetSensorCollection().GetPulseWidthPosition();
-  joint_position_[1] = front_right_drive_->GetSensorCollection().GetPulseWidthPosition();
-  joint_position_[2] = rear_left_drive_->GetSensorCollection().GetPulseWidthPosition();
-  joint_position_[3] = rear_right_drive_->GetSensorCollection().GetPulseWidthPosition();
 }
 
 void MarkhorHWInterfaceFlippers::printDriveInfo(std::unique_ptr<TalonSRX>& drive)
