@@ -16,9 +16,8 @@ RUN git clone https://github.com/clubcapra/capra_estop.git
 # Install dependencies
 RUN cd .. && rosdep install --from-paths src --ignore-src -r -y
 
+# Build the workspace
+RUN /bin/bash -c '. /opt/ros/melodic/setup.bash; cd  /root/markhor_ws; catkin_make'
+
 # Source the setup file
 RUN echo "source /root/markhor_ws/devel/setup.bash" >> ~/.bashrc
-
-
-# Build the workspace
-RUN /bin/bash -c '. /opt/ros/kinetic/setup.bash; cd <into the desired folder e.g. ~/catkin_ws/src>; catkin_make'
