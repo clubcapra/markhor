@@ -1,0 +1,13 @@
+version: '3.9'
+
+services:
+  ros:
+    build: ./
+    image: 'markhor:latest'
+    network_mode: host
+    environment:
+      - DISPLAY=host.docker.internal:0.0
+    volumes:
+      - ./src:/root/markhor_ws/src
+      - /tmp/.X11-unix:/tmp/.X11-unix  
+  
