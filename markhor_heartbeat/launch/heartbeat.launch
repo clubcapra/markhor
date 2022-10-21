@@ -1,0 +1,6 @@
+<launch>
+    <node pkg="markhor_heartbeat" type="markhor_heartbeat_node" name="markhor_heartbeat_node" ns="/markhor/heartbeat" output="screen">
+        <param name="heartbeat_interval" type="int" value="1000" /> 
+        <param name="heartbeat_timeout" type="int" value="5000" />
+    </node>
+</launch>
