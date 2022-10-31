@@ -2,12 +2,11 @@ version: '3.9'
 
 services:
   ros:
-    build: ./
-    image: 'markhor:latest'
+    command: roslaunch markhor_gazebo test_world.launch
+    image: capraets/markhor-base
     network_mode: host
     environment:
       - DISPLAY=host.docker.internal:0.0
     volumes:
-      - ./src:/root/markhor_ws/src
       - /tmp/.X11-unix:/tmp/.X11-unix  
   
