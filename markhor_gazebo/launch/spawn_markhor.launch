@@ -3,10 +3,8 @@
 
     <arg name="x" default="0.0" />
     <arg name="y" default="0.0" />
-    <arg name="z" default="0.0" />
+    <arg name="z" default="0.2" />
     <arg name="yaw" default="0.0" />
-
-    <!-- <include file="$(find markhor_control)/launch/control_track.launch" /> -->
 
     <include file="$(find markhor_control)/launch/control_flippers.launch" />
 

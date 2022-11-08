@@ -1,0 +1,18 @@
+<launch>
+    <arg name="gui" default="true" />
+    <!-- load the urdf -->
+    <param name="robot_description" command="xacro '$(find markhor_description)/urdf/markhor.urdf.xacro'" />
+
+    <!-- Allow to spaw the UI to control the flipper and motor values -->
+    <param name="use_gui" value="$(arg gui)"/>
+
+    <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+
+    <!-- publish all the frames to TF -->
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+
+    <!-- Launch rviz to see the model -->
+    <group if="$(arg gui)">
+        <node name="rviz" pkg="rviz" type="rviz" args="-d $(find markhor_description)/rviz/config.rviz"/>
+    </group>
+</launch>

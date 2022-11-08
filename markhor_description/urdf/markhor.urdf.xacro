@@ -98,7 +98,7 @@
         </plugin>
 
         <plugin name='tracked_vehicle_interface' filename='libgazebo_ros_tracked_vehicle_interface.so'>
-            <commandROSTopic>/cmd_vel</commandROSTopic>
+            <commandROSTopic>/markhor/diff_drive_controller/cmd_vel</commandROSTopic>
             <commandIGNTopic>~/markhor/cmd_vel_twist</commandIGNTopic>
             <!-- <odometryTopic>~odom</odometryTopic> -->     <!-- ROS topic for the odometry data - remap if you're using another odom source -->
             <!-- <trackSpeedTopic>~track_speed</trackSpeedTopic> -->  <!-- gazebo topic of SimpleTrackedVehicle -->
