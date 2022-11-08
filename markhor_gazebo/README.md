@@ -1,3 +1,5 @@
+Depends on aws smal house world https://github.com/aws-robotics/aws-robomaker-small-house-world
+
 To use the gazebo simulation, you need the ros tracked vehicule interface gazebo plugin found here: 
 https://github.com/lprobsth/gazebo_ros_tracked_vehicle_interface
 This allows the track simulation plugin to be controlled with ros

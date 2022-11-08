@@ -6,7 +6,20 @@
     <arg name="z" default="0.2" />
     <arg name="yaw" default="0.0" />
 
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="false" output="screen">
+        <remap from="/joint_states" to="$(arg robot_namespace)/joint_states" />
+    </node>
+
+    
+
+    <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch" />
+
+    <include file="$(find markhor_bringup)/launch/teleop_twist_joy.launch" />
+    <include file="$(find markhor_bringup)/launch/markhor_web_ui.launch" />
+
     <include file="$(find markhor_control)/launch/control_flippers.launch" />
+
+    
 
     <!-- Spawn robot in gazebo -->
     <node name="spawn_markhor_model" pkg="gazebo_ros" type="spawn_model" args="
