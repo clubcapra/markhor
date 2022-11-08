@@ -16,6 +16,8 @@
     <link name="base_footprint" />
     <link name="base_link" />
 
+    <link name="markhor_link_base" />
+
     <link name="base_body">
         <visual>
             <geometry>
@@ -37,6 +39,12 @@
         <parent link="base_link" />
         <child link="base_footprint" />
     </joint>
+
+    <joint name="markhor_link_base_j" type="fixed">
+        <parent link="base_link" />
+        <child link="markhor_link_base" />
+    </joint>
+
 
     <joint name="base_body_j" type="fixed">
         <parent link="base_link" />
