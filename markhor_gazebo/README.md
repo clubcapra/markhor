@@ -1,6 +1,10 @@
 Depends on aws smal house world https://github.com/aws-robotics/aws-robomaker-small-house-world
 Depends on velodyne simulator https://github.com/lmark1/velodyne_simulator
 
+pointcloud_to_laserscan
+
+hector_slam
+
 if using vmware, gazebo won't launch when using 3d acceleration, to fix it, run the folowing command 
 ```bash
 echo "export SVGA_VGPU10=0" >> ~/.profile
