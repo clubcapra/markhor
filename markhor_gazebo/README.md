@@ -1,5 +1,10 @@
 Depends on aws smal house world https://github.com/aws-robotics/aws-robomaker-small-house-world
 
+if using vmware, gazebo won't launch when using 3d acceleration, to fix it, run the folowing command 
+```bash
+echo "export SVGA_VGPU10=0" >> ~/.profile
+```
+
 To use the gazebo simulation, you need the ros tracked vehicule interface gazebo plugin found here: 
 https://github.com/lprobsth/gazebo_ros_tracked_vehicle_interface
 This allows the track simulation plugin to be controlled with ros
