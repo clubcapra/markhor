@@ -29,7 +29,7 @@
         <param name="rear_right_drive_peak_output_reverse" type="double" value="-0.36" />
 
         <param name="allowable_closedloop_error" type="int" value="100000"/>
-        <param name="flipper_encoder_to_rad_coeff" type="int" value="6553600"/>
+        <param name="flipper_encoder_to_rad_coeff" type="int" value="1043037"/>
 
         <param name="kP" type="double" value="0.005" />
         <param name="kI" type="double" value="0" />
