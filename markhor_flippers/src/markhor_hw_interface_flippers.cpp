@@ -580,24 +580,21 @@ void MarkhorHWInterfaceFlippers::parseDrivePosition(std::string line)
 void MarkhorHWInterfaceFlippers::applyDrivePosition(std::unique_ptr<TalonSRX>& drive, float drive_position)
 {
   int error;
-  if (has_reset_event_occured_ == false)
+  if (drive->GetDeviceID() == drive_fl_id_)
   {
-    if (drive->GetDeviceID() == drive_fl_id_)
-    {
-      front_left_drive_base_position_ = -1 * drive_position;
-    }
-    else if (drive->GetDeviceID() == drive_fr_id_)
-    {
-      front_right_drive_base_position_ = -1 * drive_position;
-    }
-    else if (drive->GetDeviceID() == drive_rl_id_)
-    {
-      rear_left_drive_base_position_ = -1 * drive_position;
-    }
-    else if (drive->GetDeviceID() == drive_rr_id_)
-    {
-      rear_right_drive_base_position_ = -1 * drive_position;
-    }
+    front_left_drive_base_position_ = -1 * drive_position;
+  }
+  else if (drive->GetDeviceID() == drive_fr_id_)
+  {
+    front_right_drive_base_position_ = -1 * drive_position;
+  }
+  else if (drive->GetDeviceID() == drive_rl_id_)
+  {
+    rear_left_drive_base_position_ = -1 * drive_position;
+  }
+  else if (drive->GetDeviceID() == drive_rr_id_)
+  {
+    rear_right_drive_base_position_ = -1 * drive_position;
   }
   do
   {
