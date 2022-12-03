@@ -88,6 +88,12 @@ void MarkhorHWInterfaceFlippers::setupCtreDrive()
     ROS_WARN("Missing allowable_closedloop_error, assuming 100000");
   }
 
+  if(nh_.getParam("/markhor/flippers/markhor_flippers_node/flipper_encoder_to_rad_coeff", flipper_encoder_to_rad_coeff) == false)
+  {
+    ROS_WARN("Missing flipper_encoder_to_rad_coeff, assuming 1");
+  }
+
+
   if (nh_.getParam("/markhor/flippers/markhor_flippers_node/front_left", drive_fl_id_) == true)
   {
     front_left_drive_ = std::make_unique<TalonSRX>(drive_fl_id_);
@@ -243,7 +249,6 @@ void MarkhorHWInterfaceFlippers::write()
   {
     accumulator_fl_ += joint_position_command_[0];
     target_fl_ = front_left_drive_base_position_ + accumulator_fl_;
-    ROS_INFO_THROTTLE(1, "target = [%f]", target_fl_);
     front_left_drive_->Set(ControlMode::Position, target_fl_);
   }
 
