@@ -6,16 +6,8 @@ ENV ROS_ROOT /root/markhor_ws
 RUN mkdir -p /root/markhor_ws/src
 WORKDIR /root/markhor_ws/
 
-RUN cd src
-
-# Copy the repository into the container
-COPY . .
-
 # Update the package list
 RUN apt-get update
-
-# Clone capra_estop
-RUN git clone https://github.com/clubcapra/capra_estop.git
 
 # Install Gazebo
 RUN sh -c 'echo "deb http://packages.osrfoundation.org/gazebo/ubuntu-stable `lsb_release -cs` main" > /etc/apt/sources.list.d/gazebo-stable.list'

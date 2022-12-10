@@ -1,7 +1,14 @@
-FROM markhor-base
+FROM capraets/markhor-base-ros1
+
+# Copy the repository into the container
+COPY . ./src
 
 # Install dependencies
 RUN rosdep install --from-paths src --ignore-src -r -y
+
+
+# Clone capra_estop
+RUN git clone https://github.com/clubcapra/capra_estop.git
 
 # Build the workspace
 RUN /bin/bash -c '. /opt/ros/melodic/setup.bash; cd  /root/markhor_ws; catkin_make'
