@@ -2,7 +2,7 @@ version: '3.9'
 
 services:
   ros:
-    command: roslaunch markhor_gazebo test_world_husky.launch
+    command: roslaunch markhor_gazebo test_world.launch
     build : .
     network_mode: host
     environment:
