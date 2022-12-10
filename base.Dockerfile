@@ -19,3 +19,25 @@ RUN apt install libgazebo9-dev -y
 
 # Install RQT
 RUN apt-get install ros-melodic-rqt -y
+
+# Install Gazebo ROS packages
+RUN sh -c 'echo "deb http://packages.osrfoundation.org/gazebo/ubuntu-stable `lsb_release -cs` main" > /etc/apt/sources.list.d/gazebo-stable.list'
+RUN wget https://packages.osrfoundation.org/gazebo.key -O - | apt-key add -
+RUN apt-get update
+RUN apt upgrade -y
+
+# Copy the repository into the container
+COPY . ./src
+
+# Clone capra_estop (emergency stop) and gazebo_ros_tracked_vehicle_interface (gazebo plugin for the tracked vehicle)
+RUN cd ./src && git clone https://github.com/clubcapra/capra_estop.git
+RUN cd ./src && git clone https://github.com/lprobsth/gazebo_ros_tracked_vehicle_interface.git
+
+# Install dependencies
+RUN rosdep install --from-paths src --ignore-src -r -y
+
+# Install the ROS bridge (for web control)
+RUN apt install -y ros-melodic-rosbridge-server
+
+# Install the Velodyne simulator
+RUN apt install -y ros-melodic-velodyne-simulator
