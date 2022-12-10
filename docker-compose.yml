@@ -2,6 +2,8 @@ version: '3.9'
 
 services:
   ros:
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
     command: roslaunch markhor_gazebo test_world.launch
     build : .
     network_mode: host
