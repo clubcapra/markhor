@@ -2,30 +2,35 @@ version: '3.9'
 
 services:
   ros1:
+    network_mode: "host"
     command: roslaunch markhor_gazebo test_world.launch
     build : .
-    network_mode: host
     environment:
       - DISPLAY=host.docker.internal:0.0
     volumes:
       - /tmp/.X11-unix:/tmp/.X11-unix  
-
-  ros2:
-    build : ./ros2.Dockerfile
-    network_mode: host
-    environment:
-      - DISPLAY=host.docker.internal:0.0
-    volumes:
-      - /tmp/.X11-unix:/tmp/.X11-unix  
-
+      
   bridge:
+    network_mode: "host"
     image: ros:foxy-ros1-bridge-focal
     environment:
-      - "ROS_HOSTNAME=bridge"
-      - "ROS_MASTER_URI=http://ros1:11311"
-    command: ros2 run ros1_bridge dynamic_bridge
+      - "ROS_HOSTNAME=localhost"
+      - "ROS_MASTER_URI=http://localhost:11311"
+    command: ros2 run ros1_bridge dynamic_bridge --bridge-all-topics
+    depends_on:
+      - ros1
   
-
-  
+  ros2:
+    network_mode: "host"
+    build:
+      context: .
+      dockerfile: ros2.Dockerfile
+    command: rqt #ros2 launch nav2_bringup nav2_default.launch.py
+    depends_on:
+      - bridge
+    environment:
+      - DISPLAY=host.docker.internal:0.0
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix  
   
   
