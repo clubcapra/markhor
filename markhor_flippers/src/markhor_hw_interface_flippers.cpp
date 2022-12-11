@@ -88,6 +88,12 @@ void MarkhorHWInterfaceFlippers::setupCtreDrive()
     ROS_WARN("Missing allowable_closedloop_error, assuming 100000");
   }
 
+  if(nh_.getParam("/markhor/flippers/markhor_flippers_node/flipper_encoder_to_rad_coeff", flipper_encoder_to_rad_coeff) == false)
+  {
+    ROS_WARN("Missing flipper_encoder_to_rad_coeff, assuming 1");
+  }
+
+
   if (nh_.getParam("/markhor/flippers/markhor_flippers_node/front_left", drive_fl_id_) == true)
   {
     front_left_drive_ = std::make_unique<TalonSRX>(drive_fl_id_);
@@ -236,6 +242,8 @@ void MarkhorHWInterfaceFlippers::write()
   in each if condition for each drive, represent if the next position value we want to apply to the flipper is going to
   be above or under the limit of the flipper.
  */
+ joint_position_command_[0] = -joint_position_command_[0];
+ joint_position_command_[1] = -joint_position_command_[1];
 
  // For debug purposes use: printDriveInfo(<drive>);
   if (front_left_drive_lower_limit_ <= front_left_drive_base_position_ + accumulator_fl_ + joint_position_command_[0] &&
@@ -243,7 +251,6 @@ void MarkhorHWInterfaceFlippers::write()
   {
     accumulator_fl_ += joint_position_command_[0];
     target_fl_ = front_left_drive_base_position_ + accumulator_fl_;
-    ROS_INFO_THROTTLE(1, "target = [%f]", target_fl_);
     front_left_drive_->Set(ControlMode::Position, target_fl_);
   }
 
@@ -253,7 +260,6 @@ void MarkhorHWInterfaceFlippers::write()
   {
     accumulator_fr_ += joint_position_command_[1];
     target_fr_ = front_right_drive_base_position_ + accumulator_fr_;
-    ROS_INFO_THROTTLE(1, "target = [%f]", target_fr_);
     front_right_drive_->Set(ControlMode::Position, target_fr_);
   }
 
@@ -262,7 +268,6 @@ void MarkhorHWInterfaceFlippers::write()
   {
     accumulator_rl_ += joint_position_command_[2];
     target_rl_ = rear_left_drive_base_position_ + accumulator_rl_;
-    ROS_INFO_THROTTLE(1, "target = [%f]", target_rl_);
     rear_left_drive_->Set(ControlMode::Position, target_rl_);
   }
 
@@ -271,7 +276,6 @@ void MarkhorHWInterfaceFlippers::write()
   {
     accumulator_rr_ += joint_position_command_[3];
     target_rr_ = rear_right_drive_base_position_ + accumulator_rr_;
-    ROS_INFO_THROTTLE(1, "target = [%f]", target_rr_);
     rear_right_drive_->Set(ControlMode::Position, target_rr_);
   }
   saveDrivePosition();
@@ -284,6 +288,11 @@ void MarkhorHWInterfaceFlippers::read()
   publishTarget();
   publishMotorCurrent();
   publishMotorBusVoltage();
+
+  joint_position_[0] = -front_left_drive_->GetSensorCollection().GetPulseWidthPosition() / (double)flipper_encoder_to_rad_coeff - 1.5707;
+  joint_position_[1] = -front_right_drive_->GetSensorCollection().GetPulseWidthPosition()/ (double)flipper_encoder_to_rad_coeff - 1.5707;
+  joint_position_[2] = rear_left_drive_->GetSensorCollection().GetPulseWidthPosition() / (double)flipper_encoder_to_rad_coeff - 1.5707;
+  joint_position_[3] = rear_right_drive_->GetSensorCollection().GetPulseWidthPosition() / (double)flipper_encoder_to_rad_coeff - 1.5707;
 }
 
 void MarkhorHWInterfaceFlippers::printDriveInfo(std::unique_ptr<TalonSRX>& drive)
@@ -571,24 +580,21 @@ void MarkhorHWInterfaceFlippers::parseDrivePosition(std::string line)
 void MarkhorHWInterfaceFlippers::applyDrivePosition(std::unique_ptr<TalonSRX>& drive, float drive_position)
 {
   int error;
-  if (has_reset_event_occured_ == false)
+  if (drive->GetDeviceID() == drive_fl_id_)
   {
-    if (drive->GetDeviceID() == drive_fl_id_)
-    {
-      front_left_drive_base_position_ = -1 * drive_position;
-    }
-    else if (drive->GetDeviceID() == drive_fr_id_)
-    {
-      front_right_drive_base_position_ = -1 * drive_position;
-    }
-    else if (drive->GetDeviceID() == drive_rl_id_)
-    {
-      rear_left_drive_base_position_ = -1 * drive_position;
-    }
-    else if (drive->GetDeviceID() == drive_rr_id_)
-    {
-      rear_right_drive_base_position_ = -1 * drive_position;
-    }
+    front_left_drive_base_position_ = -1 * drive_position;
+  }
+  else if (drive->GetDeviceID() == drive_fr_id_)
+  {
+    front_right_drive_base_position_ = -1 * drive_position;
+  }
+  else if (drive->GetDeviceID() == drive_rl_id_)
+  {
+    rear_left_drive_base_position_ = -1 * drive_position;
+  }
+  else if (drive->GetDeviceID() == drive_rr_id_)
+  {
+    rear_right_drive_base_position_ = -1 * drive_position;
   }
   do
   {

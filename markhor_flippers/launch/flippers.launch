@@ -1,6 +1,7 @@
 <launch>
     <arg name="robot_namespace" default="/markhor/flippers" />
-
+    
+    <param name="robot_description" command="xacro '$(find markhor_description)/urdf/markhor.urdf.xacro'" />
     <!-- Load hardware interface-->
     <node name="markhor_flippers_node" pkg="markhor_flippers" type="markhor_flippers_node" ns="$(arg robot_namespace)" output="screen">
         <param name="front_left" type="int" value="11" />
@@ -26,7 +27,10 @@
         <param name="rear_right_drive_lower_limit" type="double" value="-1500000" />
         <param name="rear_right_drive_peak_output_forward" type="double" value="0.325" />
         <param name="rear_right_drive_peak_output_reverse" type="double" value="-0.36" />
+
         <param name="allowable_closedloop_error" type="int" value="100000"/>
+        <param name="flipper_encoder_to_rad_coeff" type="int" value="1043037"/>
+
         <param name="kP" type="double" value="0.005" />
         <param name="kI" type="double" value="0" />
         <param name="kD" type="double" value="0" />
