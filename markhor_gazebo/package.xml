@@ -11,6 +11,14 @@
     <buildtool_depend>catkin</buildtool_depend>
     <build_depend>gazebo_plugins</build_depend>
     <build_depend>gazebo_ros_control</build_depend>
+    <build_depend>pointcloud_to_laserscan</build_depend>
+    <build_depend>hector_slam</build_depend>
+    <build_depend>velodyne_simulator</build_depend>
+
+    <!-- Those 2 repos are not supported by rosdep yet, to be fixed, see readme for repo path -->
+    <build_depend>aws-robomaker-small-house-world</build_depend>
+    <build_depend>gazebo_ros_tracked_vehicle_interface</build_depend>
+
     <!-- The export tag contains other, unspecified, tags -->
     <export>
         <!-- Other tools can request additional information be placed here -->
