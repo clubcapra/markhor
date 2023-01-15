@@ -1,0 +1,33 @@
+# bridge noetic to foxy
+# noetic can communicate with melodic (markhor)
+# foxy can communicate with humble
+version: '3.9'
+
+services:
+  ros1_bridge:
+    image: ros:foxy-ros1-bridge-focal
+    container_name: ros1_bridge
+    network_mode: host
+    environment:
+      ROS_DOMAIN_ID: 30
+      ROS_MASTER_URI: http://0.0.0.0:11311
+      ROS2_MASTER_URI: http://0.0.0.0:11311
+    command: >
+      bash -c "
+        source /opt/ros/foxy/setup.bash;
+        source /opt/ros/noetic/setup.bash;
+        ros2 run ros1_bridge dynamic_bridge --bridge-all-topics
+      "
+  
+  ros2:
+    image: ros:foxy
+    container_name: ros2
+    network_mode: host
+    environment:
+      ROS_DOMAIN_ID: 30
+      ROS_MASTER_URI: http://0.0.0.0:11311
+    command: >
+      bash -c "
+        source /opt/ros/foxy/setup.bash;
+        ros2 topic list
+      "
