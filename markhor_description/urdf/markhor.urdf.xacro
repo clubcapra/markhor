@@ -2,15 +2,9 @@
 
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="markhor">
 
-    <!--<xacro:include filename="$(find sick_tim)/urdf/sick_tim.urdf.xacro" />
-    <xacro:sick_tim551 name="laser" ros_topic="scan" />
-    <xacro:virtual_joint name="laser_mount_link" parent="base_link" origin_xyz="0.32034017 0 0.1393156" origin_rpy="0 0 0" />
-    -->
-
-
     <xacro:include filename="$(find velodyne_description)/urdf/VLP-16.urdf.xacro" />
     <xacro:VLP-16 name="laser" gpu="true">
-        <origin xyz="0.32034017 0 0.1393156" rpy="0 0 0" />  
+        <origin xyz="0.32034017 0 0.1393156" rpy="0 0 0" />
     </xacro:VLP-16>
 
     <xacro:include filename="$(find markhor_description)/urdf/markhor_common.xacro" />

@@ -3,7 +3,7 @@
     <!-- load the urdf -->
     <param name="robot_description" command="xacro '$(find markhor_description)/urdf/markhor.urdf.xacro'" />
 
-    <!-- Allow to spawn the UI to control the flipper and motor values -->
+    <!-- Allow to spaw the UI to control the flipper and motor values -->
     <param name="use_gui" value="$(arg gui)"/>
 
     <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />

@@ -120,6 +120,10 @@ private:
   float target_rl_ = 0;
   float target_rr_ = 0;
 
+  int allowable_closedloop_error = 100000;
+
+  int flipper_encoder_to_rad_coeff = 1;
+
   ros::Publisher fl_target_pub_;
   ros::Publisher fr_target_pub_;
   ros::Publisher rl_target_pub_;
