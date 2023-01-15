@@ -120,15 +120,15 @@
             <sensor name="${link_name}_camera" type="depth">
                 <update_rate>60</update_rate>
                 <camera>
-                    <horizontal_fov>1.047198</horizontal_fov>
+                    <horizontal_fov>1.24791</horizontal_fov>
                     <image>
                         <width>1280</width>
                         <height>720</height>
                         <format>R8G8B8</format>
                     </image>
                     <clip>
-                        <near>0.1</near>
-                        <far>10</far>
+                        <near>0.0001</near>
+                        <far>20</far>
                     </clip>
                 </camera>
                 <plugin name="${link_name}_controller" filename="libgazebo_ros_openni_kinect.so">
