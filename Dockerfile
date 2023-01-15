@@ -1,12 +1,15 @@
 FROM capraets/markhor-base-ros1
 
 # Copy the repository into the container (this is done in the base image, but we need to do it again to check for changes)
-COPY . ./src
+#COPY . ./src
 
 # Install dependencies
-RUN rosdep install --from-paths src --ignore-src -r -y
+#RUN rosdep install --from-paths src --ignore-src -r -y
 
 COPY scripts/ros_entrypoint.sh /ros_entrypoint.sh
+
+
+RUN chmod +777 /ros_entrypoint.sh
 
 # Build the workspace
 RUN /bin/bash -c '. /opt/ros/melodic/setup.bash; cd  /root/markhor_ws; catkin_make'
