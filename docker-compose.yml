@@ -9,9 +9,8 @@ services:
     container_name: ros1_bridge
     network_mode: host
     environment:
-      ROS_DOMAIN_ID: 30
-      ROS_MASTER_URI: http://0.0.0.0:11311
-      ROS2_MASTER_URI: http://0.0.0.0:11311
+      ROS_MASTER_URI: http://localhost:11311
+      ROS2_MASTER_URI: http://localhost:11311
     command: >
       bash -c "
         source /opt/ros/foxy/setup.bash;
@@ -19,15 +18,15 @@ services:
         ros2 run ros1_bridge dynamic_bridge --bridge-all-topics
       "
   
-  ros2:
-    image: ros:foxy
-    container_name: ros2
+  ros2_template:
+    build :
+      context: ./docker
+      dockerfile: ros2.Dockerfile
+    container_name: ros2_template
     network_mode: host
-    environment:
-      ROS_DOMAIN_ID: 30
-      ROS_MASTER_URI: http://0.0.0.0:11311
     command: >
       bash -c "
-        source /opt/ros/foxy/setup.bash;
-        ros2 topic list
+        ros2 topic echo /joy sensor_msgs/Joy
       "
+    depends_on:
+      - ros1_bridge
