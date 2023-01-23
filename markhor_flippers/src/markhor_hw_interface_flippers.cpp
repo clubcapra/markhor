@@ -244,6 +244,8 @@ void MarkhorHWInterfaceFlippers::write()
  */
  joint_position_command_[0] = -joint_position_command_[0];
  joint_position_command_[1] = -joint_position_command_[1];
+ joint_position_command_[2] = -joint_position_command_[2];
+ joint_position_command_[3] = -joint_position_command_[3];
 
  // For debug purposes use: printDriveInfo(<drive>);
   if (front_left_drive_lower_limit_ <= front_left_drive_base_position_ + accumulator_fl_ + joint_position_command_[0] &&
@@ -291,8 +293,8 @@ void MarkhorHWInterfaceFlippers::read()
 
   joint_position_[0] = -front_left_drive_->GetSensorCollection().GetPulseWidthPosition() / (double)flipper_encoder_to_rad_coeff - 1.5707;
   joint_position_[1] = -front_right_drive_->GetSensorCollection().GetPulseWidthPosition()/ (double)flipper_encoder_to_rad_coeff - 1.5707;
-  joint_position_[2] = rear_left_drive_->GetSensorCollection().GetPulseWidthPosition() / (double)flipper_encoder_to_rad_coeff - 1.5707;
-  joint_position_[3] = rear_right_drive_->GetSensorCollection().GetPulseWidthPosition() / (double)flipper_encoder_to_rad_coeff - 1.5707;
+  joint_position_[2] = -rear_left_drive_->GetSensorCollection().GetPulseWidthPosition() / (double)flipper_encoder_to_rad_coeff - 1.5707;
+  joint_position_[3] = -rear_right_drive_->GetSensorCollection().GetPulseWidthPosition() / (double)flipper_encoder_to_rad_coeff - 1.5707;
 }
 
 void MarkhorHWInterfaceFlippers::printDriveInfo(std::unique_ptr<TalonSRX>& drive)
