@@ -72,6 +72,8 @@ Upgrade packages - gazebo9 should be included:
 ```bash
 sudo apt-get upgrade
 ```
+
+**MAKE SURE YOU DELETE YOUR DEVEL AND BUILD FOLDERS AFTER INSTALLING THE LIBS**
 Then use catkin make and make sure there are no errors.
 ### OPTIONAL : AWS Small house world
 

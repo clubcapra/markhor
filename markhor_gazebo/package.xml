@@ -15,10 +15,6 @@
     <depend>hector_slam</depend>
     <depend>velodyne_simulator</depend>
 
-    <!-- Those 2 repos are not supported by rosdep yet, to be fixed, see readme for repo path -->
-    <test_depend>aws-robomaker-small-house-world</test_depend>
-    <test_depend>gazebo_ros_tracked_vehicle_interface</test_depend>
-
     <!-- The export tag contains other, unspecified, tags -->
     <export>
         <!-- Other tools can request additional information be placed here -->
