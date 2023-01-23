@@ -27,6 +27,7 @@
                 <mesh filename="package://markhor_description/meshes/mk_link_base.stl" />
             </geometry>
             <origin xyz="0 0 0" rpy="0 ${pi} 0" />
+            <material name="red"/>
         </visual>
         <collision>
             <geometry>
