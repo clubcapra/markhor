@@ -74,7 +74,7 @@ private:
   int drive_fl_id_, drive_fr_id_, drive_rl_id_, drive_rr_id_ = 0;
 
   hardware_interface::JointStateInterface joint_state_interface_;
-  hardware_interface::EffortJointInterface position_joint_interface_;
+  hardware_interface::PositionJointInterface position_joint_interface_;
   std::vector<std::string> joint_names_;
 
   std::vector<double> joint_position_;
