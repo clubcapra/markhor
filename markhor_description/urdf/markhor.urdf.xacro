@@ -92,7 +92,7 @@
 
     <gazebo>
         <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
-            <robotNamespace>/$(arg robot_namespace)</robotNamespace>
+            <robotNamespace>/$(arg robot_namespace)/flippers</robotNamespace>
         </plugin>
 
         <plugin filename="libSimpleTrackedVehiclePlugin.so" name="simple_tracked_vehicle">
@@ -108,7 +108,7 @@
         </plugin>
 
         <plugin name='tracked_vehicle_interface' filename='libgazebo_ros_tracked_vehicle_interface.so'>
-            <commandROSTopic>/markhor/diff_drive_controller/cmd_vel</commandROSTopic>
+            <commandROSTopic>/markhor/tracks/diff_drive_controller/cmd_vel</commandROSTopic>
             <commandIGNTopic>~/markhor/cmd_vel_twist</commandIGNTopic>
             <odometryTopic>/markhor/odom</odometryTopic>     <!-- ROS topic for the odometry data - remap if you're using another odom source -->
             <!-- <trackSpeedTopic>~track_speed</trackSpeedTopic> -->  <!-- gazebo topic of SimpleTrackedVehicle -->
