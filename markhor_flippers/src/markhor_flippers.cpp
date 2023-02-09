@@ -218,7 +218,7 @@ int main(int argc, char** argv)
       flipper_rr_pub.publish(clear_queue_msg);
     }
 
-    hw.read();
+    hw.read((float)period.toSec());
     cm.update(time, period);
     hw.write();
 
