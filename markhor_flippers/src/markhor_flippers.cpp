@@ -222,6 +222,7 @@ int main(int argc, char** argv)
     cm.update(time, period);
     hw.write();
 
+    prev_time = time;
     rate.sleep();
   }
 

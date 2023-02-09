@@ -40,6 +40,11 @@ MarkhorHWInterfaceFlippers::MarkhorHWInterfaceFlippers()
     ROS_WARN("Missing temp_model_tau, assuming 1");
   }
 
+  if(nh_.getParam("/markhor/flippers/markhor_flippers_node/temp_model_base_temp", temp_model_base_temp) == false)
+  {
+    ROS_WARN("Missing temp_model_base_temp, assuming 23");
+  }
+
   fr_target_pub_ = nh_.advertise<std_msgs::Float64>("flipper_fr_position_target", 1000);
   fl_target_pub_ = nh_.advertise<std_msgs::Float64>("flipper_fl_position_target", 1000);
   rr_target_pub_ = nh_.advertise<std_msgs::Float64>("flipper_rr_position_target", 1000);
@@ -102,11 +107,6 @@ void MarkhorHWInterfaceFlippers::setupCtreDrive()
   if(nh_.getParam("/markhor/flippers/markhor_flippers_node/flipper_encoder_to_rad_coeff", flipper_encoder_to_rad_coeff) == false)
   {
     ROS_WARN("Missing flipper_encoder_to_rad_coeff, assuming 1");
-  }
-
-  if(nh_.getParam("/markhor/flippers/markhor_flippers_node/temp_model_base_temp", temp_model_base_temp) == false)
-  {
-    ROS_WARN("Missing temp_model_base_temp, assuming 23");
   }
   
 
@@ -698,12 +698,12 @@ bool MarkhorHWInterfaceFlippers::publishMotorTempEstimate(float period){
   float dt = period;
   float tau = temp_model_tau;
   float k = temp_model_k;
-  float base_temp = 23;
+  float base_temp = temp_model_base_temp;
   std_msgs::Float64MultiArray msg;
   msg.data.clear();
   for(int i = 0; i < 4 ; i++){
-    temp_estimate[i] = temp_estimate[i] + (dt / tau) * (k*motor_current[i] - temp_estimate[i]) + base_temp;
-    msg.data.push_back(temp_estimate[i]);
+    temp_estimate[i] = temp_estimate[i] + (dt / tau) * (k*motor_current[i] - temp_estimate[i]);
+    msg.data.push_back(temp_estimate[i]+base_temp);
   }
   
   motor_temp_estimate_pub_.publish(msg);
