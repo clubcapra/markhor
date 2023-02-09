@@ -104,6 +104,12 @@ void MarkhorHWInterfaceFlippers::setupCtreDrive()
     ROS_WARN("Missing flipper_encoder_to_rad_coeff, assuming 1");
   }
 
+  if(nh_.getParam("/markhor/flippers/markhor_flippers_node/temp_model_base_temp", temp_model_base_temp) == false)
+  {
+    ROS_WARN("Missing temp_model_base_temp, assuming 23");
+  }
+  
+
 
   if (nh_.getParam("/markhor/flippers/markhor_flippers_node/front_left", drive_fl_id_) == true)
   {
@@ -684,18 +690,19 @@ bool MarkhorHWInterfaceFlippers::publishMotorBusVoltage()
 
 bool MarkhorHWInterfaceFlippers::publishMotorTempEstimate(float period){
   float motor_current[4];
-  motor_current[0] = front_left_drive_->GetOutputCurrent();
-  motor_current[1] = front_right_drive_->GetOutputCurrent();
-  motor_current[2] = rear_left_drive_->GetOutputCurrent();
-  motor_current[3] = rear_right_drive_->GetOutputCurrent();
+  motor_current[0] = abs(front_left_drive_->GetOutputCurrent());
+  motor_current[1] = abs(front_right_drive_->GetOutputCurrent());
+  motor_current[2] = abs(rear_left_drive_->GetOutputCurrent());
+  motor_current[3] = abs(rear_right_drive_->GetOutputCurrent());
 
   float dt = period;
   float tau = temp_model_tau;
   float k = temp_model_k;
+  float base_temp = 23;
   std_msgs::Float64MultiArray msg;
   msg.data.clear();
   for(int i = 0; i < 4 ; i++){
-    temp_estimate[i] = temp_estimate[i] + (dt / tau) * (k*motor_current[i] - temp_estimate[i]);
+    temp_estimate[i] = temp_estimate[i] + (dt / tau) * (k*motor_current[i] - temp_estimate[i]) + base_temp;
     msg.data.push_back(temp_estimate[i]);
   }
   

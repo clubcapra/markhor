@@ -121,7 +121,9 @@ private:
   float target_rl_ = 0;
   float target_rr_ = 0;
 
-  float temp_model_tau = 1, temp_model_k = 1;
+  float temp_model_tau = 1;
+  float temp_model_k = 1;
+  float temp_model_base_temp = 23;
 
   float temp_estimate[4] = {25,25,25,25};
 
