@@ -52,4 +52,6 @@
     flipper_fr_position_controller
     flipper_rl_position_controller
     flipper_rr_position_controller" />
+
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" ns="$(arg robot_namespace)/flippers"/>
 </launch>

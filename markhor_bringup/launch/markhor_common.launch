@@ -1,11 +1,8 @@
 <launch>
-    <param name="robot_description" command="xacro '$(find markhor_description)/urdf/markhor.urdf.xacro'" />
-    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="false" output="screen">
-        <remap from="/joint_states" to="$(arg robot_namespace)/joint_states" />
-    </node>
     <include file="$(find capra_estop)/launch/estop.launch" />
     
     <include file="$(find markhor_bringup)/launch/teleop_twist_joy.launch" />
     <include file="$(find markhor_bringup)/launch/tpv_controller.launch" />
     <include file="$(find markhor_bringup)/launch/markhor_web_ui.launch" />
+    <node name="tf2_web_republisher" pkg="tf2_web_republisher" type="tf2_web_republisher" respawn="false" output="screen"/>
 </launch>
