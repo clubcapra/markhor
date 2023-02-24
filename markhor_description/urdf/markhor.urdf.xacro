@@ -110,17 +110,13 @@
         <plugin name='tracked_vehicle_interface' filename='libgazebo_ros_tracked_vehicle_interface.so'>
             <commandROSTopic>/markhor/tracks/diff_drive_controller/cmd_vel</commandROSTopic>
             <commandIGNTopic>~/markhor/cmd_vel_twist</commandIGNTopic>
-            <odometryTopic>/markhor/odom</odometryTopic>     <!-- ROS topic for the odometry data - remap if you're using another odom source -->
-            <!-- <trackSpeedTopic>~track_speed</trackSpeedTopic> -->  <!-- gazebo topic of SimpleTrackedVehicle -->
+            <odometryTopic>/markhor/tracks/diff_drive_controller/odom</odometryTopic>     <!-- ROS topic for the odometry data - remap if you're using another odom source -->
             
             <robotBaseFrame>base_link</robotBaseFrame>
             <odometryFrame>odom</odometryFrame>     <!-- tf frame of the odometry messages -->
             
             <tracks_separation>${tracks_seperation}</tracks_separation>
-            <publishOdomTF>true</publishOdomTF>  -->
-            <!--<updateRate>100.0</updateRate>  -->
-            
-            <!-- <odometrySource>encoder</odometrySource> --> <!-- [encoder,world] - choose world for ground truth -->
+            <publishOdomTF>true</publishOdomTF>
         </plugin>
     </gazebo>
 

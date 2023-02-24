@@ -13,7 +13,7 @@ markhor:
     flipper_fr_position_controller:
       type: position_controllers/JointPositionController
       joint: flipper_fr_j
-      pid: {p: 100.0, i: 0.0, d: 0.0}
+      pid: {p: 0.0, i: 0.0, d: 0.0}
     flipper_rl_position_controller:
       type: position_controllers/JointPositionController
       joint: flipper_rl_j

@@ -1,10 +1,11 @@
 <launch>
     <arg name="robot_namespace" default="/markhor" />
+    <arg name="system_namespace" default="/tracks" />
 
     <param name="robot_description" command="xacro '$(find markhor_description)/urdf/markhor.urdf.xacro'" />
 
     <!-- Load hardware interface-->
-    <node name="markhor_flippers_node" pkg="markhor_flippers" type="markhor_flippers_node" ns="$(arg robot_namespace)/flippers" output="screen">
+    <node name="markhor_flippers_node" pkg="markhor_flippers" type="markhor_flippers_node" ns="$(arg robot_namespace)$(arg system_namespace)" output="screen">
         <param name="front_left" type="int" value="11" />
         <param name="front_left_drive_upper_limit" type="double" value="1500000" />
         <param name="front_left_drive_lower_limit" type="double" value="-1500000" />
@@ -47,11 +48,11 @@
     <rosparam command="load" file="$(find markhor_control)/config/flippers.yaml" />
 
     <!-- load the controllers -->
-    <node name="controller_spawner" pkg="controller_manager" type="spawner" output="screen" ns="$(arg robot_namespace)/flippers" args="joint_state_controller 
+    <node name="controller_spawner" pkg="controller_manager" type="spawner" output="screen" ns="$(arg robot_namespace)$(arg system_namespace)" args="joint_state_controller 
     flipper_fl_position_controller
     flipper_fr_position_controller
     flipper_rl_position_controller
     flipper_rr_position_controller" />
 
-    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" ns="$(arg robot_namespace)/flippers"/>
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" ns="$(arg robot_namespace)$(arg system_namespace)"/>
 </launch>

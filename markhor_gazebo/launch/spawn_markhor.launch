@@ -8,10 +8,8 @@
 
     <param name="robot_description" command="xacro '$(find markhor_description)/urdf/markhor.urdf.xacro'" />
     
-    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="false" output="screen">
-        <remap from="/joint_states" to="$(arg robot_namespace)/joint_states" />
-    </node>
-
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="false" output="screen"/>
+    
     <node name="pointcloud_to_laserscan_node" pkg="pointcloud_to_laserscan" type="pointcloud_to_laserscan_node" respawn="false" output="screen">
         <remap from="/cloud_in" to="/velodyne_points" />
         <param name="min_height" value="0.05"/>
@@ -29,9 +27,6 @@
     <include file="$(find markhor_bringup)/launch/markhor_web_ui.launch" />
 
     <include file="$(find markhor_control)/launch/control_flippers.launch" />
-
-
-    
 
     <!-- Spawn robot in gazebo -->
     <node name="spawn_markhor_model" pkg="gazebo_ros" type="spawn_model" args="
