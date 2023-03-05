@@ -8,20 +8,16 @@
   <license>GPLv3</license>
 
   <buildtool_depend>catkin</buildtool_depend>
-  <build_depend>move_base</build_depend>
-  <build_depend>my_odom_configuration_dep</build_depend>
-  <build_depend>my_sensor_configuration_dep</build_depend>
-  <build_depend>my_tf_configuration_dep</build_depend>
-  <build_export_depend>move_base</build_export_depend>
-  <build_export_depend>my_odom_configuration_dep</build_export_depend>
-  <build_export_depend>my_sensor_configuration_dep</build_export_depend>
-  <build_export_depend>my_tf_configuration_dep</build_export_depend>
+  <build_depend>roslaunch</build_depend>
+  <exec_depend>amcl</exec_depend>
+  <exec_depend>gmapping</exec_depend>
+  <exec_depend>map_server</exec_depend>
   <exec_depend>move_base</exec_depend>
-  <exec_depend>my_odom_configuration_dep</exec_depend>
-  <exec_depend>my_sensor_configuration_dep</exec_depend>
-  <exec_depend>my_tf_configuration_dep</exec_depend>
+  <exec_depend>navfn</exec_depend>
+  <exec_depend>base_local_planner</exec_depend>
+  <exec_depend>dwa_local_planner</exec_depend>
 
   <export>
-  
+
   </export>
 </package>
