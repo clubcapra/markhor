@@ -2,15 +2,9 @@
 
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="markhor">
 
-    <!--<xacro:include filename="$(find sick_tim)/urdf/sick_tim.urdf.xacro" />
-    <xacro:sick_tim551 name="laser" ros_topic="scan" />
-    <xacro:virtual_joint name="laser_mount_link" parent="base_link" origin_xyz="0.32034017 0 0.1393156" origin_rpy="0 0 0" />
-    -->
-
-    
     <xacro:include filename="$(find velodyne_description)/urdf/VLP-16.urdf.xacro" />
     <xacro:VLP-16 name="laser" gpu="true">
-        <origin xyz="0.32034017 0 0.1393156" rpy="0 0 0" />  
+        <origin xyz="0.32034017 0 0.1393156" rpy="0 0 0" />
     </xacro:VLP-16>
     
 
@@ -34,6 +28,7 @@
                 <mesh filename="package://markhor_description/meshes/mk_link_base.stl" />
             </geometry>
             <origin xyz="0 0 0" rpy="0 ${pi} 0" />
+            <material name="red"/>
         </visual>
         <collision>
             <geometry>
@@ -98,7 +93,7 @@
 
     <gazebo>
         <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
-            <robotNamespace>/$(arg robot_namespace)</robotNamespace>
+            <robotNamespace>/$(arg robot_namespace)/flippers</robotNamespace>
         </plugin>
 
         <plugin filename="libSimpleTrackedVehiclePlugin.so" name="simple_tracked_vehicle">
@@ -114,19 +109,15 @@
         </plugin>
 
         <plugin name='tracked_vehicle_interface' filename='libgazebo_ros_tracked_vehicle_interface.so'>
-            <commandROSTopic>/markhor/diff_drive_controller/cmd_vel</commandROSTopic>
+            <commandROSTopic>/markhor/tracks/diff_drive_controller/cmd_vel</commandROSTopic>
             <commandIGNTopic>~/markhor/cmd_vel_twist</commandIGNTopic>
-            <odometryTopic>/markhor/odom</odometryTopic>     <!-- ROS topic for the odometry data - remap if you're using another odom source -->
-            <!-- <trackSpeedTopic>~track_speed</trackSpeedTopic> -->  <!-- gazebo topic of SimpleTrackedVehicle -->
+            <odometryTopic>/markhor/tracks/diff_drive_controller/odom</odometryTopic>     <!-- ROS topic for the odometry data - remap if you're using another odom source -->
             
             <robotBaseFrame>base_link</robotBaseFrame>
             <odometryFrame>odom</odometryFrame>     <!-- tf frame of the odometry messages -->
             
             <tracks_separation>${tracks_seperation}</tracks_separation>
-            <publishOdomTF>true</publishOdomTF>  -->
-            <!--<updateRate>100.0</updateRate>  -->
-            
-            <!-- <odometrySource>encoder</odometrySource> --> <!-- [encoder,world] - choose world for ground truth -->
+            <publishOdomTF>true</publishOdomTF>
         </plugin>
     </gazebo>
 

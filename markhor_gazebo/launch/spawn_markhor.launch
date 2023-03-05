@@ -6,10 +6,10 @@
     <arg name="z" default="0.2" />
     <arg name="yaw" default="0.0" />
 
-    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="false" output="screen">
-        <remap from="/joint_states" to="$(arg robot_namespace)/joint_states" />
-    </node>
-
+    <param name="robot_description" command="xacro '$(find markhor_description)/urdf/markhor.urdf.xacro'" />
+    
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="false" output="screen"/>
+    
     <node name="pointcloud_to_laserscan_node" pkg="pointcloud_to_laserscan" type="pointcloud_to_laserscan_node" respawn="false" output="screen">
         <remap from="/cloud_in" to="/velodyne_points" />
         <param name="min_height" value="0.05"/>
@@ -20,15 +20,6 @@
         <param name="range_max" value="100"/> 
         <param name="use_inf" value="false"/>
     </node>
-
-    <node name="hector_mapping" pkg="hector_mapping" type="hector_mapping" respawn="false" output="screen">
-        <param name="map_update_distance_thresh " value="0.1"/>
-        <param name="map_update_angle_thresh " value="0.1"/>
-        <param name="laser_min_dist " value="0"/>
-        <param name="laser_max_dist " value="100"/>
-    </node>
-
-    <node name="tf2_web_republisher" pkg="tf2_web_republisher" type="tf2_web_republisher" respawn="false" output="screen"/>
     
     <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch" />
 
@@ -36,9 +27,6 @@
     <include file="$(find markhor_bringup)/launch/markhor_web_ui.launch" />
 
     <include file="$(find markhor_control)/launch/control_flippers.launch" />
-
-
-    
 
     <!-- Spawn robot in gazebo -->
     <node name="spawn_markhor_model" pkg="gazebo_ros" type="spawn_model" args="

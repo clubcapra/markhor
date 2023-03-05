@@ -1,8 +1,11 @@
 <launch>
     <arg name="robot_namespace" default="/markhor" />
+    <arg name="system_namespace" default="/flippers" />
+
+    <param name="robot_description" command="xacro '$(find markhor_description)/urdf/markhor.urdf.xacro'" />
 
     <!-- Load hardware interface-->
-    <node name="markhor_flippers_node" pkg="markhor_flippers" type="markhor_flippers_node" ns="$(arg robot_namespace)" output="screen">
+    <node name="markhor_flippers_node" pkg="markhor_flippers" type="markhor_flippers_node" ns="$(arg robot_namespace)$(arg system_namespace)" output="screen">
         <param name="front_left" type="int" value="11" />
         <param name="front_left_drive_upper_limit" type="double" value="1500000" />
         <param name="front_left_drive_lower_limit" type="double" value="-1500000" />
@@ -27,10 +30,12 @@
         <param name="rear_right_drive_peak_output_forward" type="double" value="0.325" />
         <param name="rear_right_drive_peak_output_reverse" type="double" value="-0.36" />
 
+        <param name="allowable_closedloop_error" type="int" value="100000"/>
+        <param name="flipper_encoder_to_rad_coeff" type="int" value="1043037"/>
+
         <param name="kP" type="double" value="0.005" />
         <param name="kI" type="double" value="0" />
         <param name="kD" type="double" value="0" />
-        <param name="fb_coeff" type="double" value="1"/>
 
         <param name="config_folder_location" type="string" value="/home/markhor/SSD/config/markhor_flippers" />
         <param name="config_file_1" type="string" value="/drives_calibration_1.cfg" />
@@ -43,11 +48,11 @@
     <rosparam command="load" file="$(find markhor_control)/config/flippers.yaml" />
 
     <!-- load the controllers -->
-    <node name="controller_spawner" pkg="controller_manager" type="spawner" output="screen" ns="$(arg robot_namespace)" args="joint_state_controller 
+    <node name="controller_spawner" pkg="controller_manager" type="spawner" output="screen" ns="$(arg robot_namespace)$(arg system_namespace)" args="joint_state_controller 
     flipper_fl_position_controller
     flipper_fr_position_controller
     flipper_rl_position_controller
     flipper_rr_position_controller" />
 
-    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" ns="$(arg robot_namespace)" respawn="false" output="screen" />
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" ns="$(arg robot_namespace)$(arg system_namespace)"/>
 </launch>
