@@ -2,7 +2,10 @@
 
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="markhor">
 
-    <xacro:include filename="$(find sick_tim)/urdf/sick_tim.urdf.xacro" />
+    <xacro:include filename="$(find velodyne_description)/urdf/VLP-16.urdf.xacro" />
+    <xacro:VLP-16 name="laser" gpu="true">
+        <origin xyz="0.32034017 0 0.1393156" rpy="0 0 0" />
+    </xacro:VLP-16>
 
     <xacro:include filename="$(find markhor_description)/urdf/markhor_common.xacro" />
 
@@ -16,12 +19,15 @@
     <link name="base_footprint" />
     <link name="base_link" />
 
+    <link name="markhor_link_base" />
+
     <link name="base_body">
         <visual>
             <geometry>
                 <mesh filename="package://markhor_description/meshes/mk_link_base.stl" />
             </geometry>
             <origin xyz="0 0 0" rpy="0 ${pi} 0" />
+            <material name="red"/>
         </visual>
         <collision>
             <geometry>
@@ -38,6 +44,12 @@
         <child link="base_footprint" />
     </joint>
 
+    <joint name="markhor_link_base_j" type="fixed">
+        <parent link="base_link" />
+        <child link="markhor_link_base" />
+    </joint>
+
+
     <joint name="base_body_j" type="fixed">
         <parent link="base_link" />
         <child link="base_body" />
@@ -53,12 +65,34 @@
 
     <xacro:virtual_anchor anchor_name="arm_root" parent="base_link" origin_xyz="0.17394875 0 0.12291060" origin_rpy="0 0 0" />
 
-    <xacro:sick_tim551 name="laser" ros_topic="scan" />
-    <xacro:virtual_joint name="laser_mount_link" parent="base_link" origin_xyz="0.32034017 0 0.1393156" origin_rpy="0 0 0" />
+
+    <gazebo reference="flipper_fl">
+        <material>Gazebo/Black</material>
+    </gazebo>
+
+    <gazebo reference="flipper_fr">
+        <material>Gazebo/Black</material>
+    </gazebo>
+
+    <gazebo reference="flipper_rl">
+        <material>Gazebo/Black</material>
+    </gazebo>
+
+    <gazebo reference="flipper_rr">
+        <material>Gazebo/Black</material>
+    </gazebo>
+
+    <gazebo reference="flipper_rr">
+        <material>Gazebo/Black</material>
+    </gazebo>
+
+    <gazebo reference="base_body">
+        <material>Gazebo/Red</material>
+    </gazebo>
 
     <gazebo>
         <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
-            <robotNamespace>/$(arg robot_namespace)</robotNamespace>
+            <robotNamespace>/$(arg robot_namespace)/flippers</robotNamespace>
         </plugin>
 
         <plugin filename="libSimpleTrackedVehiclePlugin.so" name="simple_tracked_vehicle">
@@ -73,9 +107,16 @@
             <robot_namespace>markhor</robot_namespace>
         </plugin>
 
-        <plugin filename="libKeysToCmdVelPlugin.so" name="keyboard_control">
-            <publish_as_twist>true</publish_as_twist>
-            <cmd_vel_topic>~/markhor/cmd_vel_twist</cmd_vel_topic>
+        <plugin name='tracked_vehicle_interface' filename='libgazebo_ros_tracked_vehicle_interface.so'>
+            <commandROSTopic>/markhor/tracks/diff_drive_controller/cmd_vel</commandROSTopic>
+            <commandIGNTopic>~/markhor/cmd_vel_twist</commandIGNTopic>
+            <odometryTopic>/markhor/tracks/diff_drive_controller/odom</odometryTopic>     <!-- ROS topic for the odometry data - remap if you're using another odom source -->
+            
+            <robotBaseFrame>base_link</robotBaseFrame>
+            <odometryFrame>odom</odometryFrame>     <!-- tf frame of the odometry messages -->
+            
+            <tracks_separation>${tracks_seperation}</tracks_separation>
+            <publishOdomTF>true</publishOdomTF>
         </plugin>
     </gazebo>
 

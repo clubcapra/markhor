@@ -22,7 +22,7 @@
                     <mesh filename="package://markhor_description/meshes/mk_flip.stl"/>
                 </geometry>
                 <origin xyz="0 0 0" rpy="0 0 0"/>
-                <material name="grey"/>
+                <material name="black"/>
             </visual>
             <collision>
                 <geometry>
@@ -71,6 +71,7 @@
                 <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
             </joint>
             <actuator name="${flipper_name}_actuator">
+                <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
                 <mechanicalReduction>1</mechanicalReduction>
             </actuator>
         </transmission>
@@ -78,7 +79,7 @@
         <transmission name="${flipper_name}_track_trans" type="SimpleTransmission">
             <type>transmission_interface/SimpleTransmission</type>
             <joint name="${flipper_name}_motor_j">
-                <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+                <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
             </joint>
             <actuator name="${flipper_name}_track_motor">
                 <mechanicalReduction>1</mechanicalReduction>
@@ -119,15 +120,15 @@
             <sensor name="${link_name}_camera" type="depth">
                 <update_rate>60</update_rate>
                 <camera>
-                    <horizontal_fov>1.047198</horizontal_fov>
+                    <horizontal_fov>1.24791</horizontal_fov>
                     <image>
-                        <width>640</width>
-                        <height>400</height>
+                        <width>1280</width>
+                        <height>720</height>
                         <format>R8G8B8</format>
                     </image>
                     <clip>
-                        <near>0.25</near>
-                        <far>1.5</far>
+                        <near>0.0001</near>
+                        <far>20</far>
                     </clip>
                 </camera>
                 <plugin name="${link_name}_controller" filename="libgazebo_ros_openni_kinect.so">
