@@ -69,14 +69,16 @@ private:
 
   double tracks_fb_coeff = 1;
 
+  double track_encoder_to_rad_coeff = 39384;
+
   int allowable_closedloop_error = 0;
 
   hardware_interface::JointStateInterface jnt_state_interface;
   hardware_interface::VelocityJointInterface jnt_vel_interface;
   double cmd[NUM_JOINTS];
-  double pos[NUM_JOINTS];
-  double vel[NUM_JOINTS];
-  double eff[NUM_JOINTS];
+  std::vector<double> joint_position_;
+  std::vector<double> joint_velocity_;
+  std::vector<double> joint_effort_;
 
   bool running_;
   double max_speed;
