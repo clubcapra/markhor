@@ -18,15 +18,30 @@ services:
         ros2 run ros1_bridge dynamic_bridge --bridge-all-topics
       "
   
-  ros2_template:
+#  ros2_template:
+#    build :
+#      context: ./docker
+#      dockerfile: ros2.Dockerfile
+#    container_name: ros2_template
+#    network_mode: host
+#    command: >
+#      bash -c "
+#        ros2 topic echo /joy sensor_msgs/Joy
+#      "
+#    depends_on:
+#      - ros1_bridge
+    
+  ros2_slam:
     build :
       context: ./docker
-      dockerfile: ros2.Dockerfile
-    container_name: ros2_template
+      dockerfile: slam.Dockerfile
+    container_name: ros2_slam
     network_mode: host
-    command: >
-      bash -c "
-        ros2 topic echo /joy sensor_msgs/Joy
-      "
     depends_on:
       - ros1_bridge
+    volumes:
+      - ./ros2:/ros2_ws/config
+    command: >
+      bash -c "
+        ros2 launch slam_toolbox online_async_launch.py params:=/ros2_ws/config/mapper_params_oneline_async.yaml
+      "
