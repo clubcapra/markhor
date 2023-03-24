@@ -69,7 +69,9 @@ private:
 
   double tracks_fb_coeff = 1;
 
-  double track_encoder_to_rad_coeff = 39384;
+  double track_encoder_reduction_coeff = 1.53846153846153;
+
+  const int step_per_turn = 1024;
 
   int allowable_closedloop_error = 0;
 
