@@ -4,12 +4,14 @@
 You can use this command inside the `markhor_ws` to install the project dependencies. This might not take into account the Gazebo upgrade that we need to do to run the simulation correctly.
 `rosdep install --from-paths src --rosdistro melodic -y`
 
-The ros_package `capra_estop` is essential to launch markhor. It should be located in the `markhor_ws/src` directory.
-If the module is not there, markhor will not launch and you will see the following error message : `Resource not found: capra_estop`
+The ros_package `vectornav` is essential to launch markhor. It should be located in the `markhor_ws/src` directory.
+If the module is not there, markhor will not launch and you will see the following error message : `Resource not found: vectornav`
+sudo chmod a+rw /dev/ttyUSB0
 
 ### Package dependencies
 - [usb_cam]
 - [capra_estop](https://github.com/clubcapra/capra_estop)
+- [vectornav](https://github.com/dawonn/vectornav)
 
 ### Other intented use packages
 Altough not required, these packages are also expected to be installed alongside markhor. If not present, error messages will appear when launching the robot.
