@@ -12,5 +12,6 @@
   <buildtool_depend>gmapping</buildtool_depend>
   <buildtool_depend>vectornav</buildtool_depend>
   <buildtool_depend>move_base</buildtool_depend>
+  <buildtool_depend>robot_localization</buildtool_depend>
   <export></export>
 </package>
