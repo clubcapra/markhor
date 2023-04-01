@@ -1,5 +1,10 @@
 <launch>
-  <node pkg="robot_localization" type="ekf_localization_node" name="ekf_localization" clear_params="true">
+  <node pkg="vectornav" type="vnpub" name="vectornav" output="screen">
+    <param name="frame_id" value="vectornav" />
+    <rosparam command="load" file="$(find markhor_slam)/config/vn300.yaml" />
+  </node>
+  <node pkg="robot_localization" type="ekf_localization_node" name="ekf_localization"
+    clear_params="true">
     <rosparam command="load" file="$(find markhor_slam)/config/ekf_localization.yaml" />
   </node>
 </launch>
