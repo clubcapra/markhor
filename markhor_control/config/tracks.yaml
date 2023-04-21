@@ -28,7 +28,7 @@ markhor:
       estimate_velocity_from_position: false
 
       # Wheel separation and radius multipliers
-      wheel_separation_multiplier: 1.0 # default: 1.0
+      wheel_separation_multiplier: 4.2 # default: 1.0
       wheel_radius_multiplier    : 1.2 # default: 1.0
 
       # Velocity and acceleration limits
@@ -42,6 +42,6 @@ markhor:
       angular:
         z:
           has_velocity_limits    : true
-          max_velocity           : 4   # rad/s
+          max_velocity           : 1   # rad/s
           has_acceleration_limits: true
-          max_acceleration       : 8   # rad/s^2
+          max_acceleration       : 2   # rad/s^2

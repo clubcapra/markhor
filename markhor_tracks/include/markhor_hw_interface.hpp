@@ -71,7 +71,7 @@ private:
 
   double track_encoder_reduction_coeff = 1.53846153846153;
 
-  const int step_per_turn = 1024;
+  const int step_per_turn = 4096;
 
   int allowable_closedloop_error = 0;
 
