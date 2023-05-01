@@ -8,10 +8,10 @@ MarkhorHWInterface::MarkhorHWInterface()
   , start_srv_(nh.advertiseService("start", &MarkhorHWInterface::start_callback, this))
   , stop_srv_(nh.advertiseService("stop", &MarkhorHWInterface::start_callback, this))
 {
-  std::fill(pos, pos + NUM_JOINTS, 0.0);
-  std::fill(vel, vel + NUM_JOINTS, 0.0);
-  std::fill(eff, eff + NUM_JOINTS, 0.0);
-  std::fill(cmd, cmd + NUM_JOINTS, 0.0);
+  joint_position_.resize(NUM_JOINTS, 0.0);
+  joint_velocity_.resize(NUM_JOINTS, 0.0);
+  joint_effort_.resize(NUM_JOINTS, 0.0);
+
 
   setupRosControl();
   setupCTREDrive();
@@ -24,6 +24,10 @@ void MarkhorHWInterface::setupParam()
   if (!nh.getParam("/markhor/tracks/markhor_tracks_node/log_throttle_speed", log_throttle_speed))
   {
     ROS_WARN("log_throttle_speed not set");
+  }
+  if (!nh.getParam("/markhor/tracks/markhor_tracks_node/track_encoder_reduction_coeff", track_encoder_reduction_coeff))
+  {
+    ROS_WARN("track_encoder_reduction_coeff not set assuming 1.538");
   }
 }
 
@@ -41,7 +45,7 @@ void MarkhorHWInterface::setupRosControl()
   // connect and register the joint state and velocity interfaces
   for (unsigned int i = 0; i < NUM_JOINTS; ++i)
   {
-    hardware_interface::JointStateHandle state_handle(drives_name[i], &pos[i], &vel[i], &eff[i]);
+    hardware_interface::JointStateHandle state_handle(drives_name[i], &joint_position_[i], &joint_velocity_[i], &joint_effort_[i]);
     jnt_state_interface.registerHandle(state_handle);
 
     hardware_interface::JointHandle vel_handle(jnt_state_interface.getHandle(drives_name[i]), &cmd[i]);
@@ -198,33 +202,11 @@ void MarkhorHWInterface::setupCTREDrive()
 
 void MarkhorHWInterface::write()
 {
-  double diff_ang_speed_front_left = cmd[0] * 125 * 4;
-  double diff_ang_speed_front_right = cmd[1] * 125 * 4;
-  double diff_ang_speed_rear_left = cmd[2] * 125 * 4;
-  double diff_ang_speed_rear_right = cmd[3] * 125 * 4;
-
-  ROS_INFO_THROTTLE(log_throttle_speed, "Command :");
-  ROS_INFO_THROTTLE(log_throttle_speed, "FWD_L: %lf, FWD_R: %lf", diff_ang_speed_front_right,
-                    diff_ang_speed_front_left);
-  ROS_INFO_THROTTLE(log_throttle_speed, "AFT_L: %lf, AFT_R: %lf", diff_ang_speed_rear_right, diff_ang_speed_rear_left);
-  ROS_INFO_THROTTLE(log_throttle_speed, "Encoder Velocity:");
-  ROS_INFO_THROTTLE(log_throttle_speed, "FWD_L: %d, FWD_R: %d",
-                    front_left_drive->GetSensorCollection().GetQuadratureVelocity(),
-                    front_right_drive->GetSensorCollection().GetQuadratureVelocity());
-  ROS_INFO_THROTTLE(log_throttle_speed, "AFT_L: %d, AFT_R: %d",
-                    rear_left_drive->GetSensorCollection().GetQuadratureVelocity(),
-                    rear_right_drive->GetSensorCollection().GetQuadratureVelocity());
-  ROS_INFO_THROTTLE(log_throttle_speed, "Encoder Position:");
-  ROS_INFO_THROTTLE(log_throttle_speed, "FL: %d FR: %d RL: %d RR: %d",
-                    front_left_drive->GetSensorCollection().GetPulseWidthPosition(),
-                    front_right_drive->GetSensorCollection().GetPulseWidthPosition(),
-                    rear_left_drive->GetSensorCollection().GetPulseWidthPosition(),
-                    rear_right_drive->GetSensorCollection().GetPulseWidthPosition());
-  ROS_INFO_THROTTLE(log_throttle_speed, "Drive output current: ");
-  ROS_INFO_THROTTLE(log_throttle_speed, "FL: %f FR: %f RL: %f RR: %f", front_left_drive->GetOutputCurrent(),
-                    front_right_drive->GetOutputCurrent(), rear_left_drive->GetOutputCurrent(),
-                    rear_right_drive->GetOutputCurrent());
-
+  double diff_ang_speed_front_left = (cmd[0] * step_per_turn * track_encoder_reduction_coeff)/(2*M_PI);
+  double diff_ang_speed_front_right = (cmd[1] * step_per_turn * track_encoder_reduction_coeff)/(2*M_PI);
+  double diff_ang_speed_rear_left = (cmd[2] * step_per_turn * track_encoder_reduction_coeff)/(2*M_PI);
+  double diff_ang_speed_rear_right = (cmd[3] * step_per_turn * track_encoder_reduction_coeff)/(2*M_PI);
+                
   ctre::phoenix::unmanaged::FeedEnable(timeout_ms_);
 
   // Set data
@@ -248,9 +230,15 @@ void MarkhorHWInterface::write()
 
 void MarkhorHWInterface::read(const ros::Duration& period)
 {
-  // Read from the motor API, going to read from the TalonSRX objects
-  // ROS_INFO("Vel: %d, %d",
-  // rear_right_drive->GetSensorCollection().GetQuadratureVelocity(),rear_left_drive->GetSensorCollection().GetQuadratureVelocity());
+  joint_position_[0] = -2*M_PI*front_left_drive->GetSensorCollection().GetPulseWidthPosition() / ((double)track_encoder_reduction_coeff * step_per_turn);
+  joint_position_[1] = 2*M_PI*front_right_drive->GetSensorCollection().GetPulseWidthPosition() / ((double)track_encoder_reduction_coeff * step_per_turn);
+  joint_position_[2] = -2*M_PI*rear_left_drive->GetSensorCollection().GetPulseWidthPosition() / ((double)track_encoder_reduction_coeff * step_per_turn);
+  joint_position_[3] = 2*M_PI*rear_right_drive->GetSensorCollection().GetPulseWidthPosition() / ((double)track_encoder_reduction_coeff * step_per_turn);
+
+  joint_velocity_[0] = -2*M_PI*front_left_drive->GetSensorCollection().GetPulseWidthVelocity() / ((double)track_encoder_reduction_coeff * step_per_turn);
+  joint_velocity_[1] = 2*M_PI*front_right_drive->GetSensorCollection().GetPulseWidthVelocity() / ((double)track_encoder_reduction_coeff * step_per_turn);
+  joint_velocity_[2] = -2*M_PI*rear_left_drive->GetSensorCollection().GetPulseWidthVelocity() / ((double)track_encoder_reduction_coeff * step_per_turn);
+  joint_velocity_[3] = 2*M_PI*rear_right_drive->GetSensorCollection().GetPulseWidthVelocity() / ((double)track_encoder_reduction_coeff * step_per_turn);
 }
 
 ros::Time MarkhorHWInterface::get_time()

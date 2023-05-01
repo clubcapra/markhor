@@ -1,5 +1,8 @@
 markhor:
   tracks:
+    joint_state_controller:
+      type: joint_state_controller/JointStateController
+      publish_rate: 50  
     # Diff drive controller
     diff_drive_controller:
       type: "diff_drive_controller/DiffDriveController"
@@ -12,10 +15,10 @@ markhor:
       velocity_rolling_window_size: 2
 
       wheel_separation : 0.46
-      wheel_radius : 0.125
+      wheel_radius : 0.132
 
       # Base frame_id
-      base_frame_id: markhor_root
+      base_frame_id: base_link
 
       # Odometry fused with IMU is published by robot_localization, so
       # no need to publish a TF based on encoders alone.
@@ -25,20 +28,20 @@ markhor:
       estimate_velocity_from_position: false
 
       # Wheel separation and radius multipliers
-      wheel_separation_multiplier: 1.0 # default: 1.0
-      wheel_radius_multiplier    : 1.0 # default: 1.0
+      wheel_separation_multiplier: 4.2 # default: 1.0
+      wheel_radius_multiplier    : 1.2 # default: 1.0
 
       # Velocity and acceleration limits
       # Whenever a min_* is unspecified, default to -max_*
       linear:
         x:
           has_velocity_limits    : true
-          max_velocity           : 1.5   # m/s
+          max_velocity           : 0.1   # m/s
           has_acceleration_limits: true
-          max_acceleration       : 3     # m/s^2
+          max_acceleration       : 0.5     # m/s^2
       angular:
         z:
           has_velocity_limits    : true
-          max_velocity           : 4   # rad/s
+          max_velocity           : 0.1   # rad/s
           has_acceleration_limits: true
-          max_acceleration       : 8   # rad/s^2
+          max_acceleration       : 0.5   # rad/s^2
