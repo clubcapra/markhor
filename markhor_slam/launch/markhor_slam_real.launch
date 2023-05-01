@@ -1,12 +1,11 @@
 <?xml version="1.0"?>
 <launch>
-
+    <arg name="param_file" default="VLP16_points" />
     <arg name="frame_id" default="vectornav" />
 
     <!-- LIDAR (Velodyne vlp16) -->
-    <node pkg="velodyne_pointcloud" type="cloud_node" name="velodyne_cloud_node" output="screen">
-        <rosparam command="load" file="$(arg param_file)" />
-    </node>
+    <include file="$(find velodyne_pointcloud)/launch/VLP16_points.launch" />
+
 
     <!-- Transform between the Velodyne LiDAR and the base_link frame -->
     <node pkg="tf" type="static_transform_publisher" name="velodyne_to_base_link"

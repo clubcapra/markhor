@@ -13,12 +13,19 @@ raytrace_range: 6.0
 
 #layer definitions
 static:
-    map_topic: /map
-    subscribe_to_updates: true
+  map_topic: /map
+  subscribe_to_updates: true
 
 obstacles_laser:
-    observation_sources: laser
-    laser: {data_type: LaserScan, clearing: true, marking: true, topic: front/scan, inf_is_valid: true}
+  observation_sources: laser
+  laser:
+    {
+      data_type: LaserScan,
+      clearing: true,
+      marking: true,
+      topic: scan,
+      inf_is_valid: true,
+    }
 
 inflation:
-    inflation_radius: 1.0
+  inflation_radius: 1.0

@@ -1,7 +1,7 @@
-global_frame: odom
+global_frame: map
 rolling_window: false
 track_unknown_space: true
 
 plugins:
-  - {name: static,                  type: "costmap_2d::StaticLayer"}
-  - {name: inflation,               type: "costmap_2d::InflationLayer"}
+  - { name: static, type: "costmap_2d::StaticLayer" }
+  - { name: inflation, type: "costmap_2d::InflationLayer" }
