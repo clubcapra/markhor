@@ -5,11 +5,9 @@
   <xacro:include filename="$(find markhor_description)/urdf/markhor.urdf.xacro"/>
   <xacro:include filename="$(find ovis_description)/urdf/ovis_standalone.xacro"/>
 
-
-
   <joint name="markhor_joint_fix_arm" type="fixed">
-    <origin rpy="${pi} ${pi} 0" xyz="0.17394875 0 0.12291060"/>
-    <parent link="base_link"/>
+    <origin rpy="${pi} ${pi} 0" xyz="0 0 0"/>
+    <parent link="arm_root"/>
     <child link="ovis_root"/>
   </joint>
 
