@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<launch>
+
+    <arg name="frame_id" default="vectornav" />
+
+    <!-- LIDAR (Velodyne vlp16) -->
+    <node pkg="velodyne_pointcloud" type="cloud_node" name="velodyne_cloud_node" output="screen">
+        <rosparam command="load" file="$(arg param_file)" />
+    </node>
+
+    <!-- Transform between the Velodyne LiDAR and the base_link frame -->
+    <node pkg="tf" type="static_transform_publisher" name="velodyne_to_base_link"
+        args="0 0 0 0 0 0 base_link velodyne 100" />
+
+
+    <!-- IMU -->
+    <node pkg="vectornav" type="vnpub" name="vectornav" output="screen">
+        <param name="frame_id" value="$(arg frame_id)" />
+        <rosparam command="load" file="$(find markhor_slam)/config/vn300.yaml" />
+    </node>
+
+    <!-- RobotLocalization (Sensor fusion) -->
+    <node pkg="robot_localization" type="ekf_localization_node" name="ekf_localization"
+        clear_params="true">
+        <rosparam command="load" file="$(find markhor_slam)/config/ekf_localization.yaml" />
+    </node>
+
+    <!-- SLAM -->
+    <include file="$(find markhor_slam)/launch/markhor_slam.launch" />
+</launch>

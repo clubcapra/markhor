@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>markhor_2dnav</name>
+  <name>markhor_navigation</name>
   <version>0.0.0</version>
-  <description>The markhor_2dnav package</description>
-  <maintainer email="capra@ens.etsmtl.ca">crackhead</maintainer>
+  <description>The markhor_navigation package</description>
+  <maintainer email="capra@ens.etsmtl.ca">Capra</maintainer>
 
-  <license>GPLv3</license>
+  <license>MIT</license>
 
   <buildtool_depend>catkin</buildtool_depend>
   <build_depend>roslaunch</build_depend>
