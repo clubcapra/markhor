@@ -4,7 +4,7 @@
 
     <xacro:include filename="$(find velodyne_description)/urdf/VLP-16.urdf.xacro" />
     <xacro:VLP-16 name="laser" gpu="true">
-        <origin xyz="0.32034017 0 0.1393156" rpy="0 0 0" />
+        <origin xyz="-0.2875 0 0.45176" rpy="0 0 0" />
     </xacro:VLP-16>
     
 
@@ -19,8 +19,6 @@
 
     <link name="base_footprint" />
     <link name="base_link" />
-
-    <link name="markhor_link_base" />
 
     <link name="base_body">
         <visual>
@@ -39,15 +37,32 @@
         <xacro:markhor_inertial type="body" />
     </link>
 
+    <link name="tower_body">
+        <visual>
+            <geometry>
+                <mesh filename="package://markhor_description/meshes/LidarTower.stl" />
+            </geometry>
+            <origin xyz="0 0 0" rpy="0 0 -${pi/2}" />
+            <material name="grey"/>
+        </visual>
+        <collision>
+            <geometry>
+                <mesh filename="package://markhor_description/meshes/LidarTower.stl" />
+            </geometry>
+            <origin xyz="0 0 0" rpy="0 0 -${pi/2}" />
+        </collision>
+        <xacro:markhor_inertial type="body" />
+    </link>
+
+    <joint name="tower_body_j" type="fixed">
+        <parent link="base_link" />
+        <child link="tower_body" />
+    </joint>
+
     <joint name="base_link_j" type="fixed">
         <origin xyz="0 0 -0.085" rpy="0 0 0" />
         <parent link="base_link" />
         <child link="base_footprint" />
-    </joint>
-
-    <joint name="markhor_link_base_j" type="fixed">
-        <parent link="base_link" />
-        <child link="markhor_link_base" />
     </joint>
 
 
@@ -64,31 +79,35 @@
     <xacro:camera_link link_name="front_cam" camera_name="$(arg robot_namespace)/front_cam" frame_name="front_cam" parent="base_link" origin_xyz="0.35864800 0 0.03810000" origin_rpy="0 0 0" />
     <xacro:camera_link link_name="rear_cam" camera_name="$(arg robot_namespace)/rear_cam" frame_name="rear_cam" parent="base_link" origin_xyz="-0.35864800 0 0.03810000" origin_rpy="0 0 ${pi}" />
 
-    <xacro:virtual_anchor anchor_name="arm_root" parent="base_link" origin_xyz="0.17394875 0 0.12291060" origin_rpy="0 0 0" />
+    <xacro:virtual_anchor anchor_name="arm_root" parent="base_link" origin_xyz="0.3 0 0.12291060" origin_rpy="0 0 0" />
 
 
     <gazebo reference="flipper_fl">
-        <material>Gazebo/Black</material>
+        <material>Gazebo/Grey</material>
     </gazebo>
 
     <gazebo reference="flipper_fr">
-        <material>Gazebo/Black</material>
+        <material>Gazebo/Grey</material>
     </gazebo>
 
     <gazebo reference="flipper_rl">
-        <material>Gazebo/Black</material>
+        <material>Gazebo/Grey</material>
     </gazebo>
 
     <gazebo reference="flipper_rr">
-        <material>Gazebo/Black</material>
+        <material>Gazebo/Grey</material>
     </gazebo>
 
     <gazebo reference="flipper_rr">
-        <material>Gazebo/Black</material>
+        <material>Gazebo/Grey</material>
     </gazebo>
 
     <gazebo reference="base_body">
         <material>Gazebo/Red</material>
+    </gazebo>
+
+    <gazebo reference="tower_body">
+        <material>Gazebo/Grey</material>
     </gazebo>
 
     <gazebo>
