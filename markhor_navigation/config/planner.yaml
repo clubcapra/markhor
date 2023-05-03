@@ -10,8 +10,9 @@ TrajectoryPlannerROS:
   acc_lim_x: 2.5
   acc_lim_theta:  3.2
 
-  max_vel_x: 1.0
+  max_vel_x: 0.05
   min_vel_x: 0.0
+  max_rotational_vel: 1.0
 
   max_vel_theta: 1.0
   min_vel_theta: -1.0
@@ -57,7 +58,7 @@ DWAPlannerROS:
   acc_lim_y: 0
   acc_lim_th: 3.2
 
-  max_vel_x: 0.5
+  max_vel_x: 0.05
   min_vel_x: 0.0
   max_vel_y: 0
   min_vel_y: 0
