@@ -136,7 +136,7 @@
             <odometryFrame>odom</odometryFrame>     <!-- tf frame of the odometry messages -->
             
             <tracks_separation>${tracks_seperation}</tracks_separation>
-            <publishOdomTF>true</publishOdomTF>
+            <publishOdomTF>false</publishOdomTF>
         </plugin>
     </gazebo>
 

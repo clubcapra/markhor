@@ -13,6 +13,12 @@
         <param name="use_inf" value="false" />
     </node>
 
+    <!-- RobotLocalization (Sensor fusion) -->
+    <node pkg="robot_localization" type="ekf_localization_node" name="ekf_localization"
+        clear_params="true">
+        <rosparam command="load" file="$(find markhor_slam)/config/ekf_localization.yaml" />
+    </node>
+    
     <!-- SLAM -->
     <node name="slam_gmapping" pkg="gmapping" type="slam_gmapping" output="screen">
         <param name="base_frame" value="base_link" />
