@@ -18,12 +18,6 @@
         <rosparam command="load" file="$(find markhor_slam)/config/vn300.yaml" />
     </node>
 
-    <!-- RobotLocalization (Sensor fusion) -->
-    <node pkg="robot_localization" type="ekf_localization_node" name="ekf_localization"
-        clear_params="true">
-        <rosparam command="load" file="$(find markhor_slam)/config/ekf_localization.yaml" />
-    </node>
-
     <!-- SLAM -->
     <include file="$(find markhor_slam)/launch/markhor_slam.launch" />
 </launch>
