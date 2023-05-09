@@ -134,22 +134,23 @@ odom0_twist_rejection_threshold: 1
 imu0: vectornav/IMU
 imu0_config:
   [
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
+    false, # X position
+    false, # Y position
+    false, # Z position
+    true, # Roll orientation
+    true, # Pitch orientation
+    true, # Yaw orientation
+    false, # X velocity
+    false, # Y velocity
+    false, # Z velocity
+    true, # Roll angular velocity
+    true, # Pitch angular velocity
+    true, # Yaw angular velocity
+    false, # X acceleration
+    false, # Y acceleration
+    false, # Z acceleration
   ]
+
 imu0_nodelay: false
 imu0_differential: false
 imu0_relative: true
