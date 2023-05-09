@@ -202,10 +202,10 @@ void MarkhorHWInterface::setupCTREDrive()
 
 void MarkhorHWInterface::write()
 {
-  double diff_ang_speed_front_left = (cmd[0] * step_per_turn * track_encoder_reduction_coeff)/(2*M_PI);
-  double diff_ang_speed_front_right = (cmd[1] * step_per_turn * track_encoder_reduction_coeff)/(2*M_PI);
-  double diff_ang_speed_rear_left = (cmd[2] * step_per_turn * track_encoder_reduction_coeff)/(2*M_PI);
-  double diff_ang_speed_rear_right = (cmd[3] * step_per_turn * track_encoder_reduction_coeff)/(2*M_PI);
+  double diff_ang_speed_front_left = (cmd[0] * step_per_turn * track_encoder_reduction_coeff*0.1)/(2*M_PI);
+  double diff_ang_speed_front_right = (cmd[1] * step_per_turn * track_encoder_reduction_coeff*0.1)/(2*M_PI);
+  double diff_ang_speed_rear_left = (cmd[2] * step_per_turn * track_encoder_reduction_coeff*0.1)/(2*M_PI);
+  double diff_ang_speed_rear_right = (cmd[3] * step_per_turn * track_encoder_reduction_coeff*0.1)/(2*M_PI);
                 
   ctre::phoenix::unmanaged::FeedEnable(timeout_ms_);
 
