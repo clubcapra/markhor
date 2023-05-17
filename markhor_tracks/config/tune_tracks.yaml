@@ -1,0 +1,24 @@
+markhor:
+  tracks:
+    # Publish all joint states -----------------------------------
+    joint_state_controller:
+      type: joint_state_controller/JointStateController
+      publish_rate: 50  
+      
+    # Position Controllers ---------------------------------------
+    track_fl_velocity_controller:
+      type: velocity_controllers/JointVelocityController
+      joint: flipper_fl_motor_j
+      pid: {p: 0.0, i: 0.0, d: 0.0}
+    track_fr_velocity_controller:
+      type: velocity_controllers/JointVelocityController
+      joint: flipper_fr_j
+      pid: {p: 0.0, i: 0.0, d: 0.0}
+    track_rl_velocity_controller:
+      type: velocity_controllers/JointVelocityController
+      joint: flipper_rl_motor_j
+      pid: {p: 0.0, i: 0.0, d: 0.0}
+    track_rr_velocity_controller:
+      type: velocity_controllers/JointVelocityController
+      joint: flipper_rr_motor_j
+      pid: {p: 0.0, i: 0.0, d: 0.0}
