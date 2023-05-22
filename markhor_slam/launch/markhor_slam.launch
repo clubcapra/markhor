@@ -67,10 +67,10 @@
         <arg name="depth" value="$(eval camera and not depth_from_lidar)" />
         <arg name="subscribe_rgb" value="$(eval camera)" />
         <arg name="rgbd_sync" value="$(eval camera and not depth_from_lidar)" />
-        <arg name="rgb_topic" value="/zed_node/rgb/image_rect_color" />
-        <arg name="camera_info_topic" value="/zed_node/rgb/camera_info" />
-        <arg name="depth_topic" value="/zed_node/depth/depth_registered" />
-        <arg name="depth_camera_info_topic" default="/zed_node/depth/camera_info" />
+        <arg name="rgb_topic" value="/zed2i/zed_node/rgb/image_rect_color" />
+        <arg name="camera_info_topic" value="/zed2i/zed_node/rgb/camera_info" />
+        <arg name="depth_topic" value="/zed2i/zed_node/depth/depth_registered" />
+        <arg name="depth_camera_info_topic" default="/zed2i/zed_node/depth/camera_info" />
         
         <arg name="approx_rgbd_sync" value="false" />
 
