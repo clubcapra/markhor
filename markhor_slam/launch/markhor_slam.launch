@@ -67,9 +67,11 @@
         <arg name="depth" value="$(eval camera and not depth_from_lidar)" />
         <arg name="subscribe_rgb" value="$(eval camera)" />
         <arg name="rgbd_sync" value="$(eval camera and not depth_from_lidar)" />
-        <arg name="rgb_topic" value="/realsense/color/image_raw" />
-        <arg name="camera_info_topic" value="/realsense/color/camera_info" />
-        <arg name="depth_topic" value="/realsense/depth/image_rect_raw" />
+        <arg name="rgb_topic" value="/zed_node/rgb/image_rect_color" />
+        <arg name="camera_info_topic" value="/zed_node/rgb/camera_info" />
+        <arg name="depth_topic" value="/zed_node/depth/depth_registered" />
+        <arg name="depth_camera_info_topic" default="/zed_node/depth/camera_info" />
+        
         <arg name="approx_rgbd_sync" value="false" />
 
         <!-- If icp_odometry is used -->
