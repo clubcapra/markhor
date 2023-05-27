@@ -4,7 +4,7 @@
 
     <xacro:include filename="$(find zed_wrapper)/urdf/zed_macro.urdf.xacro" />
     <xacro:zed_camera name="zed2" model="zed2" parent="tpv_tilt">
-        <origin xyz="0 0 -0.0125" rpy="0 0 0"/>
+        <origin xyz="0.015 0 -0.0125" rpy="0 0 0"/>
     </xacro:zed_camera>
 
     <xacro:include filename="$(find velodyne_description)/urdf/VLP-16.urdf.xacro" />
@@ -100,7 +100,22 @@
         <origin xyz=".065 0 .045" rpy="0 0 0" />
     </joint>
 
-    <link name="tpv_tilt"/>
+    <link name="tpv_tilt">
+        <visual>
+            <geometry>
+                <mesh filename="package://markhor_description/meshes/tpv_tilt.stl" />
+            </geometry>
+            <origin xyz="0 0 0" rpy="${pi/2} 0 ${pi/2}" />
+            <material name="grey"/>
+        </visual>
+        <collision>
+            <geometry>
+                <mesh filename="package://markhor_description/meshes/tpv_tilt.stl" />
+            </geometry>
+            <origin xyz="0 0 0" rpy="${pi/2} 0 ${pi/2}" />
+        </collision>
+        <xacro:markhor_inertial type="body" />
+    </link>
 
     <joint name="tpv_tilt_j" type="continuous">
         <parent link="tpv_tilt_axis" />
