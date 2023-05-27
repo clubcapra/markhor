@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+
+<root xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xacro="http://www.ros.org/wiki/xacro">
+    <link name="tower_body">
+        <visual>
+            <geometry>
+                <mesh filename="package://markhor_description/meshes/tower.stl" />
+            </geometry>
+            <origin xyz="0 0 0" rpy="${pi/2} 0 ${pi/2}" />
+            <material name="grey"/>
+        </visual>
+        <collision>
+            <geometry>
+                <mesh filename="package://markhor_description/meshes/tower.stl" />
+            </geometry>
+            <origin xyz="0 0 0" rpy="${pi/2} 0 ${pi/2}" />
+        </collision>
+        <xacro:markhor_inertial type="body" />
+    </link>
+
+    <joint name="tower_body_j" type="fixed">
+        <parent link="base_link" />
+        <child link="tower_body" />
+        <origin xyz="-0.314 0 .126" rpy="0 0 0" />
+    </joint>
+
+    <xacro:include filename="$(find velodyne_description)/urdf/VLP-16.urdf.xacro" />
+    <xacro:VLP-16 name="laser" gpu="true" parent="tower_body">
+        <origin xyz="0 0 0.355" rpy="0 0 0" />
+    </xacro:VLP-16>
+
+    <link name="tower_top">
+        <visual>
+            <geometry>
+                <mesh filename="package://markhor_description/meshes/tower_top.stl" />
+            </geometry>
+            <origin xyz="0 0 0" rpy="${pi/2} 0 ${pi/2}" />
+            <material name="grey"/>
+        </visual>
+        <collision>
+            <geometry>
+                <mesh filename="package://markhor_description/meshes/tower_top.stl" />
+            </geometry>
+            <origin xyz="0 0 0" rpy="${pi/2} 0 ${pi/2}" />
+        </collision>
+        <xacro:markhor_inertial type="body" />
+    </link>
+
+    <joint name="tower_top_j" type="fixed">
+        <parent link="tower_body" />
+        <child link="tower_top" />
+        <origin xyz="0 0 .44" rpy="0 0 0" />
+    </joint>
+
+    <link name="tpv_base">
+        <visual>
+            <geometry>
+                <mesh filename="package://markhor_description/meshes/TPV_base.stl" />
+            </geometry>
+            <origin xyz="0 0 0" rpy="${pi/2} 0 ${pi/2}" />
+            <material name="grey"/>
+        </visual>
+        <collision>
+            <geometry>
+                <mesh filename="package://markhor_description/meshes/TPV_base.stl" />
+            </geometry>
+            <origin xyz="0 0 0" rpy="${pi/2} 0 ${pi/2}" />
+        </collision>
+        <xacro:markhor_inertial type="body" />
+    </link>
+
+    <joint name="tpv_base_j" type="continuous">
+        <parent link="tower_top" />
+        <child link="tpv_base" />
+        <axis xyz="0 0 1"/> 
+        <origin xyz="0 0 .01" rpy="0 0 0" />
+    </joint>
+</root>
