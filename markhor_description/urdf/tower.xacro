@@ -1,6 +1,18 @@
 <?xml version="1.0"?>
 
 <root xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <xacro:include filename="$(find zed_wrapper)/urdf/zed_macro.urdf.xacro" />
+    <xacro:zed_camera name="zed2" model="zed2" parent="tpv_tilt">
+        <origin xyz="0 0 -0.0125" rpy="0 0 0"/>
+    </xacro:zed_camera>
+
+    <xacro:include filename="$(find velodyne_description)/urdf/VLP-16.urdf.xacro" />
+    <xacro:VLP-16 name="laser" gpu="true" parent="tower_body">
+        <origin xyz="0 0 0.355" rpy="0 0 0" />
+    </xacro:VLP-16>
+
+
     <link name="tower_body">
         <visual>
             <geometry>
@@ -23,11 +35,6 @@
         <child link="tower_body" />
         <origin xyz="-0.314 0 .126" rpy="0 0 0" />
     </joint>
-
-    <xacro:include filename="$(find velodyne_description)/urdf/VLP-16.urdf.xacro" />
-    <xacro:VLP-16 name="laser" gpu="true" parent="tower_body">
-        <origin xyz="0 0 0.355" rpy="0 0 0" />
-    </xacro:VLP-16>
 
     <link name="tower_top">
         <visual>
@@ -75,4 +82,32 @@
         <axis xyz="0 0 1"/> 
         <origin xyz="0 0 .01" rpy="0 0 0" />
     </joint>
+
+    <transmission name="tpv_base_trans">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="tpv_base_j">
+            <hardwareInterface>PositionJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="tpv_base_motor"/>
+    </transmission>
+
+
+    <link name="tpv_tilt_axis"/>
+
+    <joint name="tpv_tilt_axis_j" type="fixed">
+        <parent link="tpv_base" />
+        <child link="tpv_tilt_axis" />
+        <origin xyz=".065 0 .045" rpy="0 0 0" />
+    </joint>
+
+    <link name="tpv_tilt"/>
+
+    <joint name="tpv_tilt_j" type="continuous">
+        <parent link="tpv_tilt_axis" />
+        <child link="tpv_tilt" />
+        <axis xyz="0 1 0"/> 
+        <origin xyz="0 0 0" rpy="0 0 0" />
+    </joint>
+
+
 </root>
