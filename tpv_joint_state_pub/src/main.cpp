@@ -4,7 +4,7 @@
 #include "math.h"
 
 #define X_REDUCTION 0.25
-#define DEG_TO_RAD 180.0/M_PI
+#define DEG_TO_RAD M_PI/180.0
 
 sensor_msgs::JointState joint_state_msg;
 
@@ -25,7 +25,6 @@ int main(int argc, char **argv)
 
     ros::Publisher state_pub = nh.advertise<sensor_msgs::JointState>("joint_states", 1);
 
-    sensor_msgs::JointState joint_state_msg;
     joint_state_msg.name.push_back("tpv_base_j");
     joint_state_msg.name.push_back("tpv_tilt_j");
     joint_state_msg.position.push_back(0.0); 
