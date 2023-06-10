@@ -6,7 +6,6 @@
     <xacro:VLP-16 name="laser" gpu="true">
         <origin xyz="-0.2875 0 0.45176" rpy="0 0 0" />
     </xacro:VLP-16>
-    
     <xacro:include filename="$(find markhor_description)/urdf/markhor_common.xacro" />
 
     <xacro:arg name="robot_namespace" default="markhor" />

@@ -44,7 +44,7 @@ def handle_start_exploration(req):
     # Send goal to move_base to move back to the return position
     rospy.loginfo("Returning to return position...")
     goal = MoveBaseGoal()
-    goal.target_pose.header.frame_id = 'map' 
+    goal.target_pose.header.frame_id = 'map'
     goal.target_pose.header.stamp = rospy.Time.now()
     goal.target_pose.pose = return_position
     client.send_goal(goal)
