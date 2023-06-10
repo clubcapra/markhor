@@ -35,39 +35,73 @@ There are multiple launch configurations depending on your needs. The intended u
 everything simultaneously for demonstration purposes.  
 
 # markhor gazebo
-To use the gazebo simulation you need to update the gazebo version on your machine to atleast `9.14`.
+To use the gazebo simulation you need to update the gazebo version on your machine to atleast `9.14`, the default version included with melodic should be fine.
 
 ## In the tutorial instead of downloading `gazebo11` download `gazebo9`.
 
 For this you need to follow the `step-by-step` alternative installation method over at : http://gazebosim.org/tutorials?tut=install_ubuntu&cat=install
 
 
-Also make sure you have the dependencies downloaded. You can make sure by using the command : `rosdep install --from-paths src --ignore-src -r -y `
+## Dependencies installation
+### Rosdep managed dependencies
+Some of the dependencies require manual installation, first, install the automatic dependencies using rosdep (running from the workspace root): 
+`rosdep install --from-paths src --ignore-src -r -y `
+### Gazebo_ros_tracked_vehicle_interface
+
+To allow the tracks to be controlled with ros, you will need to build the gazebo_ros_tracked_vehicle_interface plugin, it can be found here : 
+https://github.com/lprobsth/gazebo_ros_tracked_vehicle_interface
+
+Clone it in your catkin workspace src folder, then you will need to update the gazebo sources following those steps: 
+
+Add the package list:
+```bash
+sudo sh -c 'echo "deb http://packages.osrfoundation.org/gazebo/ubuntu-stable `lsb_release -cs` main" > /etc/apt/sources.list.d/gazebo-stable.list'
+```
+
+Add the lists key:
+```bash
+wget https://packages.osrfoundation.org/gazebo.key -O - | sudo apt-key add -
+```
+
+Rebuild the local index:
+```bash
+sudo apt-get update
+```
+
+Upgrade packages - gazebo9 should be included:
+```bash
+sudo apt-get upgrade
+```
+
+**MAKE SURE YOU DELETE YOUR DEVEL AND BUILD FOLDERS AFTER INSTALLING THE LIBS**
+Then use catkin make and make sure there are no errors.
+### OPTIONAL : AWS Small house world
+
+If you want to use the small house world, you need to clone it in your catkin workspace and do a catkin make.
+
+https://github.com/aws-robotics/aws-robomaker-small-house-world
+
+### Vmware 3d acceleration
+If using vmware, gazebo won't launch when using 3d acceleration, 3d acceleration is required to get a decent framerate in gazebo to fix it, run the folowing command in the linux VM
+```bash
+echo "export SVGA_VGPU10=0" >> ~/.profile
+```
 
 
 # Running the simulation
-The simulation suffers from a missing implementation of the link between the ros_control and the SimpleTrackVehiculePlugin. Although it is fit to simulate and control the robot with the arrow keys it is not possible to control it through ROS.
 
-This necessitates a workaround when testing the robot with the UI or with a joystick. We repurpose the wheel from the Clearpath Husky robot in the simulation.
-
-**Note**: Make sure you have the repository built & sourced.
-
-## Running the simulation with Markhor with husky wheels (joystick/keyboard with ROS)
-### Start the simulation with husky wheels
-`roslaunch markhor_gazebo test_world_husky.launch`
-
-### Start sending cmd_vel command through a joystick 
-`roslaunch markhor_bringup teleop.launch`
-
-### Start sending cmd_vel command through the keyboard 
-`rosrun teleop_twist_keyboard teleop_twist_keyboard.py cmd_vel:=/markhor/diff_drive_controller/cmd_vel`
-
-## Running the simulation with Markhor with tracks (keyboard without ROS)
 ### Start the simulation with tracks
 `roslaunch markhor_gazebo test_world.launch`
 
-### How to move the robot
-To move the robot, first select Markhor inside the simulation by clicking on it and use your arrow keys to control it.
+
+**Note**: Make sure you have the repository built & sourced.
+
+## Running the simulation with Markhor
+### Start sending cmd_vel command through a joystick 
+`roslaunch markhor_bringup teleop_twist_joy.launch`
+
+### Start sending cmd_vel command through the keyboard 
+`rosrun teleop_twist_keyboard teleop_twist_keyboard.py cmd_vel:=/markhor/diff_drive_controller/cmd_vel`
 
 ## Controlling the flippers axe through ROS
 When running the simulation with the tracks you can control the flippers axe with this command:

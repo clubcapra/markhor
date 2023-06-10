@@ -22,11 +22,11 @@
     </node>
 
     <!-- Load controller config -->
-    <rosparam command="load" file="$(find markhor_control)/config/tracks.yaml" />
+    <rosparam command="load" file="$(find markhor_tracks)/config/tune_tracks.yaml" />
 
     <!-- load the controllers -->
-    <node name="controller_spawner" pkg="controller_manager" type="spawner" output="screen" ns="$(arg robot_namespace)$(arg system_namespace)" args="diff_drive_controller
-                                                                                                                                                     joint_state_controller" />
-
+    <node name="controller_spawner" pkg="controller_manager" type="spawner" output="screen" ns="$(arg robot_namespace)$(arg system_namespace)" args="   track_fl_velocity_controller
+                                                                                                                                                        joint_state_controller" />
     <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" ns="$(arg robot_namespace)$(arg system_namespace)"/>
+    
 </launch>
