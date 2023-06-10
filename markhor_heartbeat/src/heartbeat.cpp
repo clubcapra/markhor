@@ -74,6 +74,7 @@ int main(int argc, char* argv[])
 
   // Subscribe to heartbeat topic to receive heartbeats from web ui.
   ros::Subscriber heartbeat_subscriber = nh.subscribe("/heartbeat", 5, heartbeat);
+  ros::ServiceServer toggle_autonomy_mode = nh.advertiseService("/heartbeat/toggle_autonomy_mode", toggleAutonomyMode);
 
   // Create timer to verify that we received a heartbeat.
   ros::Timer timer1 = nh.createTimer(ros::Duration(heartbeat_interval / 1000), boost::bind(check_heartbeat, _1, nh));
