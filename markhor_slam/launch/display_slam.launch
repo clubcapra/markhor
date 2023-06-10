@@ -1,5 +1,0 @@
-<?xml version="1.0"?>
-<launch>
-   <node pkg="rviz" type="rviz" name="rviz" args="-d $(find markhor_slam)/rviz_cfg/mapping.rviz" />
-
-</launch>

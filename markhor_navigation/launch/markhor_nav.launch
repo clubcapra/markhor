@@ -33,6 +33,11 @@
       ns="global_costmap" />
     <param name="global_costmap/width" value="100.0" />
     <param name="global_costmap/height" value="100.0" />
+
   </node>
+
+  <!-- Start markhor exploration service -->
+  <node pkg="markhor_navigation" type="explore_and_return.py" name="explore_and_return"
+    output="screen" />
 
 </launch>

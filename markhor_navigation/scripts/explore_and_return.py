@@ -10,7 +10,12 @@ from markhor_navigation.srv import StartExploration, StartExplorationResponse
 from geometry_msgs.msg import Pose
 
 
+"""
+Service server that starts the explore_lite node and returns the robot to its original position after a specified amount of time.
+The original position is the position of the robot when the service is called.
+"""
 def handle_start_exploration(req):
+    # Get the timeout from the request
     timeout = req.timeout
 
     # Get the current position to use as the return position
@@ -37,12 +42,11 @@ def handle_start_exploration(req):
     explore_process.terminate()
 
     # Send goal to move_base to move back to the return position
+    rospy.loginfo("Returning to return position...")
     goal = MoveBaseGoal()
-    goal.target_pose.header.frame_id = 'map'  # assuming you're using map frame
+    goal.target_pose.header.frame_id = 'map' 
     goal.target_pose.header.stamp = rospy.Time.now()
     goal.target_pose.pose = return_position
-
-    rospy.loginfo("Returning to return position...")
     client.send_goal(goal)
 
     # Wait for the action to complete
