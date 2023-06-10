@@ -22,7 +22,7 @@
     </node>
 
     <arg name="rtabmapviz" default="true" />
-    <arg name="camera" default="true" />
+    <arg name="camera" default="false" />
     <arg name="lidar3d" default="true" />
     <arg name="lidar3d_ray_tracing" default="true" />
     <arg name="slam2d" default="true" />

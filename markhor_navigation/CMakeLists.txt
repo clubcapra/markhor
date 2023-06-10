@@ -11,7 +11,7 @@ find_package(catkin REQUIRED COMPONENTS
 
 add_service_files(
   FILES
-  SetReturnPosition.srv
+  StartExploration.srv
 )
 
 generate_messages(
