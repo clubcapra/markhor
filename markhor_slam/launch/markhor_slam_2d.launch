@@ -25,7 +25,6 @@
         </node>
     </group>
 
-    
     <arg name="lidar_args"
         default="
       --Reg/Strategy 1 

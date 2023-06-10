@@ -54,7 +54,8 @@ def handle_start_exploration(req):
 
     return StartExplorationResponse(True, "Exploration started and return position set successfully")
 
-if  __name__ == '__main__':
+
+if __name__ == '__main__':
     try:
         # Initialize the ros node
         rospy.init_node('explore_and_return', anonymous=True)
