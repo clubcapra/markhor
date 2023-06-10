@@ -13,5 +13,7 @@
   <buildtool_depend>vectornav</buildtool_depend>
   <buildtool_depend>move_base</buildtool_depend>
   <buildtool_depend>robot_localization</buildtool_depend>
+  <build_depend>message_generation</build_depend>
+  <exec_depend>message_runtime</exec_depend>
   <export></export>
 </package>

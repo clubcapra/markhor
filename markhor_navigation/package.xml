@@ -16,6 +16,10 @@
   <exec_depend>navfn</exec_depend>
   <exec_depend>base_local_planner</exec_depend>
   <exec_depend>dwa_local_planner</exec_depend>
+  <build_depend>actionlib</build_depend>
+  <build_depend>actionlib_msgs</build_depend>
+  <exec_depend>actionlib</exec_depend>
+  <exec_depend>actionlib_msgs</exec_depend>
 
   <export>
 
