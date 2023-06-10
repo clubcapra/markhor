@@ -21,7 +21,7 @@
         <param name="use_inf" value="false" />
     </node>
 
-    <arg name="rtabmapviz" default="true" />
+    <arg name="rtabmapviz" default="false" />
     <arg name="camera" default="false" />
     <arg name="lidar3d" default="true" />
     <arg name="lidar3d_ray_tracing" default="true" />
