@@ -6,6 +6,16 @@ import time
 from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
 import actionlib
 from nav_msgs.msg import Odometry
+from markhor_navigation.srv import SetReturnPosition, SetReturnPositionResponse
+from geometry_msgs.msg import Pose
+
+# Global variable to store the return position
+return_position = None
+
+def handle_set_return_position(req):
+    global return_position
+    return_position = req.return_position
+    return SetReturnPositionResponse(True, "Return position set successfully")
 
 def explore_and_return():
     # Initialize the ros node
@@ -32,13 +42,17 @@ def explore_and_return():
     rospy.loginfo("Stopping exploration...")
     explore_process.terminate()
 
-    # Send goal to move_base to move back to initial position
+    # If no return position was set, use the initial position
+    if return_position is None:
+        return_position = initial_pose
+
+    # Send goal to move_base to move back to the initial position
     goal = MoveBaseGoal()
     goal.target_pose.header.frame_id = 'map'  # assuming you're using map frame
     goal.target_pose.header.stamp = rospy.Time.now()
-    goal.target_pose.pose = initial_pose
+    goal.target_pose.pose = return_position
 
-    rospy.loginfo("Returning to initial position...")
+    rospy.loginfo("Returning to return position...")
     client.send_goal(goal)
 
     # Wait for the action to complete
@@ -46,6 +60,9 @@ def explore_and_return():
 
 if __name__ == '__main__':
     try:
+        # Start the service server
+        rospy.Service('set_return_position', SetReturnPosition, handle_set_return_position)
+
         explore_and_return()
     except rospy.ROSInterruptException:
         pass

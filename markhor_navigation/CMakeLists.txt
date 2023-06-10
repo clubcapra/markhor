@@ -9,9 +9,9 @@ find_package(catkin REQUIRED COMPONENTS
   message_generation
 )
 
-add_action_files(
-  DIRECTORY action
-  FILES SetReturnPosition.srv
+add_service_files(
+  FILES
+  SetReturnPosition.srv
 )
 
 generate_messages(
