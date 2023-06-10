@@ -6,11 +6,9 @@
     <arg name="z" default="0.2" />
     <arg name="yaw" default="0.0" />
 
-    <param name="robot_description"
-        command="xacro '$(find markhor_description)/urdf/markhor.urdf.xacro'" />
+    <param name="robot_description" command="xacro '$(find markhor_description)/urdf/markhor.urdf.xacro'" />
 
-    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"
-        respawn="false" output="screen" />
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="false" output="screen"/>
 
 
     <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch" />
@@ -21,8 +19,7 @@
     <include file="$(find markhor_control)/launch/control_flippers.launch" />
 
     <!-- Spawn robot in gazebo -->
-    <node name="spawn_markhor_model" pkg="gazebo_ros" type="spawn_model"
-        args="
+    <node name="spawn_markhor_model" pkg="gazebo_ros" type="spawn_model" args="
                 -x $(arg x)
                 -y $(arg y)
                 -z $(arg z)

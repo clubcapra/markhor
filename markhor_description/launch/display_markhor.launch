@@ -1,6 +1,5 @@
 <launch>
     <arg name="gui" default="true" />
     <!-- load the urdf -->
-    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find markhor_description)/rviz/config.rviz" />
-
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find markhor_description)/rviz/config.rviz"/>
 </launch>

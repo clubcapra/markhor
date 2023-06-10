@@ -5,7 +5,7 @@
     <!-- <include file="$(find markhor_description)/launch/markhor_ovis.launch" /> -->
 
     <!-- Load robot model-->
-    <param name="robot_description" command="$(find xacro)/xacro '$(find markhor_description)/urdf/markhor.urdf.xacro'" />
+    <param name="robot_description" command="xacro '$(find markhor_description)/urdf/markhor.urdf.xacro'" />
 
     <!-- Load joint controller configurations from YAML file to parameter server -->
     <rosparam file="$(find markhor_control)/config/simulation_flippers.yaml" command="load" />
