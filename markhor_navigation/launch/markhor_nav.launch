@@ -36,8 +36,12 @@
 
   </node>
 
+  <!-- Start markhor boundary exploration server -->
+  <include file="$(find exploration_server)/launch/exploration.launch" /> 
+
+
   <!-- Start markhor exploration service -->
   <node pkg="markhor_navigation" type="explore_and_return.py" name="explore_and_return"
-    output="screen" />
+    output="screen" /> 
 
 </launch>
