@@ -9,12 +9,19 @@ on:
 jobs:
   build_base:
     runs-on: ubuntu-latest
-    if: contains(github.event.head_commit.message, 'Dockerfile.base')
     
     steps:
     - uses: actions/checkout@v3
 
+    - name: Check if Dockerfile.base has changed
+      id: check_files
+      uses: tj-actions/changed-files@v11.7
+      with:
+        files: |
+          Dockerfile.base
+
     - name: Log in to GitHub Container Registry
+      if: steps.check_files.outputs.any_changed == 'true'
       uses: docker/login-action@v1
       with:
         registry: ghcr.io
@@ -22,6 +29,7 @@ jobs:
         password: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Build and push Docker image
+      if: steps.check_files.outputs.any_changed == 'true'
       uses: docker/build-push-action@v2
       with:
         context: .
