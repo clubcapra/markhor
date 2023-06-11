@@ -3,8 +3,8 @@ name: Docker Image CI
 on:
   push:
     paths:
-      - '/Dockerfile.base'
-      - '/Dockerfile.markhor'
+      - 'Dockerfile.base'
+      - 'Dockerfile.markhor'
 
 jobs:
   build_base:
