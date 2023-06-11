@@ -60,4 +60,4 @@ jobs:
         context: .
         file: ./Dockerfile.markhor
         push: true
-        tags: ghcr.io/${{ github.repository }}/markhor:${{ github.sha }}
+        tags: ghcr.io/${{ github.repository }}/markhor:latest
