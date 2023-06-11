@@ -5,6 +5,8 @@ FROM ghcr.io/clubcapra/markhor/base:latest
 # Install dependencies
 #RUN rosdep install --from-paths src --ignore-src -r -y
 
+RUN apt-get -y install rviz
+
 COPY scripts/ros_entrypoint.sh /ros_entrypoint.sh
 
 
