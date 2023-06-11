@@ -6,4 +6,5 @@
     <include file="$(find markhor_bringup)/launch/markhor_web_ui.launch" />
     <node name="tf2_web_republisher" pkg="tf2_web_republisher" type="tf2_web_republisher" respawn="false"/>
     <include file="$(find markhor_bringup)/launch/cameras/markhor_all_cameras.launch" />
+    <include file="$(find zed_ros_wrapper)/launch/zed_2i.launch" />
 </launch>
