@@ -2,10 +2,10 @@ FROM ghcr.io/clubcapra/markhor/base:latest
 # Copy the repository into the container (this is done in the base image, but we need to do it again to check for changes)
 #COPY . ./src
 
+ENV simulation=true
+
 # Install dependencies
 #RUN rosdep install --from-paths src --ignore-src -r -y
-
-RUN apt-get -y install rviz
 
 COPY scripts/ros_entrypoint.sh /ros_entrypoint.sh
 
@@ -14,7 +14,6 @@ RUN chmod +777 /ros_entrypoint.sh
 
 # Build the workspace
 RUN /bin/bash -c '. /opt/ros/melodic/setup.bash; cd  /root/markhor_ws; catkin_make'
-
 
 # Source the setup file (this is done in the entrypoint script)
 RUN sed -i \
