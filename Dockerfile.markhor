@@ -1,5 +1,4 @@
-FROM capraets/markhor-base-ros1
-
+FROM ghcr.io/clubcapra/markhor/base:latest
 # Copy the repository into the container (this is done in the base image, but we need to do it again to check for changes)
 #COPY . ./src
 
