@@ -59,11 +59,13 @@ if __name__ == '__main__':
     try:
         # Initialize the ros node
         rospy.init_node('explore_and_return', anonymous=True)
+        rate = rospy.Rate(5)
 
         # Start the service server
         rospy.Service('start_exploration', StartExploration, handle_start_exploration)
 
-        # Keep the node running until it's shut down
-        rospy.spin()
+        # Keep the node running at 5 Hz
+        rate.sleep()
+
     except rospy.ROSInterruptException:
         pass
