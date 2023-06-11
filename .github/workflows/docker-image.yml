@@ -40,6 +40,7 @@ jobs:
         tags: ghcr.io/${{ github.repository }}/base:latest
 
   build_markhor:
+    needs: build_base
     runs-on: ubuntu-latest
 
     steps:
