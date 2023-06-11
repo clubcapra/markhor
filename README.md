@@ -10,6 +10,7 @@ If the module is not there, markhor will not launch and you will see the followi
 ### Package dependencies
 - [usb_cam]
 - [capra_estop](https://github.com/clubcapra/capra_estop)
+- [vectornav](https://github.com/dawonn/vectornav)
 
 ### Other intented use packages
 Altough not required, these packages are also expected to be installed alongside markhor. If not present, error messages will appear when launching the robot.
@@ -87,12 +88,10 @@ If using vmware, gazebo won't launch when using 3d acceleration, 3d acceleration
 echo "export SVGA_VGPU10=0" >> ~/.profile
 ```
 
-
 # Running the simulation
 
 ### Start the simulation with tracks
 `roslaunch markhor_gazebo test_world.launch`
-
 
 **Note**: Make sure you have the repository built & sourced.
 
