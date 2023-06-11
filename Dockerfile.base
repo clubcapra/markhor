@@ -36,7 +36,6 @@ RUN cd ./src && git clone https://github.com/lprobsth/gazebo_ros_tracked_vehicle
 # Add traks support in gazebo
 RUN git clone https://github.com/lprobsth/gazebo_ros_tracked_vehicle_interface.git
 
-
 # Add Amazon small house
 RUN git clone https://github.com/aws-robotics/aws-robomaker-small-house-world.git
 
