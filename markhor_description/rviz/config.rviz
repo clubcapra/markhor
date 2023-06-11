@@ -6,6 +6,8 @@ Panels:
       Expanded:
         - /Global Options1
         - /Status1
+        - /TF1
+        - /TF1/Frames1
       Splitter Ratio: 0.5
     Tree Height: 306
   - Class: rviz/Selection
@@ -26,7 +28,7 @@ Panels:
     Experimental: false
     Name: Time
     SyncMode: 0
-    SyncSource: Front Cam
+    SyncSource: ""
   - Class: rviz/Views
     Expanded:
       - /Current View1
@@ -102,7 +104,7 @@ Visualization Manager:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-        flipper_rl:
+        flipper_rl:s
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -134,11 +136,72 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
-        markhor_link_base:
+        rear_cam:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-        rear_cam:
+        tower_body:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        tower_top:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        tpv_base:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        tpv_tilt:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        tpv_tilt_axis:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        zed2_baro_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        zed2_base_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        zed2_camera_center:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        zed2_left_camera_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        zed2_left_camera_optical_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        zed2_mag_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        zed2_right_camera_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        zed2_right_camera_optical_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        zed2_temp_left_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        zed2_temp_right_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
