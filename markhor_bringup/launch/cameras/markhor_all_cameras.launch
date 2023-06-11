@@ -1,5 +1,5 @@
 <launch>
-     <include file="$(find markhor_bringup)/launch/cameras/markhor_camera00_cam.launch" />
      <include file="$(find markhor_bringup)/launch/cameras/markhor_camera01_cam.launch" />
+     <include file="$(find markhor_bringup)/launch/cameras/markhor_camera02_cam.launch" />
      <include file="$(find markhor_bringup)/launch/cameras/markhor_camera03_cam.launch" />
 </launch>
