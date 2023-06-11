@@ -33,6 +33,8 @@ COPY . ./src
 RUN cd ./src && git clone https://github.com/clubcapra/capra_estop.git
 RUN cd ./src && git clone https://github.com/lprobsth/gazebo_ros_tracked_vehicle_interface.git
 
+# TODO : Add traks support
+
 # Install dependencies
 RUN rosdep install --from-paths src --ignore-src -r -y
 
