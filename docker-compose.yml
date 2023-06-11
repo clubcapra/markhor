@@ -1,14 +1,32 @@
 version: '3.9'
 
 services:
-  ros:
+  markhor_gazebo:
     stdin_open: true # docker run -i
     tty: true        # docker run -t
     command: roslaunch markhor_gazebo test_world.launch
-    build : .
+    image : ghcr.io/clubcapra/markhor/markhor:latest
     network_mode: host
     environment:
       - DISPLAY=host.docker.internal:0.0
     volumes:
       - /tmp/.X11-unix:/tmp/.X11-unix  
   
+  ros_slam:
+    command: roslaunch markhor_slam markhor_slam.launch
+    image : ghcr.io/clubcapra/markhor/markhor:latest
+    network_mode: host
+  
+  ros_navigation:
+    command: roslaunch markhor_navigation markhor_nav.launch
+    image : ghcr.io/clubcapra/markhor/markhor:latest
+    network_mode: host
+  
+  rviz :
+    command : roslaunch markhor_description display_markhor.launch
+    image : ghcr.io/clubcapra/markhor/markhor:latest
+    network_mode: host
+    environment:
+      - DISPLAY=host.docker.internal:0.0
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix  
