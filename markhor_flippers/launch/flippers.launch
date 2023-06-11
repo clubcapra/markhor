@@ -2,7 +2,7 @@
     <arg name="robot_namespace" default="/markhor" />
     <arg name="system_namespace" default="/flippers" />
 
-    <param name="robot_description" command="xacro '$(find markhor_description)/urdf/markhor.urdf.xacro'" />
+    <param name="robot_description" command="xacro '$(find markhor_description)/urdf/markhor_w_attachments.xacro'" />
 
     <!-- Load hardware interface-->
     <node name="markhor_flippers_node" pkg="markhor_flippers" type="markhor_flippers_node" ns="$(arg robot_namespace)$(arg system_namespace)" output="screen">
