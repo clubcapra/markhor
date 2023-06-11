@@ -1,4 +1,4 @@
-FROM ghcr.io/clubcapra/markhor/base:latest
+FROM ghcr.io/clubcapra/markhor/base:4e4dcd3dad627725e3208ca9ef1cb4f8596bb003
 # Copy the repository into the container (this is done in the base image, but we need to do it again to check for changes)
 #COPY . ./src
 
