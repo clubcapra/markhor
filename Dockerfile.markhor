@@ -1,9 +1,10 @@
 FROM ghcr.io/clubcapra/markhor/base:latest
 # Copy the repository into the container (this is done in the base image, but we need to do it again to check for changes)
-#COPY . ./src
+# TODO : Change this for volume
+COPY . ./src
 
-ENV simulation=true
-
+ENV MARKHOR_SIMULATION=true
+ENV GAZEBO_GUI=false
 # Install dependencies
 #RUN rosdep install --from-paths src --ignore-src -r -y
 

@@ -3,7 +3,7 @@
 <root xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
     <!-- Get the ENV simulation variable (default to false) -->
-    <xacro:property name="simulation" value="$(optenv simulation false)"/>
+    <xacro:property name="simulation" value="$(optenv MARKHOR_SIMULATION false)"/>
 
     <xacro:if value="${not simulation}">
         <xacro:include filename="$(find zed_wrapper)/urdf/zed_macro.urdf.xacro" />
