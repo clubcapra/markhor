@@ -79,7 +79,7 @@
     <joint name="tpv_base_j" type="continuous">
         <parent link="tower_top" />
         <child link="tpv_base" />
-        <axis xyz="0 0 1"/> 
+        <axis xyz="0 0 1"/>
         <origin xyz="0 0 .01" rpy="0 0 0" />
     </joint>
 
