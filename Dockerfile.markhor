@@ -5,8 +5,13 @@ COPY . ./src
 
 ENV MARKHOR_SIMULATION=true
 ENV GAZEBO_GUI=false
+
 # Install dependencies
-#RUN rosdep install --from-paths src --ignore-src -r -y
+RUN rosdep install --from-paths src --ignore-src -r -y
+
+
+RUN apt-get install -y xvfb
+
 
 COPY scripts/ros_entrypoint.sh /ros_entrypoint.sh
 
