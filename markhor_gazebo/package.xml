@@ -12,7 +12,6 @@
     <depend>gazebo_plugins</depend>
     <depend>gazebo_ros_control</depend>
     <depend>pointcloud_to_laserscan</depend>
-    <depend>hector_slam</depend>
     <depend>velodyne_simulator</depend>
 
     <!-- The export tag contains other, unspecified, tags -->
