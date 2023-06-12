@@ -2,9 +2,9 @@ name: Docker Image CI
 
 on:
   push:
-    branches: [ "master", "enrich", "ftr/docker" ]
+    branches: [ "*" ]
   pull_request:
-    branches: [ "master", "enrich", "ftr/docker" ]
+    branches: [ "*" ]
 
 jobs:
   build_base:
