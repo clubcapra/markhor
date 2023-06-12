@@ -123,9 +123,9 @@ In the future this control will be done with a hardware interface.
 
 ## Overview
 
-Docker has been tested on Linux only. All the code has been installed in a docker in a two step process. There is "base" which contains all the dependencies and files that doesn't change often. Then there is "marhor" which contains the code of the robot. This way, the building time of "markhor" is shorter.
+Docker has been tested on Linux only. All the code has been installed in a docker in a two step process. There is "base" package which contains all the dependencies and files that doesn't change often. Then there is "marhor" package which contains the code of the robot. This way, the building time of "markhor" is shorter.
 
-In github, the "base" is only updated if the file "Dockerfile. base" has been changed. The "markhor" is updated at each commit/push.
+In github, the "base" package (container) is only updated if the file [Dockerfile.base](/Dockerfile.base) has been changed. The "markhor" package (container) is updated at each commit/push.
 
 ## Usage
 
