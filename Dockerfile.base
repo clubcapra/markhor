@@ -1,44 +1,31 @@
+# Use ROS Melodic as base image
 FROM ros:melodic
 
-ENV ROS_ROOT /root/markhor_ws
+# Set the working directory in the container
+WORKDIR /root/markhor_ws
 
 # Create a catkin workspace
 RUN mkdir -p /root/markhor_ws/src
-WORKDIR /root/markhor_ws/
 
-# Update the package list
-RUN apt-get update
+# Update the package list and install necessary packages
+RUN apt-get update && \
+    apt-get install -y \
+    wget \
+    ros-melodic-rqt \
+    ros-melodic-rosbridge-server
 
 # Install Gazebo
-RUN sh -c 'echo "deb http://packages.osrfoundation.org/gazebo/ubuntu-stable `lsb_release -cs` main" > /etc/apt/sources.list.d/gazebo-stable.list'
-RUN apt install wget -y
-RUN wget https://packages.osrfoundation.org/gazebo.key -O - | sudo apt-key add -
-RUN apt-get update
-RUN apt-get install gazebo9 -y
-RUN apt install libgazebo9-dev -y
+RUN sh -c 'echo "deb http://packages.osrfoundation.org/gazebo/ubuntu-stable `lsb_release -cs` main" > /etc/apt/sources.list.d/gazebo-stable.list' && \
+    wget https://packages.osrfoundation.org/gazebo.key -O - | apt-key add - && \
+    apt-get update && \
+    apt-get install -y \
+    gazebo9 \
+    libgazebo9-dev
 
-# Install RQT
-RUN apt-get install ros-melodic-rqt -y
-
-# Install Gazebo ROS packages
-RUN sh -c 'echo "deb http://packages.osrfoundation.org/gazebo/ubuntu-stable `lsb_release -cs` main" > /etc/apt/sources.list.d/gazebo-stable.list'
-RUN wget https://packages.osrfoundation.org/gazebo.key -O - | apt-key add -
-RUN apt-get update
-RUN apt upgrade -y
-
-# Copy the repository into the container
-COPY . ./src
-
-# Clone capra_estop (emergency stop) and gazebo_ros_tracked_vehicle_interface (gazebo plugin for the tracked vehicle)
-RUN cd ./src && git clone https://github.com/clubcapra/capra_estop.git
-RUN cd ./src && git clone https://github.com/lprobsth/gazebo_ros_tracked_vehicle_interface.git
-
-# Add traks support in gazebo
-RUN git clone https://github.com/lprobsth/gazebo_ros_tracked_vehicle_interface.git
+# Clone necessary repositories
+RUN cd ./src && \
+    git clone https://github.com/clubcapra/capra_estop.git && \
+    git clone https://github.com/lprobsth/gazebo_ros_tracked_vehicle_interface.git
 
 # Install dependencies
 RUN rosdep install --from-paths src --ignore-src -r -y
-
-# Install the ROS bridge (for web control)
-RUN apt install -y ros-melodic-rosbridge-server
-RUN apt-get -y install rviz
