@@ -37,14 +37,14 @@ everything simultaneously for demonstration purposes.
 
 ## Environnment variable
 
-You can add two environnments variables in your bashrc.
+You can add two environment variables in your bashrc.
 
-GAZEBO_GUI : Enable/disable the GUI version of gazebo. If you don't want the gazebo ui, you can set it the false. The default value is true
+GAZEBO_GUI : Enable/disable the GUI version of gazebo. If you don't want the gazebo gui, you can set it the false. The default value is true.
 
-MARKHOR_SIMULATION : If set to true, it disable the use of the ZED ros wrapper. This way, you don't need to clone/install the ros wrapper/sdk. The default value is false.
+MARKHOR_SIMULATION : If set to true, it disables the use of the ZED ros wrapper. This way, you don't need to clone/install the ros wrapper/SDK. The default value is false.
 
 # markhor gazebo
-To use the gazebo simulation you need to update the gazebo version on your machine to atleast `9.14`, the default version included with melodic should be fine.
+To use the gazebo simulation you need to update the gazebo version on your machine to at least `9.14`, the default version included with melodic should be fine.
 
 ## In the tutorial instead of downloading `gazebo11` download `gazebo9`.
 
@@ -123,9 +123,9 @@ In the future this control will be done with a hardware interface.
 
 ## Overview
 
-Docker have been tested on linux only. All the code have been installed in a docker in a two step process. There is "base" which contains all the dependecies and files that doesn't change often. Then there is "marhor" which contains the code of the robot. This way, the building time of markhor is shorter.
+Docker has been tested on Linux only. All the code has been installed in a docker in a two step process. There is "base" which contains all the dependencies and files that doesn't change often. Then there is "marhor" which contains the code of the robot. This way, the building time of "markhor" is shorter.
 
-In github, the "base" is only updated if the file "Dockerfile.base" have been changed. The "markhor" is updated at each commit/push.
+In github, the "base" is only updated if the file "Dockerfile. base" has been changed. The "markhor" is updated at each commit/push.
 
 ## Usage
 
@@ -142,7 +142,7 @@ docker-compose up
 ```
 
 
-This will take the online packages and start the system. If ever you want to build the images, you can use the following command:
+This will take the online packages and start the system. If ever you want to build the images, you can use the following commands:
 
 
 ```bash
@@ -150,4 +150,4 @@ This will take the online packages and start the system. If ever you want to bui
 ./scripts/build_markhor.sh
 ```
 
-The first script will build the base image. The second one will build the markhor image. If you only did change to the code, you can only build the markhor image. If you did change to the dependecies, you need to build the base image.
+The first script will build the base image. The second one will build the Markhor image. If you only did change to the code, you can only build the Markhor image. If you did change to the dependencies, you need to build the base image.
