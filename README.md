@@ -35,6 +35,14 @@ There are multiple launch configurations depending on your needs. The intended u
 - `markhor_base.launch` : While the two other files are made to be an optimised for competition setup, the `base` version launches
 everything simultaneously for demonstration purposes.  
 
+## Environnment variable
+
+You can add two environnments variables in your bashrc.
+
+GAZEBO_GUI : Enable/disable the GUI version of gazebo. If you don't want the gazebo ui, you can set it the false. The default value is true
+
+MARKHOR_SIMULATION : If set to true, it disable the use of the ZED ros wrapper. This way, you don't need to clone/install the ros wrapper/sdk. The default value is false.
+
 # markhor gazebo
 To use the gazebo simulation you need to update the gazebo version on your machine to atleast `9.14`, the default version included with melodic should be fine.
 
@@ -108,3 +116,38 @@ When running the simulation with the tracks you can control the flippers axe wit
 `rostopic pub -1 /markhor/flipper_<fl|fr|rl|rr>_position_controller/command std_msgs/Float64 "data: <0 = 180deg -3 = -180deg>"`
 
 In the future this control will be done with a hardware interface.
+
+
+
+# Running using Docker
+
+## Overview
+
+Docker have been tested on linux only. All the code have been installed in a docker in a two step process. There is "base" which contains all the dependecies and files that doesn't change often. Then there is "marhor" which contains the code of the robot. This way, the building time of markhor is shorter.
+
+In github, the "base" is only updated if the file "Dockerfile.base" have been changed. The "markhor" is updated at each commit/push.
+
+## Usage
+
+If you are running in simulation, you can start gazebo in docker using the following command:
+
+```bash
+./scripts/start_gazebo.sh
+```
+
+Once you have Gazebo or the real robot running, you can start the slam and navigation stack with the following command:
+
+```bash
+docker-compose up
+```
+
+
+This will take the online packages and start the system. If ever you want to build the images, you can use the following command:
+
+
+```bash
+./scripts/build_markhor_base.sh
+./scripts/build_markhor.sh
+```
+
+The first script will build the base image. The second one will build the markhor image. If you only did change to the code, you can only build the markhor image. If you did change to the dependecies, you need to build the base image.
