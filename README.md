@@ -39,7 +39,7 @@ everything simultaneously for demonstration purposes.
 
 You can add two environment variables in your bashrc.
 
-GAZEBO_GUI : Enable/disable the GUI version of gazebo. If you don't want the gazebo gui, you can set it the false. The default value is true. This feature is mainly used for the docker version since docker doesn't have a gui by default.
+GAZEBO_GUI : Enable/disable the GUI version of gazebo. If you don't want the gazebo gui, you can set it to false. The default value is true. This feature is mainly used for the docker version since docker doesn't have a gui by default.
 
 MARKHOR_SIMULATION : If set to true, it disables the use of the ZED ros wrapper. This way, you don't need to clone/install the ros wrapper/SDK. The default value is false. If you clone the repo and you don't have the SDK, you won't be able to build without the variable set to false.
 
