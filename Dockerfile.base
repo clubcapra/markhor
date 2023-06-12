@@ -42,6 +42,3 @@ RUN rosdep install --from-paths src --ignore-src -r -y
 # Install the ROS bridge (for web control)
 RUN apt install -y ros-melodic-rosbridge-server
 RUN apt-get -y install rviz
-
-# Install the Velodyne simulator
-RUN apt install -y ros-melodic-velodyne-simulator
