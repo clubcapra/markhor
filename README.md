@@ -37,11 +37,9 @@ everything simultaneously for demonstration purposes.
 
 ## Environnment variable
 
-You can add two environnments variables in your bashrc.
+You can add an environnement variable to disable the zed camera SDK.
 
-GAZEBO_GUI : Enable/disable the GUI version of gazebo. If you don't want the gazebo ui, you can set it the false. The default value is true
-
-MARKHOR_SIMULATION : If set to true, it disable the use of the ZED ros wrapper. This way, you don't need to clone/install the ros wrapper/sdk. The default value is false.
+MARKHOR_SIMULATION : If set to true, it disables the use of the ZED ros wrapper. This way, you don't need to clone/install the ros wrapper/SDK. The default value is false. If you clone the repo and you don't have the SDK, you won't be able to build without the variable set to false.
 
 # markhor gazebo
 To use the gazebo simulation you need to update the gazebo version on your machine to atleast `9.14`, the default version included with melodic should be fine.

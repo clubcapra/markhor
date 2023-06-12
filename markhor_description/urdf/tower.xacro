@@ -12,7 +12,6 @@
         </xacro:zed_camera>
     </xacro:if>
 
-
     <xacro:include filename="$(find velodyne_description)/urdf/VLP-16.urdf.xacro" />
     <xacro:VLP-16 name="laser" gpu="true" parent="tower_body">
         <origin xyz="0 0 0.355" rpy="0 0 0" />
