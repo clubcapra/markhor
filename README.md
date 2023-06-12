@@ -35,6 +35,14 @@ There are multiple launch configurations depending on your needs. The intended u
 - `markhor_base.launch` : While the two other files are made to be an optimised for competition setup, the `base` version launches
 everything simultaneously for demonstration purposes.  
 
+## Environnment variable
+
+You can add two environnments variables in your bashrc.
+
+GAZEBO_GUI : Enable/disable the GUI version of gazebo. If you don't want the gazebo ui, you can set it the false. The default value is true
+
+MARKHOR_SIMULATION : If set to true, it disable the use of the ZED ros wrapper. This way, you don't need to clone/install the ros wrapper/sdk. The default value is false.
+
 # markhor gazebo
 To use the gazebo simulation you need to update the gazebo version on your machine to atleast `9.14`, the default version included with melodic should be fine.
 
@@ -111,7 +119,7 @@ In the future this control will be done with a hardware interface.
 
 
 
-# Docker
+# Running using Docker
 
 ## Overview
 
