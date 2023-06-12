@@ -1,5 +1,8 @@
 version: '3.9'
 
+# Docker compose that start the markhor navigation stack
+# Gazebo or the real hardware must be started separately
+# Gazebo can be started with ./scripts/start_gazebo.sh
 services:
   markhor_slam:
     command: roslaunch markhor_slam markhor_slam.launch

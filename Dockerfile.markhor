@@ -9,14 +9,14 @@ ENV GAZEBO_GUI=false
 # Install dependencies
 RUN rosdep install --from-paths src --ignore-src -r -y
 
-
+# Install virtual framebuffer
 RUN apt-get install -y xvfb
 
-
+# Copy the entrypoint script (sourcing)
 COPY scripts/ros_entrypoint.sh /ros_entrypoint.sh
 
-
-RUN chmod +777 /ros_entrypoint.sh
+# Make the entrypoint script executable
+RUN chmod +x /ros_entrypoint.sh
 
 # Build the workspace
 RUN /bin/bash -c '. /opt/ros/melodic/setup.bash; cd  /root/markhor_ws; catkin_make'
@@ -30,6 +30,6 @@ RUN sed -i \
 # Source the setup file in the bashrc
 RUN echo "source /root/markhor_ws/devel/setup.bash" >> ~/.bashrc
 
-
+# Source the setup file in the bashrc
 ENTRYPOINT ["/ros_entrypoint.sh"]
 CMD ["bash"]
