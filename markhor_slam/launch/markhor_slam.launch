@@ -33,30 +33,33 @@
 
     <arg name="lidar_args"
         default="
-      --Reg/Strategy 1 
-      --RGBD/NeighborLinkRefining true 
-      --ICP/PM true 
-      --Icp/PMOutlierRatio 0.7 
+      --Reg/Strategy 1
+      --RGBD/NeighborLinkRefining true
+      --ICP/PM true
+      --Icp/PMOutlierRatio 0.7
       --Icp/VoxelSize 0.3
-      --Icp/MaxCorrespondenceDistance 1 
-      --Icp/PointToPlaneGroundNormalsUp 0.9 
-      --Icp/Iterations 10 
-      --Icp/Epsilon 0.001 
-      --OdomF2M/ScanSubtractRadius 0.3 
-      --OdomF2M/ScanMaxSize 15000 
-      --Grid/ClusterRadius 1 
+      --Icp/MaxCorrespondenceDistance 1
+      --Icp/PointToPlaneGroundNormalsUp 0.9
+      --Icp/Iterations 10
+      --Icp/Epsilon 0.001
+      --OdomF2M/ScanSubtractRadius 0.3
+      --OdomF2M/ScanMaxSize 15000
+      --Grid/ClusterRadius 1
       --Grid/RangeMax 20
       --Grid/RayTracing $(arg lidar3d_ray_tracing)
-      --Grid/MaxObstacleHeight 1.5 
+      --Grid/MaxObstacleHeight 1.5
       --Grid/CellSize 0.05
-      --Icp/PointToPlaneRadius 0 
-      --Icp/PointToPlaneNormalK 10 
+      --Icp/PointToPlaneRadius 0
+      --Icp/PointToPlaneNormalK 10
       --Icp/MaxTranslation 1" />
 
     <!---
     Run rtabmap -->
-    <remap from="/rtabmap/grid_map" to="/map"/>
+    <remap from="/rtabmap/grid_map" to="/map" />
     <include file="$(find rtabmap_ros)/launch/rtabmap.launch">
+
+        <!-- Allows republishing of wifi data points -->
+        <arg name="user_data_async_topic" value="/wifi_signal" />
 
         <arg name="rtabmapviz" value="$(arg rtabmapviz)" />
         <arg name="odom_topic" value="/markhor/odometry/filtered" />
@@ -84,7 +87,7 @@
         <arg name="camera_info_topic" value="/zed2i/zed_node/rgb/camera_info" />
         <arg name="depth_topic" value="/zed2i/zed_node/depth/depth_registered" />
         <arg name="depth_camera_info_topic" default="/zed2i/zed_node/depth/camera_info" />
-        
+
         <arg name="approx_rgbd_sync" value="false" />
 
         <!-- If icp_odometry is used -->

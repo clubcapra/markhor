@@ -1,4 +1,3 @@
-<!-- -->
 <launch>
 
     <arg name="rtabmapviz" default="true" />
@@ -27,16 +26,18 @@
 
     <arg name="lidar_args"
         default="
-      --Reg/Strategy 1 
-      --RGBD/NeighborLinkRefining true 
-      --Grid/CellSize $(arg cell_size) 
-      --Icp/PointToPlaneRadius 0 
+      --Reg/Strategy 1
+      --RGBD/NeighborLinkRefining true
+      --Grid/CellSize $(arg cell_size)
+      --Icp/PointToPlaneRadius 0
       --Icp/MaxTranslation 1" />
 
     <!---
     Run rtabmap -->
     <remap from="/rtabmap/grid_map" to="/map" />
     <include file="$(find rtabmap_ros)/launch/rtabmap.launch">
+        <!-- Allows republishing of wifi data points -->
+        <arg name="user_data_async_topic" value="/wifi_signal" />
         <!-- create new map -->
         <arg name="args"
             value="--Reg/Force3DoF $(arg lidar_args) -d" />
