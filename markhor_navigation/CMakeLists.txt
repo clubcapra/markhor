@@ -21,16 +21,5 @@ generate_messages(
 )
 
 catkin_package(
-
-    # INCLUDE_DIRS include
-    # LIBRARIES markhor_navigation
-    # CATKIN_DEPENDS move_base my_odom_configuration_dep my_sensor_configuration_dep my_tf_configuration_dep
-    # DEPENDS system_lib
     CATKIN_DEPENDS message_runtime
-)
-
-include_directories(
-
-    # include
-    # ${catkin_INCLUDE_DIRS}
 )
