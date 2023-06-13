@@ -6,9 +6,13 @@ import time
 from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
 import actionlib
 from nav_msgs.msg import Odometry
-from markhor_navigation.srv import StartExploration, StartExplorationResponse
+from markhor_navigation.srv import StartExploration, StartExplorationResponse, StopExploration, StopExplorationResponse
+
 from geometry_msgs.msg import Pose
 import rosnode
+
+# Global variable to control the exploration
+is_running = False
 
 def distance_between_positions(position1, position2):
     """
@@ -26,7 +30,8 @@ def handle_start_exploration(req):
     # Get the timeout from the request
     timeout = req.timeout
 
-    # Is the exploration running
+    # Start the exploration
+    global is_running
     is_running = True
 
     # Get the current position to use as the return position
@@ -46,17 +51,27 @@ def handle_start_exploration(req):
     explore_process = subprocess.Popen(["roslaunch", "explore_lite", "explore_costmap.launch"])
     start_time = rospy.Time.now()
 
+    # Wait for the explore_lite node to start (or wait initialisation time)
     max_intialisation_wait_time = 10
     is_initialised = False
-    # Wait for the explore_lite node to start (or wait initialisation time)
-    rospy.loginfo("Waiting for explore_lite node to start...")
+    rospy.loginfo("Waiting for movement to start...")
     while not is_initialised and (rospy.Time.now() - start_time).to_sec() < max_intialisation_wait_time:
         if '/explore' in rosnode.get_node_names():
             is_initialised = True
         time.sleep(0.5)  # check every half second
 
-
-
+    # Wait for the movement to start (or 10 seconds)
+    max_wait_time_start_movement = 10
+    start_movement_time = rospy.Time.now()
+    start_position = current_pose_msg.pose.pose.position
+    has_move = False  
+    while not is_initialised and not has_move and (rospy.Time.now() - start_movement_time).to_sec() < max_wait_time_start_movement:
+        current_pose_msg = rospy.wait_for_message('/markhor/odometry/filtered', Odometry)
+        last_position = current_pose_msg.pose.pose.position
+        if distance_between_positions(start_position, last_position) < 0.05:
+            has_move = True
+    
+    
     # Wait for the specified amount of time
     rospy.loginfo("Exploring for {} seconds...".format(timeout))
 
@@ -97,13 +112,22 @@ def handle_start_exploration(req):
     return StartExplorationResponse(True, "Exploration started and return position set successfully")
 
 
+def handle_stop_exploration(req):
+    global is_running
+    # Stop the exploration
+    is_running = False
+    return StopExplorationResponse(True, "Exploration stopped successfully")
+
+
+
 if __name__ == '__main__':
     try:
         # Initialize the ros node
         rospy.init_node('explore_and_return', anonymous=True)
 
-        # Start the service server
+        # Start the service servers
         rospy.Service('start_exploration', StartExploration, handle_start_exploration)
+        rospy.Service('stop_exploration', StopExploration, handle_stop_exploration)
 
         # Set the rate of the node
         rate = rospy.Rate(5)  # 10 Hz
