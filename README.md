@@ -114,38 +114,3 @@ When running the simulation with the tracks you can control the flippers axe wit
 `rostopic pub -1 /markhor/flipper_<fl|fr|rl|rr>_position_controller/command std_msgs/Float64 "data: <0 = 180deg -3 = -180deg>"`
 
 In the future this control will be done with a hardware interface.
-
-
-
-# Running using Docker
-
-## Overview
-
-Docker have been tested on linux only. All the code have been installed in a docker in a two step process. There is "base" which contains all the dependecies and files that doesn't change often. Then there is "marhor" which contains the code of the robot. This way, the building time of markhor is shorter.
-
-In github, the "base" is only updated if the file "Dockerfile.base" have been changed. The "markhor" is updated at each commit/push.
-
-## Usage
-
-If you are running in simulation, you can start gazebo in docker using the following command:
-
-```bash
-./scripts/start_gazebo.sh
-```
-
-Once you have Gazebo or the real robot running, you can start the slam and navigation stack with the following command:
-
-```bash
-docker-compose up
-```
-
-
-This will take the online packages and start the system. If ever you want to build the images, you can use the following command:
-
-
-```bash
-./scripts/build_markhor_base.sh
-./scripts/build_markhor.sh
-```
-
-The first script will build the base image. The second one will build the markhor image. If you only did change to the code, you can only build the markhor image. If you did change to the dependecies, you need to build the base image.
