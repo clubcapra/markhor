@@ -15,7 +15,7 @@
         </gui>
 
         <gui>
-            <plugin name="keyboard" filename="libKeyboardGUIPlugin.so" />
+            <plugin name="keyboard" filename="libKeyboardGUIPlugin.so"/>
         </gui>
 
         <include>

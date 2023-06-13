@@ -17,4 +17,11 @@ To call the frontier exploration, you can use the following command :
 rosservice call /start_exploration "timeout: 80"
 ```
 
-In this case, the robot will explore the environment for 80 seconds. Note that the navigation is slow and 80 seconds is a very short time for the robot to explore the environment. However, the more time you give to the robot, the robot can get stuck and stop the exploration. This will not cancel the exploration and you'll lose some time.
+In this case, the robot will explore the environment for 80 seconds. Note that the navigation is slow and 80 seconds is a very short time for the robot to explore the environment. However, the more time you give to the robot, the robot can get stuck and stop the exploration. This will not cancel the exploration and you'll lose some time. 
+
+To stop the service, you can use the following command : 
+
+
+```bash
+rosservice call /stop_exploration
+```
