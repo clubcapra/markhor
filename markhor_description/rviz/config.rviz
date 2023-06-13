@@ -4,10 +4,8 @@ Panels:
     Name: Displays
     Property Tree Widget:
       Expanded:
-        - /Global Options1
         - /Status1
-        - /TF1
-        - /TF1/Frames1
+        - /Polygon1
       Splitter Ratio: 0.5
     Tree Height: 321
   - Class: rviz/Selection
@@ -164,47 +162,6 @@ Visualization Manager:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-        zed2_baro_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        zed2_base_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        zed2_camera_center:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        zed2_left_camera_frame:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        zed2_left_camera_optical_frame:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        zed2_mag_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        zed2_right_camera_frame:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        zed2_right_camera_optical_frame:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        zed2_temp_left_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        zed2_temp_right_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
       Name: RobotModel
       Robot Description: robot_description
       TF Prefix: ""
@@ -304,6 +261,24 @@ Visualization Manager:
         {}
       Queue Size: 100
       Value: true
+    - Alpha: 0.699999988079071
+      Class: rviz/Map
+      Color Scheme: map
+      Draw Behind: false
+      Enabled: true
+      Name: Map
+      Topic: /exploration_server_node/explore_costmap/costmap
+      Unreliable: false
+      Use Timestamp: false
+      Value: true
+    - Alpha: 1
+      Class: rviz/Polygon
+      Color: 25; 255; 0
+      Enabled: true
+      Name: Polygon
+      Topic: /exploration_server_node/explore_costmap/polygon_layer/current_polygon
+      Unreliable: false
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -332,16 +307,16 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 50.985313415527344
+      Distance: 27.601224899291992
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: -1.231353521347046
-        Y: -0.7756049633026123
-        Z: -3.1196188926696777
+        X: -2.073533535003662
+        Y: 2.905930280685425
+        Z: -4.9213480949401855
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
@@ -374,4 +349,3 @@ Window Geometry:
   Width: 1267
   X: 67
   Y: 27
-  

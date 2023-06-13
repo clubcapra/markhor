@@ -1,0 +1,70 @@
+<launch>
+
+    <arg name="scan_topic" default="/scan" />
+
+
+    <!-- Pointcloud to laserscan conversion for slam -->
+    <node name="pointcloud_to_laserscan_node" pkg="pointcloud_to_laserscan"
+        type="pointcloud_to_laserscan_node" respawn="false" output="screen">
+        <remap from="/cloud_in" to="/velodyne_points" />
+        <param name="min_height" value="-0.3" /> <!-- in meters -->
+        <param name="max_height" value="0.3" /> <!-- in meters -->
+        <param name="angle_min" value="-3.14" /> <!-- in rads -->
+        <param name="angle_max" value="3.14" /> <!-- in rads -->
+        <param name="range_min" value="1.2" /> <!-- in meters -->
+        <param name="range_max" value="100" /> <!-- in meters -->
+        <param name="use_inf" value="false" />
+    </node>
+
+    <group ns="markhor">
+        <!-- RobotLocalization (Sensor fusion) and tf -->
+        <node pkg="robot_localization" type="ekf_localization_node" name="ekf_localization"
+            clear_params="true">
+            <rosparam command="load" file="$(find markhor_slam)/config/ekf_localization.yaml" />
+        </node>
+    </group>
+
+    <remap from="odom" to="/markhor/tracks/diff_drive_controller/odom" />
+
+    <node pkg="gmapping" type="slam_gmapping" name="slam_gmapping">
+        <rosparam>
+            odom_frame: odom
+            base_frame: base_link
+            map_frame: map
+
+            map_update_interval: 0.5 # Publish new map
+
+            maxUrange: 100 # Should be just less than sensor range
+            maxRange: 100 # Should be just greater than sensor range
+            particles: 100 # Increased from 80
+
+            # Update frequencies
+            linearUpdate: 0.3
+            angularUpdate: 0.5
+            temporalUpdate: 2.0
+            resampleThreshold: 0.5
+
+            # Initial Map Size
+            xmin: -100.0
+            ymin: -100.0
+            xmax: 100.0
+            ymax: 100.0
+            delta: 0.05
+
+            # All default
+            sigma: 0.05
+            kernelSize: 1
+            lstep: 0.05
+            astep: 0.05
+            iterations: 5
+            lsigma: 0.075
+            ogain: 3.0
+            lskip: 0
+            llsamplerange: 0.01
+            llsamplestep: 0.01
+            lasamplerange: 0.005
+            lasamplestep: 0.005
+
+        </rosparam>
+    </node>
+</launch>
