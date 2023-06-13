@@ -8,7 +8,6 @@ import actionlib
 from nav_msgs.msg import Odometry
 from markhor_navigation.srv import StartExploration, StartExplorationResponse, StopExploration, StopExplorationResponse
 
-from geometry_msgs.msg import Pose
 import rosnode
 
 # Global variable to control the exploration
