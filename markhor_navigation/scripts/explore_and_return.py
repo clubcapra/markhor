@@ -13,6 +13,7 @@ import rosnode
 # Global variable to control the exploration
 is_running = False
 
+
 def distance_between_positions(position1, position2):
     """
     Calculates the euclidean distance between two positions (2 dimensions).
@@ -20,6 +21,7 @@ def distance_between_positions(position1, position2):
     dx = position1.x - position2.x
     dy = position1.y - position2.y
     return (dx**2 + dy**2)**0.5
+
 
 def handle_start_exploration(req):
     """
@@ -63,19 +65,17 @@ def handle_start_exploration(req):
     max_wait_time_start_movement = 10
     start_movement_time = rospy.Time.now()
     start_position = current_pose_msg.pose.pose.position
-    has_move = False  
+    has_move = False
     while not is_initialised and not has_move and (rospy.Time.now() - start_movement_time).to_sec() < max_wait_time_start_movement:
         current_pose_msg = rospy.wait_for_message('/markhor/odometry/filtered', Odometry)
         last_position = current_pose_msg.pose.pose.position
         if distance_between_positions(start_position, last_position) < 0.05:
             has_move = True
-    
-    
+
     # Wait for the specified amount of time
     rospy.loginfo("Exploring for {} seconds...".format(timeout))
 
     while is_running and is_initialised:
-        
         time.sleep(5)  # check the robot's position every 5 seconds
 
         # Get the robot's current position
@@ -116,7 +116,6 @@ def handle_stop_exploration(req):
     # Stop the exploration
     is_running = False
     return StopExplorationResponse(True, "Exploration stopped successfully")
-
 
 
 if __name__ == '__main__':
