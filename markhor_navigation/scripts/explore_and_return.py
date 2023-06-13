@@ -1,14 +1,22 @@
 #!/usr/bin/env python
 
-import rospy
 import subprocess
 import time
-from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
-import actionlib
-from nav_msgs.msg import Odometry
-from markhor_navigation.srv import StartExploration, StartExplorationResponse, StopExploration, StopExplorationResponse
 
+import actionlib
 import rosnode
+import rospy
+from markhor_navigation.srv import (
+    StartExploration,
+    StartExplorationResponse,
+    StopExploration,
+    StopExplorationResponse,
+)
+from move_base_msgs.msg import (
+    MoveBaseAction,
+    MoveBaseGoal,
+)
+from nav_msgs.msg import Odometry
 
 # Global variable to control the exploration
 is_running = False
