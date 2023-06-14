@@ -20,9 +20,9 @@ markhor:
       # Base frame_id
       base_frame_id: base_link
 
-      # Odometry fused with IMU is published by robot_localization, so
+      # Odometry is now being published by markhor slam, so no need to enable it here.
       # no need to publish a TF based on encoders alone.
-      enable_odom_tf: true
+      enable_odom_tf: false
 
       # Hardware provides wheel velocities
       estimate_velocity_from_position: false
@@ -44,4 +44,4 @@ markhor:
           has_velocity_limits    : true
           max_velocity           : 1   # rad/s
           has_acceleration_limits: true
-          max_acceleration       : 2   # rad/s^2
+          max_acceleration       : 4   # rad/s^2

@@ -1,13 +1,8 @@
 <?xml version="1.0"?>
 
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="markhor">
-
-    <xacro:include filename="$(find velodyne_description)/urdf/VLP-16.urdf.xacro" />
-    <xacro:VLP-16 name="laser" gpu="true">
-        <origin xyz="-0.2875 0 0.45176" rpy="0 0 0" />
-    </xacro:VLP-16>
-
     <xacro:include filename="$(find markhor_description)/urdf/markhor_common.xacro" />
+    <xacro:include filename="$(find markhor_description)/urdf/tower.xacro" />
 
     <xacro:arg name="robot_namespace" default="markhor" />
 
@@ -35,28 +30,6 @@
         </collision>
         <xacro:markhor_inertial type="body" />
     </link>
-
-    <link name="tower_body">
-        <visual>
-            <geometry>
-                <mesh filename="package://markhor_description/meshes/LidarTower.stl" />
-            </geometry>
-            <origin xyz="0 0 0" rpy="0 0 -${pi/2}" />
-            <material name="grey"/>
-        </visual>
-        <collision>
-            <geometry>
-                <mesh filename="package://markhor_description/meshes/LidarTower.stl" />
-            </geometry>
-            <origin xyz="0 0 0" rpy="0 0 -${pi/2}" />
-        </collision>
-        <xacro:markhor_inertial type="body" />
-    </link>
-
-    <joint name="tower_body_j" type="fixed">
-        <parent link="base_link" />
-        <child link="tower_body" />
-    </joint>
 
     <joint name="base_link_j" type="fixed">
         <origin xyz="0 0 -0.085" rpy="0 0 0" />
@@ -135,7 +108,7 @@
             <odometryFrame>odom</odometryFrame>     <!-- tf frame of the odometry messages -->
             
             <tracks_separation>${tracks_seperation}</tracks_separation>
-            <publishOdomTF>true</publishOdomTF>
+            <publishOdomTF>false</publishOdomTF> <!-- odom is now being published by markhor slam package -->
         </plugin>
     </gazebo>
 

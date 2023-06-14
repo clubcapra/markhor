@@ -1,31 +1,99 @@
 <?xml version="1.0"?>
-
 <launch>
-    <arg name="geotiff_map_file_path" default="$(find markhor_slam)/maps" />
+    <!-- RobotLocalization (Sensor fusion) -->
+    <group ns="markhor">
+        <node pkg="robot_localization" type="ekf_localization_node" name="ekf_localization"
+            clear_params="true">
+            <rosparam command="load" file="$(find markhor_slam)/config/ekf_localization.yaml" />
+        </node>
+    </group>
 
-    <node pkg="rviz" type="rviz" name="rviz" args="-d $(find markhor_slam)/rviz_cfg/mapping.rviz" />
+    <!-- Pointcloud to laserscan conversion for slam -->
+    <node name="pointcloud_to_laserscan_node" pkg="pointcloud_to_laserscan"
+        type="pointcloud_to_laserscan_node" respawn="false" output="screen">
+        <remap from="/cloud_in" to="/velodyne_points" />
+        <param name="min_height" value="-0.3" />
+        <param name="max_height" value="0.3" />
+        <param name="angle_min" value="-3.14" />
+        <param name="angle_max" value="3.14" />
+        <param name="range_min" value="1.2" />
+        <param name="range_max" value="10" />
+        <param name="use_inf" value="false" />
+    </node>
 
-    <!-- TF remapping -->
-    <node pkg="tf" type="static_transform_publisher" name="map_2_odom" args="0 0 0 0 0 0 /map /odom 100" />
-    <node pkg="tf" type="static_transform_publisher" name="odom_2_base_footprint" args="0 0 0 0 0 0 /odom /base_footprint 100" />
-    <node pkg="tf" type="static_transform_publisher" name="base_footprint_2_base_link" args="0 0 0 0 0 0 /base_footprint /base_link 100" />
-    <node pkg="tf" type="static_transform_publisher" name="base_link_2_base_stabilized_link" args="0 0 0 0 0 0 /base_link /base_stabilized 100" />
-    <node pkg="tf" type="static_transform_publisher" name="base_stablized_2_base_frame" args="0 0 0 0 0 0 /base_stabilized /base_frame 100" />
-    <node pkg="tf" type="static_transform_publisher" name="base_frame_2_laser_link" args="0 0 0 0 0 0 /base_frame /laser 100" />
-    <node pkg="tf" type="static_transform_publisher" name="base_2_nav_link" args="0 0 0 0 0 0 /base_frame /nav 100" />
+    <arg name="rtabmapviz" default="false" />
+    <arg name="camera" default="false" />
+    <arg name="lidar3d" default="true" />
+    <arg name="lidar3d_ray_tracing" default="true" />
+    <arg name="slam2d" default="true" />
+    <arg name="depth_from_lidar" default="false" />
 
-    <include file="$(find hector_mapping)/launch/mapping_default.launch">
-        <param name="pub_map_odom_transform" value="false" />
-        <param name="map_frame" value="map" />
-        <param name="base_frame" value="base_frame" />
-        <param name="odom_frame" value="base_frame" />
+    <arg name="cell_size" default="0.1" />
+
+
+    <arg name="lidar_args"
+        default="
+      --Reg/Strategy 1
+      --RGBD/NeighborLinkRefining true
+      --ICP/PM true
+      --Icp/PMOutlierRatio 0.7
+      --Icp/VoxelSize 0.3
+      --Icp/MaxCorrespondenceDistance 1
+      --Icp/PointToPlaneGroundNormalsUp 0.9
+      --Icp/Iterations 10
+      --Icp/Epsilon 0.001
+      --OdomF2M/ScanSubtractRadius 0.3
+      --OdomF2M/ScanMaxSize 15000
+      --Grid/ClusterRadius 1
+      --Grid/RangeMax 20
+      --Grid/RayTracing $(arg lidar3d_ray_tracing)
+      --Grid/MaxObstacleHeight 1.5
+      --Grid/CellSize 0.05
+      --Icp/PointToPlaneRadius 0
+      --Icp/PointToPlaneNormalK 10
+      --Icp/MaxTranslation 1" />
+
+    <!---
+    Run rtabmap -->
+    <remap from="/rtabmap/grid_map" to="/map" />
+    <include file="$(find rtabmap_ros)/launch/rtabmap.launch">
+
+        <!-- Allows republishing of wifi data points -->
+        <arg name="user_data_async_topic" value="/wifi_signal" />
+
+        <arg name="rtabmapviz" value="$(arg rtabmapviz)" />
+        <arg name="odom_topic" value="/markhor/odometry/filtered" />
+
+        <!-- Frame definition -->
+        <arg name="frame_id" value="base_link" />
+
+        <!-- SLAM -->
+        <arg name="args" value="--Reg/Force3DoF $(arg lidar_args) -d" />
+
+        <!-- Input data -->
+        <arg name="imu_topic" value="/vectornav/IMU" />
+        <arg name="scan_cloud_assembling_range_min" value="1.0" />
+        <arg name="scan_cloud_assembling_range_max" value="10.0" />
+
+        <!-- 3D LiDAR -->
+        <arg name="subscribe_scan_cloud" value="$(arg lidar3d)" />
+        <arg name="scan_cloud_topic" value="/velodyne_points" />
+
+        <!-- If camera is used -->
+        <arg name="depth" value="$(eval camera and not depth_from_lidar)" />
+        <arg name="subscribe_rgb" value="$(eval camera)" />
+        <arg name="rgbd_sync" value="$(eval camera and not depth_from_lidar)" />
+        <arg name="rgb_topic" value="/zed2i/zed_node/rgb/image_rect_color" />
+        <arg name="camera_info_topic" value="/zed2i/zed_node/rgb/camera_info" />
+        <arg name="depth_topic" value="/zed2i/zed_node/depth/depth_registered" />
+        <arg name="depth_camera_info_topic" default="/zed2i/zed_node/depth/camera_info" />
+
+        <arg name="approx_rgbd_sync" value="false" />
+
+        <!-- If icp_odometry is used -->
+        <arg name="icp_odometry" value="true" />
+        <arg name="odom_guess_frame_id" value="odom" />
+        <arg name="vo_frame_id" value="icp_odom" />
+        <arg name="odom_args" value="--Icp/CorrespondenceRatio 0.01" />
     </include>
-
-    <include file="$(find hector_geotiff)/launch/geotiff_mapper.launch">
-        <arg name="trajectory_source_frame_name" value="scanmatcher_frame" />
-        <arg name="map_file_path" value="$(arg geotiff_map_file_path)" />
-    </include>
-
-    <!-- LIDAR -->
-    <include file="$(find markhor_slam)/launch/sick_tim.launch" />
 </launch>

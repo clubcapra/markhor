@@ -10,6 +10,7 @@ If the module is not there, markhor will not launch and you will see the followi
 ### Package dependencies
 - [usb_cam]
 - [capra_estop](https://github.com/clubcapra/capra_estop)
+- [vectornav](https://github.com/dawonn/vectornav)
 
 ### Other intented use packages
 Altough not required, these packages are also expected to be installed alongside markhor. If not present, error messages will appear when launching the robot.
@@ -33,6 +34,12 @@ There are multiple launch configurations depending on your needs. The intended u
 - `markhor_observation.launch` : This launch file aims to launch every sensor equipped and the robot arm with its gripper, ovis in this case.
 - `markhor_base.launch` : While the two other files are made to be an optimised for competition setup, the `base` version launches
 everything simultaneously for demonstration purposes.  
+
+## Environnment variable
+
+You can add an environnement variable to disable the zed camera SDK.
+
+MARKHOR_SIMULATION : If set to true, it disables the use of the ZED ros wrapper. This way, you don't need to clone/install the ros wrapper/SDK. The default value is false. If you clone the repo and you don't have the SDK, you won't be able to build without the variable set to false.
 
 # markhor gazebo
 To use the gazebo simulation you need to update the gazebo version on your machine to atleast `9.14`, the default version included with melodic should be fine.
@@ -87,12 +94,10 @@ If using vmware, gazebo won't launch when using 3d acceleration, 3d acceleration
 echo "export SVGA_VGPU10=0" >> ~/.profile
 ```
 
-
 # Running the simulation
 
 ### Start the simulation with tracks
 `roslaunch markhor_gazebo test_world.launch`
-
 
 **Note**: Make sure you have the repository built & sourced.
 
