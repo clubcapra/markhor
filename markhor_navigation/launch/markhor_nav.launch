@@ -40,4 +40,7 @@
   <node pkg="markhor_navigation" type="explore_and_return.py" name="explore_and_return"
     output="screen" />
 
+    <!-- Navigation heartbeat to keep navigating even mooving even if the UI is disconnected -->
+    <node pkg="markhor_navigation" type="heartbeat_publisher.py" name="heartbeat_publisher" output="screen" ns="markhor"/>
+
 </launch>
