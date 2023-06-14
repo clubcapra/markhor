@@ -8,7 +8,7 @@
 
     <!-- Remap the 'cmd_vel' and 'odom' topics to the appropriate topics for the robot -->
     <remap from="cmd_vel" to="/markhor/tracks/diff_drive_controller/cmd_vel" />
-    <remap from="odom" to="/markhor/tracks/diff_drive_controller/odom" />
+    <remap from="odom" to="/rtabmap/odom" />
 
     <!-- Set the global and local planners using the previously defined arguments -->
     <param name="base_global_planner" value="$(arg base_global_planner)" />
