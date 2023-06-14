@@ -3,6 +3,7 @@
 #include <std_msgs/String.h>
 #include <chrono>
 #include <std_srvs/Trigger.h>
+#include <map>
 
 int ui_timeout;
 int navigation_timeout;
@@ -11,7 +12,7 @@ std::map<std::string, std::chrono::_V2::system_clock::time_point> last_heartbeat
 
 void heartbeat(const std_msgs::String message)
 {
-  last_heartbeats[message] = std::chrono::system_clock::now();
+  last_heartbeats.at(message.data) = std::chrono::system_clock::now();
 }
 
 // Function that returns to known connection points until the heartbeat is back.
@@ -35,12 +36,12 @@ bool validate_heartbeat(std::chrono::_V2::system_clock::time_point last_heartbea
   }
 }
 
-void check_heartbeat()
+void check_heartbeat(const ros::TimerEvent& event)
 {
   if (!validate_heartbeat(last_heartbeats.at("navigation"), navigation_timeout) &&
       !validate_heartbeat(last_heartbeats.at("ui"), ui_timeout))
   {
-    bool success = return_to_connection_pose();
+    bool success = return_to_last_connection_point();
     std_srvs::Trigger service;
     if (ros::service::exists("/markhor/estop_disable", true))
     {
@@ -61,11 +62,11 @@ int main(int argc, char* argv[])
 
   ROS_INFO("Heartbeat interval is : %d ms", heartbeat_interval);
   ROS_INFO("Navigation timeout is : %d ms", navigation_timeout);
-   ROS_INFO("UI timeout is : %d ms", ui_timeout);
+  ROS_INFO("UI timeout is : %d ms", ui_timeout);
 
   // Init heartbeats
-  map["navigation"] = std::chrono::system_clock::now();
-  map["ui"] = std::chrono::system_clock::now();
+  last_heartbeats.at("navigation") = std::chrono::system_clock::now();
+  last_heartbeats.at("ui") = std::chrono::system_clock::now();
 
   // Subscribe to heartbeat topic to receive heartbeats from web ui.
   ros::Subscriber heartbeat_subscriber = nh.subscribe("heartbeat", 5, heartbeat);
