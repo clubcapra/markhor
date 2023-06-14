@@ -62,6 +62,8 @@
 
         <!-- SLAM -->
         <arg name="args" value="--Reg/Force3DoF $(arg lidar_args) -d" />
+        <arg name="approx_sync"     value="icp_odometry" />
+
 
         <!-- Input data -->
         <arg name="imu_topic" value="/vectornav/IMU" />

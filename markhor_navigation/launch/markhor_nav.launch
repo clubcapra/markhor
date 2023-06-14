@@ -29,7 +29,7 @@
     <param name="local_costmap/height" value="10.0" />
 
     <!-- Load the costmap_global_laser configuration file and set global_costmap dimensions -->
-    <rosparam file="$(find markhor_navigation)/config/costmap_global_laser.yaml" command="load"
+    <rosparam file="$(find markhor_navigation)/config/costmap_global_static.yaml" command="load"
       ns="global_costmap" />
     <param name="global_costmap/width" value="100.0" />
     <param name="global_costmap/height" value="100.0" />
