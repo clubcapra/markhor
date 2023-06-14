@@ -6,8 +6,8 @@
   <!-- Launch the move_base node (Navigation core) -->
   <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
 
-    <!-- Remap the 'cmd_vel' and 'odom' topics to the appropriate topics for the robot -->
-    <remap from="cmd_vel" to="/markhor/tracks/diff_drive_controller/cmd_vel" />
+    <!-- Remap the 'cmd_vel' and 'odom' topics to the appropriate topics for the robot (multiplexer) -->
+    <remap from="cmd_vel" to="/move_base/cmd_vel"/>
     <remap from="odom" to="/markhor/tracks/diff_drive_controller/odom" />
 
     <!-- Set the global and local planners using the previously defined arguments -->
