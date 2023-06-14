@@ -10,4 +10,5 @@
     <include file="$(find markhor_bringup)/launch/cameras/markhor_all_cameras.launch" />
     <include file="$(find zed_wrapper)/launch/zed2i.launch" />
     <include file="$(find ros_rtsp)/launch/rtsp_streams.launch" />
+    <include file="$(find capra_signal_strength)/launch/wifi_mapper.launch" />
 </launch>
