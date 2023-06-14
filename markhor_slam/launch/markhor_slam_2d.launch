@@ -12,17 +12,9 @@
         <param name="angle_min" value="-3.14" /> <!-- in rads -->
         <param name="angle_max" value="3.14" /> <!-- in rads -->
         <param name="range_min" value="1.2" /> <!-- in meters -->
-        <param name="range_max" value="10" /> <!-- in meters -->
+        <param name="range_max" value="50" /> <!-- in meters -->
         <param name="use_inf" value="false" />
     </node>
-
-    <group ns="markhor">
-        <!-- RobotLocalization (Sensor fusion) and tf -->
-        <node pkg="robot_localization" type="ekf_localization_node" name="ekf_localization"
-            clear_params="true">
-            <rosparam command="load" file="$(find markhor_slam)/config/ekf_localization.yaml" />
-        </node>
-    </group>
 
     <arg name="lidar_args"
         default="
@@ -42,7 +34,6 @@
         <arg name="args"
             value="--Reg/Force3DoF $(arg lidar_args) -d" />
         <arg name="imu_topic" value="/vectornav/IMU" />
-        <arg name="odom_topic" value="/markhor/odometry/filtered" />
         <arg name="frame_id" value="base_link" />
         <arg name="rtabmapviz" value="$(arg rtabmapviz)" />
 
@@ -54,7 +45,7 @@
         <!-- icp_odometry -->
         <arg name="icp_odometry" value="true" />
         <arg name="odom_guess_frame_id" value="odom" />
-        <arg name="vo_frame_id" value="icp_odom" />
+        <arg name="vo_frame_id" value="odom" />
         <arg name="depth" value="false" />
 
     </include>
