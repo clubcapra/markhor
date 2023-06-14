@@ -45,7 +45,7 @@ def handle_start_exploration(req):
 
     # Get the current position to use as the return position
     rospy.loginfo("Getting current position to use as return position...")
-    current_pose_msg = rospy.wait_for_message('/markhor/odometry/filtered', Odometry)
+    current_pose_msg = rospy.wait_for_message('/rtabmap/odom', Odometry)
     return_pose = current_pose_msg.pose.pose
     last_position = current_pose_msg.pose.pose.position  # Keep track of the last position
 
@@ -75,7 +75,7 @@ def handle_start_exploration(req):
     start_position = current_pose_msg.pose.pose.position
     has_move = False
     while not is_initialised and not has_move and (rospy.Time.now() - start_movement_time).to_sec() < max_wait_time_start_movement:
-        current_pose_msg = rospy.wait_for_message('/markhor/odometry/filtered', Odometry)
+        current_pose_msg = rospy.wait_for_message('/rtabmap/odom', Odometry)
         last_position = current_pose_msg.pose.pose.position
         if distance_between_positions(start_position, last_position) < 0.05:
             has_move = True
@@ -87,7 +87,7 @@ def handle_start_exploration(req):
         time.sleep(5)  # check the robot's position every 5 seconds
 
         # Get the robot's current position
-        current_pose_msg = rospy.wait_for_message('/markhor/odometry/filtered', Odometry)
+        current_pose_msg = rospy.wait_for_message('/rtabmap/odom', Odometry)
         current_position = current_pose_msg.pose.pose.position
 
         # If the robot hasn't moved for a certain amount of time, end the exploration

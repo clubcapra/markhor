@@ -1,12 +1,5 @@
 <?xml version="1.0"?>
 <launch>
-    <!-- RobotLocalization (Sensor fusion) -->
-    <group ns="markhor">
-        <node pkg="robot_localization" type="ekf_localization_node" name="ekf_localization"
-            clear_params="true">
-            <rosparam command="load" file="$(find markhor_slam)/config/ekf_localization.yaml" />
-        </node>
-    </group>
 
     <!-- Pointcloud to laserscan conversion for slam -->
     <node name="pointcloud_to_laserscan_node" pkg="pointcloud_to_laserscan"
@@ -20,12 +13,11 @@
         <param name="range_max" value="10" />
         <param name="use_inf" value="false" />
     </node>
-
+    
     <arg name="rtabmapviz" default="false" />
     <arg name="camera" default="false" />
     <arg name="lidar3d" default="true" />
     <arg name="lidar3d_ray_tracing" default="true" />
-    <arg name="slam2d" default="true" />
     <arg name="depth_from_lidar" default="false" />
 
     <arg name="cell_size" default="0.1" />
@@ -53,16 +45,15 @@
       --Icp/PointToPlaneNormalK 10
       --Icp/MaxTranslation 1" />
 
-    <!---
-    Run rtabmap -->
+    <!--- Run rtabmap -->
     <remap from="/rtabmap/grid_map" to="/map" />
+
     <include file="$(find rtabmap_ros)/launch/rtabmap.launch">
 
         <!-- Allows republishing of wifi data points -->
         <arg name="user_data_async_topic" value="/wifi_signal" />
 
         <arg name="rtabmapviz" value="$(arg rtabmapviz)" />
-        <arg name="odom_topic" value="/markhor/odometry/filtered" />
 
         <!-- Frame definition -->
         <arg name="frame_id" value="base_link" />
@@ -93,7 +84,7 @@
         <!-- If icp_odometry is used -->
         <arg name="icp_odometry" value="true" />
         <arg name="odom_guess_frame_id" value="odom" />
-        <arg name="vo_frame_id" value="icp_odom" />
+        <arg name="vo_frame_id" value="odom" />
         <arg name="odom_args" value="--Icp/CorrespondenceRatio 0.01" />
     </include>
 </launch>
