@@ -1,9 +1,17 @@
 <launch>
     <arg name="joy_config" default="xbox" />
-    <arg name="config_filepath" default="$(find markhor_bringup)/config/$(arg joy_config).config.yaml" />
+    <arg name="config_filepath"
+        default="$(find markhor_bringup)/config/$(arg joy_config).config.yaml" />
 
     <node pkg="teleop_twist_joy" name="teleop_twist_joy" type="teleop_node">
         <rosparam command="load" file="$(arg config_filepath)" />
-        <remap from="cmd_vel" to="/markhor/tracks/diff_drive_controller/cmd_vel" />
+        <remap from="cmd_vel" to="/markhor/joy/cmd_vel" />
     </node>
+
+    <!-- Multiplexer to prioritize teleop commands over autonomous commands -->
+    <node pkg="twist_mux" type="twist_mux" name="twist_mux" respawn="false">
+        <rosparam file="$(find markhor_bringup)/config/twist_mux.yaml" command="load" />
+        <remap from="/cmd_vel_out" to="/markhor/tracks/diff_drive_controller/cmd_vel"/>
+    </node>
+
 </launch>
