@@ -8,11 +8,10 @@ int ui_timeout;
 int navigation_timeout;
 int heartbeat_interval;
 std::map<std::string, std::chrono::_V2::system_clock::time_point> last_heartbeats;
-std::chrono::_V2::system_clock::time_point last_heartbeat = std::chrono::system_clock::now();
 
 void heartbeat(const std_msgs::String message)
 {
-  map[message] = std::chrono::system_clock::now();
+  last_heartbeats[message] = std::chrono::system_clock::now();
 }
 
 // Function that returns to known connection points until the heartbeat is back.
