@@ -10,7 +10,7 @@ ENV GAZEBO_GUI=false
 WORKDIR /root/markhor_ws
 
 # Copy the repository into the container
-COPY . ./src
+COPY . ./src/markhor
 
 # Copy the entrypoint script
 COPY scripts/ros_entrypoint.sh /ros_entrypoint.sh

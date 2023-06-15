@@ -27,5 +27,8 @@ RUN cd ./src && \
     git clone https://github.com/clubcapra/capra_estop.git && \
     git clone https://github.com/lprobsth/gazebo_ros_tracked_vehicle_interface.git
 
+# Copy the repository into the container to provibe base package to install
+COPY . ./src/markhor
+
 # Install dependencies
 RUN rosdep install --from-paths src --ignore-src -r -y
