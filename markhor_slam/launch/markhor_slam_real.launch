@@ -6,10 +6,6 @@
     <!-- LIDAR (Velodyne vlp16) -->
     <include file="$(find velodyne_pointcloud)/launch/VLP16_points.launch" />
 
-     <!-- Transform between the Velodyne LiDAR and the base_link frame -->
-    <node pkg="tf" type="static_transform_publisher" name="velodyne_to_base_link"
-        args="0 0 0 0 0 0 base_link velodyne 100" />
-
     <!-- IMU -->
     <node pkg="vectornav" type="vnpub" name="vectornav" output="screen">
         <param name="frame_id" value="$(arg frame_id)" />
