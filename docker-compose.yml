@@ -4,16 +4,58 @@ version: '3.9'
 # Gazebo or the real hardware must be started separately
 # Gazebo can be started with ./scripts/start_gazebo.sh
 services:
+  markhor_gazebo:
+    command: roslaunch markhor_gazebo test_world.launch
+    image: ghcr.io/clubcapra/markhor/markhor:latest
+    environment:
+      - DISPLAY=host.docker.internal:0.0
+      - QT_X11_NO_MITSHM=1
+      - GAZEBO_GUI=true
+    ports:
+      - "9090:9090"
+    networks:
+      - markhor_network
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    privileged: true
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix
   markhor_slam:
     command: roslaunch markhor_slam markhor_slam.launch
     image: ghcr.io/clubcapra/markhor/markhor:latest
-    network_mode: host
+    networks:
+      - markhor_network
     privileged: true
+    depends_on:
+      - markhor_gazebo
     
   markhor_navigation:
     command: roslaunch markhor_navigation markhor_nav.launch
     image: ghcr.io/clubcapra/markhor/markhor:latest
-    network_mode: host
+    networks:
+      - markhor_network
     privileged: true
     depends_on:
+      - markhor_gazebo
       - markhor_slam
+
+  markhor_viz:
+    command: roslaunch markhor_description display_markhor.launch
+    image: ghcr.io/clubcapra/markhor/markhor:latest
+    networks:
+      - markhor_network
+    environment:
+      - DISPLAY=host.docker.internal:0.0
+      - QT_X11_NO_MITSHM=1
+      - GAZEBO_GUI=true
+    volumes:
+        - /tmp/.X11-unix:/tmp/.X11-unix
+
+networks:
+  markhor_network:
+    driver: bridge

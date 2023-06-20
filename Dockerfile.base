@@ -1,5 +1,5 @@
 # Use ROS Melodic as base image
-FROM ros:melodic
+FROM ros:melodic-ros-core-bionic
 
 # Set the working directory in the container
 WORKDIR /root/markhor_ws
@@ -12,7 +12,8 @@ RUN apt-get update && \
     apt-get install -y \
     wget \
     ros-melodic-rqt \
-    ros-melodic-rosbridge-server
+    ros-melodic-rosbridge-server \
+    git
 
 # Install Gazebo
 RUN sh -c 'echo "deb http://packages.osrfoundation.org/gazebo/ubuntu-stable `lsb_release -cs` main" > /etc/apt/sources.list.d/gazebo-stable.list' && \
@@ -20,7 +21,9 @@ RUN sh -c 'echo "deb http://packages.osrfoundation.org/gazebo/ubuntu-stable `lsb
     apt-get update && \
     apt-get install -y \
     gazebo9 \
-    libgazebo9-dev
+    libgazebo9-dev \
+    build-essential \
+    rviz
 
 # Clone necessary repositories
 RUN cd ./src && \
@@ -30,5 +33,7 @@ RUN cd ./src && \
 # Copy the repository into the container to provibe base package to install
 COPY . ./src/markhor
 
+RUN apt-get install -y python-rosdep
+RUN rosdep init && rosdep update
 # Install dependencies
 RUN rosdep install --from-paths src --ignore-src -r -y
