@@ -21,7 +21,7 @@ services:
           devices:
             - driver: nvidia
               count: 1
-              capabilities: ["${GPU_CAPABILITIES}"]
+              capabilities: [gpu]
     privileged: true
     volumes:
       - /tmp/.X11-unix:/tmp/.X11-unix
