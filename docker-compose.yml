@@ -21,7 +21,7 @@ services:
           devices:
             - driver: nvidia
               count: 1
-              capabilities: [gpu]
+              capabilities: ["${GPU_CAPABILITIES}"]
     privileged: true
     volumes:
       - /tmp/.X11-unix:/tmp/.X11-unix
@@ -36,7 +36,7 @@ services:
     privileged: true
     depends_on:
       - markhor_gazebo
-    
+
   markhor_navigation:
     command: roslaunch markhor_navigation markhor_nav.launch
     image: ghcr.io/clubcapra/markhor/markhor:latest
