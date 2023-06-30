@@ -28,7 +28,7 @@ RUN sh -c 'echo "deb http://packages.osrfoundation.org/gazebo/ubuntu-stable `lsb
 # Clone necessary repositories
 RUN cd ./src && \
     git clone https://github.com/clubcapra/capra_estop.git && \
-    git clone --depth 0 https://github.com/lprobsth/gazebo_ros_tracked_vehicle_interface.git
+    git clone --depth 1 https://github.com/lprobsth/gazebo_ros_tracked_vehicle_interface.git
 
 # Copy the repository into the container to provibe base package to install
 COPY . ./src/markhor
