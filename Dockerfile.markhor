@@ -1,0 +1,35 @@
+# Use the custom base image
+FROM ghcr.io/clubcapra/markhor/base:latest
+
+# ROS environment variables
+ENV ROS_ROOT /root/markhor_ws
+
+# Set environment variables
+ENV MARKHOR_SIMULATION=true
+ENV GAZEBO_GUI=false
+
+# Set the working directory in the container
+WORKDIR /root/markhor_ws
+
+# Copy the repository into the container
+COPY . ./src/markhor
+
+
+# Copy the entrypoint script into the container
+RUN echo '#!/bin/bash \n\
+    source /opt/ros/melodic/setup.bash \n\
+    source /root/markhor_ws/devel/setup.bash \n\
+    exec "$@"' > /ros_entrypoint.sh
+
+# Install dependencies and virtual framebuffer, and make the entrypoint script executable
+RUN rosdep install --from-paths src --ignore-src -r -y && \
+    apt-get install -y xvfb
+
+# Build the workspace
+RUN apt-get update && apt-get install -y build-essential
+RUN /bin/bash -c '. /opt/ros/melodic/setup.bash; cd /root/markhor_ws; catkin_make'
+
+
+# Set the default command
+ENTRYPOINT ["/ros_entrypoint.sh"]
+CMD ["bash"]

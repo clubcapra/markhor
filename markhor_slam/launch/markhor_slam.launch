@@ -58,6 +58,8 @@
     <remap from="/rtabmap/grid_map" to="/map" />
     <include file="$(find rtabmap_ros)/launch/rtabmap.launch">
 
+        <param name="approx_sync" value="true"/> 
+
         <!-- Allows republishing of wifi data points -->
         <arg name="user_data_async_topic" value="/wifi_signal" />
 

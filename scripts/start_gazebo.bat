@@ -1,0 +1,1 @@
+docker run -it --rm --gpus all --privileged --net host -e DISPLAY=host.docker.internal:0.0 -e GAZEBO_GUI=true -v /tmp/.X11-unix:/tmp/.X11-unix ghcr.io/clubcapra/markhor/markhor:latest roslaunch markhor_gazebo test_world.launch
