@@ -1,0 +1,11 @@
+topics:
+-
+  name    : navigation
+  topic   : /move_base/cmd_vel
+  timeout : 1 # Timeout in seconds before switching to lower priority topic
+  priority: 10 # Lower priority than joystick
+-
+  name    : joystick
+  topic   : /markhor/joy/cmd_vel
+  timeout : 1 # Timeout in seconds before switching to lower priority topic
+  priority: 100  # Higher priority than navigation
