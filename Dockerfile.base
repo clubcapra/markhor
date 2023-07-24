@@ -1,0 +1,39 @@
+# Use ROS Melodic as base image
+FROM ros:melodic-ros-core-bionic
+
+# Set the working directory in the container
+WORKDIR /root/markhor_ws
+
+# Create a catkin workspace
+RUN mkdir -p /root/markhor_ws/src
+
+# Update the package list and install necessary packages
+RUN apt-get update && \
+    apt-get install -y \
+    wget \
+    ros-melodic-rqt \
+    ros-melodic-rosbridge-server \
+    git
+
+# Install Gazebo
+RUN sh -c 'echo "deb http://packages.osrfoundation.org/gazebo/ubuntu-stable `lsb_release -cs` main" > /etc/apt/sources.list.d/gazebo-stable.list' && \
+    wget https://packages.osrfoundation.org/gazebo.key -O - | apt-key add - && \
+    apt-get update && \
+    apt-get install -y \
+    gazebo9 \
+    libgazebo9-dev \
+    build-essential \
+    rviz
+
+# Clone necessary repositories
+RUN cd ./src && \
+    git clone https://github.com/clubcapra/capra_estop.git && \
+    git clone --depth 1 https://github.com/lprobsth/gazebo_ros_tracked_vehicle_interface.git
+
+# Copy the repository into the container to provibe base package to install
+COPY . ./src/markhor
+
+RUN apt-get install -y python-rosdep
+RUN rosdep init && rosdep update
+# Install dependencies
+RUN rosdep install --from-paths src --ignore-src -r -y

@@ -2,15 +2,30 @@
 
 <root xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-    <xacro:include filename="$(find zed_wrapper)/urdf/zed_macro.urdf.xacro" />
-    <xacro:zed_camera name="zed2" model="zed2" parent="tpv_tilt">
+    <!-- Get the ENV simulation variable (default to false) -->
+    <xacro:property name="simulation" value="$(optenv MARKHOR_SIMULATION false)"/>
+
+    <xacro:if value="${not simulation}">
+        <xacro:include filename="$(find zed_wrapper)/urdf/zed_macro.urdf.xacro" />
+        <xacro:zed_camera name="zed2" model="zed2" parent="tpv_tilt">
         <origin xyz="0.015 0 -0.0125" rpy="0 0 0"/>
-    </xacro:zed_camera>
+        </xacro:zed_camera>
+    </xacro:if>
 
     <xacro:include filename="$(find velodyne_description)/urdf/VLP-16.urdf.xacro" />
     <xacro:VLP-16 name="laser" gpu="true" parent="tower_body">
         <origin xyz="0 0 0.355" rpy="0 0 0" />
     </xacro:VLP-16>
+
+    <link name="velodyne"/>
+
+
+    <joint name="velodyne_j" type="fixed">
+        <parent link="tower_body" />
+        <child link="velodyne" />
+        <origin xyz="0 0 0.355" rpy="0 0 0" />
+    </joint>
+
 
 
     <link name="tower_body">
@@ -123,13 +138,5 @@
         <axis xyz="0 1 0"/>
         <origin xyz="0 0 0" rpy="0 0 0" />
     </joint>
-
-    <transmission name="tpv_tilt_trans">
-        <type>transmission_interface/SimpleTransmission</type>
-        <joint name="tpv_tilt_j">
-            <hardwareInterface>PositionJointInterface</hardwareInterface>
-        </joint>
-        <actuator name="tpv_tilt_motor"/>
-    </transmission>
 
 </root>

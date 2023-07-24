@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<launch>
+    <arg name="param_file" default="VLP16_points" />
+    <arg name="frame_id" default="vectornav" />
+
+    <!-- LIDAR (Velodyne vlp16) -->
+    <include file="$(find velodyne_pointcloud)/launch/VLP16_points.launch" />
+
+    <!-- IMU -->
+    <node pkg="vectornav" type="vnpub" name="vectornav" output="screen">
+        <param name="frame_id" value="$(arg frame_id)" />
+        <rosparam command="load" file="$(find markhor_slam)/config/vn300.yaml" />
+    </node>
+
+    <!-- SLAM -->
+    <include file="$(find markhor_slam)/launch/markhor_slam.launch" />
+</launch>

@@ -1,31 +1,18 @@
 <launch>
     <arg name="robot_namespace" default="markhor" />
-
+    
     <arg name="x" default="0.0" />
     <arg name="y" default="0.0" />
     <arg name="z" default="0.2" />
     <arg name="yaw" default="0.0" />
 
     <param name="robot_description" command="xacro '$(find markhor_description)/urdf/markhor.urdf.xacro'" />
-    
+
     <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="false" output="screen"/>
     
-    <node name="pointcloud_to_laserscan_node" pkg="pointcloud_to_laserscan" type="pointcloud_to_laserscan_node" respawn="false" output="screen">
-        <remap from="/cloud_in" to="/velodyne_points" />
-        <param name="min_height" value="0.05"/>
-        <param name="max_height" value="0.3"/>
-        <param name="angle_min" value="-3.14"/>
-        <param name="angle_max" value="3.14"/>
-        <param name="range_min" value="0"/> 
-        <param name="range_max" value="100"/> 
-        <param name="use_inf" value="false"/>
-    </node>
-    
     <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch" />
-
     <include file="$(find markhor_bringup)/launch/teleop_twist_joy.launch" />
     <include file="$(find markhor_bringup)/launch/markhor_web_ui.launch" />
-
     <include file="$(find markhor_control)/launch/control_flippers.launch" />
 
     <!-- Spawn robot in gazebo -->

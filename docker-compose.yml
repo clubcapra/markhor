@@ -1,0 +1,71 @@
+version: '3.9'
+
+# Docker compose that start the markhor navigation stack
+services:
+  markhor_gazebo:
+    command: roslaunch markhor_gazebo test_world.launch
+    image: ghcr.io/clubcapra/markhor/markhor:latest
+    restart: always
+    ports:
+      - 9090:9090
+    environment:
+      - DISPLAY=host.docker.internal:0.0
+      - QT_X11_NO_MITSHM=1
+      - GAZEBO_GUI=true
+      - ROS_MASTER_URI=http://markhor_gazebo:11311
+    networks:
+      - markhor_network
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    privileged: true
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix
+  markhor_slam:
+    command: roslaunch markhor_slam markhor_slam.launch
+    image: ghcr.io/clubcapra/markhor/markhor:latest
+    environment:
+      - ROS_MASTER_URI=http://markhor_gazebo:11311
+    networks:
+      - markhor_network
+    restart: always
+    privileged: true
+    depends_on:
+      - markhor_gazebo
+
+  markhor_navigation:
+    command: roslaunch markhor_navigation markhor_nav.launch
+    image: ghcr.io/clubcapra/markhor/markhor:latest
+    environment:
+      - ROS_MASTER_URI=http://markhor_gazebo:11311
+    networks:
+      - markhor_network
+    privileged: true
+    restart: always
+    depends_on:
+      - markhor_gazebo
+      - markhor_slam
+
+  markhor_viz:
+    command: roslaunch markhor_description display_markhor.launch
+    image: ghcr.io/clubcapra/markhor/markhor:latest
+    networks:
+      - markhor_network
+    restart: always
+    environment:
+      - DISPLAY=host.docker.internal:0.0
+      - QT_X11_NO_MITSHM=1
+      - GAZEBO_GUI=true
+      - ROS_MASTER_URI=http://markhor_gazebo:11311
+    volumes:
+        - /tmp/.X11-unix:/tmp/.X11-unix
+    depends_on:
+      - markhor_gazebo
+
+networks:
+  markhor_network:
+    driver: bridge
