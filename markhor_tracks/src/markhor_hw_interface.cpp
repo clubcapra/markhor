@@ -179,7 +179,6 @@ void MarkhorHWInterface::setupCTREDrive()
   {
     rear_right_drive = std::make_unique<TalonSRX>(drive_rr_id);
     rear_right_drive->SetNeutralMode(NeutralMode::Coast);
-    rear_right_drive->SetInverted(true);
     rear_right_drive->ConfigFactoryDefault();
     rear_right_drive->ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Relative, 0, timeout_ms_);
     rear_right_drive->SetSensorPhase(true);

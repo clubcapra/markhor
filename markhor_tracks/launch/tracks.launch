@@ -6,18 +6,18 @@
 
     <!-- Load hardware interface-->
     <node name="markhor_tracks_node" pkg="markhor_tracks" type="markhor_tracks_node" ns="$(arg robot_namespace)$(arg system_namespace)" output="screen">
-        <param name="front_left" type="int" value="21" />
-        <param name="front_right" type="int" value="22" />
-        <param name="rear_left" type="int" value="23" />
-        <param name="rear_right" type="int" value="24" />
+        <param name="front_left" type="int" value="11" />
+        <param name="front_right" type="int" value="12" />
+        <param name="rear_left" type="int" value="13" />
+        <param name="rear_right" type="int" value="14" />
         <param name="log_throttle_speed" type="int" value="1"/>
-        <param name="kp" type="double" value="1.5" />
-        <param name="ki" type="double" value="0.01" />
+        <param name="kp" type="double" value="0.007" />
+        <param name="ki" type="double" value="0.0" />
         <param name="kd" type="double" value="0" />
         <param name="integral_max" type="double" value="100000" />
         <param name="integral_zone" type="double" value="150000" />
         <param name="fb_coeff" type="double" value="1" />
-        <param name="track_encoder_reduction_coeff" type="double" value="1.538461538461538461" />
+        <param name="track_encoder_reduction_coeff" type="double" value="320" />
         <param name="allowable_closedloop_error" type="int" value="0"/>
     </node>
 
