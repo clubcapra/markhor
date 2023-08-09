@@ -60,14 +60,6 @@ private:
   
   const int timeout_ms_ = 30;
 
-  int tracks_i_max = 0;
-  int tracks_i_zone = 0;
-
-  double tracks_kp = 0;
-  double tracks_ki = 0;
-  double tracks_kd = 0;
-
-  double tracks_fb_coeff = 1;
 
   double track_encoder_reduction_coeff = 1.53846153846153;
 
@@ -105,5 +97,13 @@ private:
   std::unique_ptr<TalonSRX> rear_right_drive;
 
   int log_throttle_speed = 1;
+
+  double tracks_kp[NUM_JOINTS] = {0.0};
+  double tracks_ki[NUM_JOINTS] = {0.0};
+  double tracks_kd[NUM_JOINTS] = {0.0};
+  double tracks_i_max[NUM_JOINTS] = {0.0};
+  double tracks_i_zone[NUM_JOINTS] = {0.0};
+  double tracks_fb_coeff[NUM_JOINTS] = {1.0};
+
 };
 #endif  // MARKHOR_HW_INTERFACE_H

@@ -73,36 +73,47 @@ void MarkhorHWInterface::setupCTREDrive()
     ROS_WARN("Missing allowable_closedloop_error, assuming 1");
   }
 
-  if (!nh.getParam("/markhor/tracks/markhor_tracks_node/kp", tracks_kp))
+  for (unsigned int i = 0; i < NUM_JOINTS; ++i)
   {
-    ROS_FATAL("TRACKS : Missing argument kp, assuming 0");
-    ros::shutdown();
+      std::string base_name = "/markhor/tracks/markhor_tracks_node/" + drives_name[i];
+      
+      if (!nh.getParam(base_name + "/kp", tracks_kp[i]))
+      {
+          ROS_FATAL("TRACKS : Missing argument kp for %s, assuming 0", drives_name[i].c_str());
+          ros::shutdown();
+      }
+      
+      if (!nh.getParam(base_name + "/ki", tracks_ki[i]))
+      {
+          ROS_FATAL("TRACKS : Missing argument ki for %s, assuming 0", drives_name[i].c_str());
+          ros::shutdown();
+      }
+      
+      if (!nh.getParam(base_name + "/kd", tracks_kd[i]))
+      {
+          ROS_FATAL("TRACKS : Missing argument kd for %s, assuming 0", drives_name[i].c_str());
+          ros::shutdown();
+      }
+      
+      if (!nh.getParam(base_name + "/integral_max", tracks_i_max[i]))
+      {
+          ROS_FATAL("TRACKS : Missing argument integral_max for %s, assuming 0", drives_name[i].c_str());
+          ros::shutdown();
+      }
+      
+      if (!nh.getParam(base_name + "/integral_zone", tracks_i_zone[i]))
+      {
+          ROS_FATAL("TRACKS : Missing argument integral_zone for %s, assuming 0", drives_name[i].c_str());
+          ros::shutdown();
+      }
+      
+      if (!nh.getParam(base_name + "/fb_coeff", tracks_fb_coeff[i]))
+      {
+          ROS_FATAL("TRACKS : Missing argument fb_coeff for %s, assuming 1", drives_name[i].c_str());
+          ros::shutdown();
+      }
   }
-  if (!nh.getParam("/markhor/tracks/markhor_tracks_node/ki", tracks_ki))
-  {
-    ROS_FATAL("TRACKS : Missing argument ki, assuming 0");
-    ros::shutdown();
-  }
-  if (!nh.getParam("/markhor/tracks/markhor_tracks_node/kd", tracks_kd))
-  {
-    ROS_FATAL("TRACKS : Missing argument kd, assuming 0");
-    ros::shutdown();
-  }
-  if (!nh.getParam("/markhor/tracks/markhor_tracks_node/integral_max", tracks_i_max))
-  {
-    ROS_FATAL("TRACKS : Missing argument integral_max, assuming 0");
-    ros::shutdown();
-  }
-  if (!nh.getParam("/markhor/tracks/markhor_tracks_node/integral_zone", tracks_i_zone))
-  {
-    ROS_FATAL("TRACKS : Missing argument integral_zone, assuming 0");
-    ros::shutdown();
-  }
-  if (!nh.getParam("/markhor/tracks/markhor_tracks_node/fb_coeff", tracks_fb_coeff))
-  {
-    ROS_FATAL("TRACKS : Missing argument fb_coeff, assuming 1");
-    ros::shutdown();
-  }
+
 
   if (nh.getParam("/markhor/tracks/markhor_tracks_node/front_left", drive_fl_id) == true)
   {
@@ -118,12 +129,12 @@ void MarkhorHWInterface::setupCTREDrive()
     front_left_drive->ConfigAllowableClosedloopError(0, allowable_closedloop_error, timeout_ms_);
     front_left_drive->SelectProfileSlot(0, 0);
     front_left_drive->Config_kF(0, 0, timeout_ms_);
-    front_left_drive->Config_kP(0, tracks_kp, timeout_ms_);
-    front_left_drive->Config_kI(0, tracks_ki, timeout_ms_);
-    front_left_drive->Config_kD(0, tracks_kd, timeout_ms_);
-    front_left_drive->ConfigMaxIntegralAccumulator(0, tracks_i_max, timeout_ms_);
-    front_left_drive->Config_IntegralZone(0, tracks_i_zone, timeout_ms_);
-    front_left_drive->ConfigSelectedFeedbackCoefficient(tracks_fb_coeff, 0, timeout_ms_);
+    front_left_drive->Config_kP(0, tracks_kp[0], timeout_ms_);
+    front_left_drive->Config_kI(0, tracks_ki[0], timeout_ms_);
+    front_left_drive->Config_kD(0, tracks_kd[0], timeout_ms_);
+    front_left_drive->ConfigMaxIntegralAccumulator(0, tracks_i_max[0], timeout_ms_);
+    front_left_drive->Config_IntegralZone(0, tracks_i_zone[0], timeout_ms_);
+    front_left_drive->ConfigSelectedFeedbackCoefficient(tracks_fb_coeff[0], 0, timeout_ms_);
 
     ctre::phoenix::unmanaged::FeedEnable(timeout_ms_);
     front_left_drive->Set(ControlMode::Velocity, 0);
@@ -141,12 +152,12 @@ void MarkhorHWInterface::setupCTREDrive()
     rear_left_drive->ConfigAllowableClosedloopError(0, allowable_closedloop_error, timeout_ms_);
     rear_left_drive->SelectProfileSlot(0, 0);
     rear_left_drive->Config_kF(0, 0, timeout_ms_);
-    rear_left_drive->Config_kP(0, tracks_kp, timeout_ms_);
-    rear_left_drive->Config_kI(0, tracks_ki, timeout_ms_);
-    rear_left_drive->Config_kD(0, tracks_kd, timeout_ms_);
-    rear_left_drive->ConfigMaxIntegralAccumulator(0, tracks_i_max, timeout_ms_);
-    rear_left_drive->Config_IntegralZone(0, tracks_i_zone, timeout_ms_);
-    rear_left_drive->ConfigSelectedFeedbackCoefficient(tracks_fb_coeff, 0, timeout_ms_);
+    front_right_drive->Config_kP(0, tracks_kp[1], timeout_ms_);
+    front_right_drive->Config_kI(0, tracks_ki[1], timeout_ms_);
+    front_right_drive->Config_kD(0, tracks_kd[1], timeout_ms_);
+    rear_left_drive->ConfigMaxIntegralAccumulator(0, tracks_i_max[1], timeout_ms_);
+    rear_left_drive->Config_IntegralZone(0, tracks_i_zone[1], timeout_ms_);
+    rear_left_drive->ConfigSelectedFeedbackCoefficient(tracks_fb_coeff[1], 0, timeout_ms_);
 
     ctre::phoenix::unmanaged::FeedEnable(timeout_ms_);
     rear_left_drive->Set(ControlMode::Velocity, 0);
@@ -165,12 +176,12 @@ void MarkhorHWInterface::setupCTREDrive()
     front_right_drive->ConfigAllowableClosedloopError(0, allowable_closedloop_error, timeout_ms_);
     front_right_drive->SelectProfileSlot(0, 0);
     front_right_drive->Config_kF(0, 0, timeout_ms_);
-    front_right_drive->Config_kP(0, tracks_kp, timeout_ms_);
-    front_right_drive->Config_kI(0, tracks_ki, timeout_ms_);
-    front_right_drive->Config_kD(0, tracks_kd, timeout_ms_);
-    front_right_drive->ConfigMaxIntegralAccumulator(0, tracks_i_max, timeout_ms_);
-    front_right_drive->Config_IntegralZone(0, tracks_i_zone, timeout_ms_);
-    front_right_drive->ConfigSelectedFeedbackCoefficient(tracks_fb_coeff, 0, timeout_ms_);
+    rear_left_drive->Config_kP(0, tracks_kp[2], timeout_ms_);
+    rear_left_drive->Config_kI(0, tracks_ki[2], timeout_ms_);
+    rear_left_drive->Config_kD(0, tracks_kd[2], timeout_ms_);
+    front_right_drive->ConfigMaxIntegralAccumulator(0, tracks_i_max[2], timeout_ms_);
+    front_right_drive->Config_IntegralZone(0, tracks_i_zone[2], timeout_ms_);
+    front_right_drive->ConfigSelectedFeedbackCoefficient(tracks_fb_coeff[2], 0, timeout_ms_);
 
     ctre::phoenix::unmanaged::FeedEnable(timeout_ms_);
     front_right_drive->Set(ControlMode::Velocity, 0);
@@ -188,12 +199,12 @@ void MarkhorHWInterface::setupCTREDrive()
     rear_right_drive->ConfigAllowableClosedloopError(0, allowable_closedloop_error, timeout_ms_);
     rear_right_drive->SelectProfileSlot(0, 0);
     rear_right_drive->Config_kF(0, 0, timeout_ms_);
-    rear_right_drive->Config_kP(0, tracks_kp, timeout_ms_);
-    rear_right_drive->Config_kI(0, tracks_ki, timeout_ms_);
-    rear_right_drive->Config_kD(0, tracks_kd, timeout_ms_);
-    rear_right_drive->ConfigMaxIntegralAccumulator(0, tracks_i_max, timeout_ms_);
-    rear_right_drive->Config_IntegralZone(0, tracks_i_zone, timeout_ms_);
-    rear_right_drive->ConfigSelectedFeedbackCoefficient(tracks_fb_coeff, 0, timeout_ms_);
+    rear_right_drive->Config_kP(0, tracks_kp[3], timeout_ms_);
+    rear_right_drive->Config_kI(0, tracks_ki[3], timeout_ms_);
+    rear_right_drive->Config_kD(0, tracks_kd[3], timeout_ms_);
+    rear_right_drive->ConfigMaxIntegralAccumulator(0, tracks_i_max[3], timeout_ms_);
+    rear_right_drive->Config_IntegralZone(0, tracks_i_zone[3], timeout_ms_);
+    rear_right_drive->ConfigSelectedFeedbackCoefficient(tracks_fb_coeff[3], 0, timeout_ms_);
 
     ctre::phoenix::unmanaged::FeedEnable(timeout_ms_);
     rear_right_drive->Set(ControlMode::Velocity, 0);
