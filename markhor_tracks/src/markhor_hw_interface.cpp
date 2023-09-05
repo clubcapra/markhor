@@ -35,9 +35,9 @@ void MarkhorHWInterface::setupPublisher()
 {
   // Initialize publishers and subscribers
   front_left_track_vel_pub_ = nh.advertise<std_msgs::Float32>("front_left_track_vel", 1);
-  rear_left_track_vel_pub_ = nh.advertise<std_msgs::Float32>("rear_right_track_vel", 1);
+  rear_right_track_vel_pub_ = nh.advertise<std_msgs::Float32>("rear_right_track_vel", 1);
   front_right_track_vel_pub_ = nh.advertise<std_msgs::Float32>("front_right_track_vel", 1);
-  rear_right_track_vel_pub_ = nh.advertise<std_msgs::Float32>("rear_left_track_vel", 1);
+  rear_left_track_vel_pub_ = nh.advertise<std_msgs::Float32>("rear_left_track_vel", 1);
 }
 
 void MarkhorHWInterface::setupRosControl()
@@ -139,29 +139,6 @@ void MarkhorHWInterface::setupCTREDrive()
     ctre::phoenix::unmanaged::FeedEnable(timeout_ms_);
     front_left_drive->Set(ControlMode::Velocity, 0);
   }
-  if (nh.getParam("/markhor/tracks/markhor_tracks_node/rear_left", drive_rl_id) == true)
-  {
-    rear_left_drive = std::make_unique<TalonSRX>(drive_rl_id);
-    rear_left_drive->SetNeutralMode(NeutralMode::Coast);
-    rear_left_drive->ConfigFactoryDefault();
-    rear_left_drive->ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Relative, 0, timeout_ms_);
-    rear_left_drive->SetSensorPhase(true);
-    rear_left_drive->ConfigSupplyCurrentLimit(current_limit_config);
-    rear_left_drive->ConfigNominalOutputForward(0, timeout_ms_);
-    rear_left_drive->ConfigNominalOutputReverse(0, timeout_ms_);
-    rear_left_drive->ConfigAllowableClosedloopError(0, allowable_closedloop_error, timeout_ms_);
-    rear_left_drive->SelectProfileSlot(0, 0);
-    rear_left_drive->Config_kF(0, 0, timeout_ms_);
-    front_right_drive->Config_kP(0, tracks_kp[1], timeout_ms_);
-    front_right_drive->Config_kI(0, tracks_ki[1], timeout_ms_);
-    front_right_drive->Config_kD(0, tracks_kd[1], timeout_ms_);
-    rear_left_drive->ConfigMaxIntegralAccumulator(0, tracks_i_max[1], timeout_ms_);
-    rear_left_drive->Config_IntegralZone(0, tracks_i_zone[1], timeout_ms_);
-    rear_left_drive->ConfigSelectedFeedbackCoefficient(tracks_fb_coeff[1], 0, timeout_ms_);
-
-    ctre::phoenix::unmanaged::FeedEnable(timeout_ms_);
-    rear_left_drive->Set(ControlMode::Velocity, 0);
-  }
   if (nh.getParam("/markhor/tracks/markhor_tracks_node/front_right", drive_fr_id) == true)
   {
     front_right_drive = std::make_unique<TalonSRX>(drive_fr_id);
@@ -176,15 +153,38 @@ void MarkhorHWInterface::setupCTREDrive()
     front_right_drive->ConfigAllowableClosedloopError(0, allowable_closedloop_error, timeout_ms_);
     front_right_drive->SelectProfileSlot(0, 0);
     front_right_drive->Config_kF(0, 0, timeout_ms_);
-    rear_left_drive->Config_kP(0, tracks_kp[2], timeout_ms_);
-    rear_left_drive->Config_kI(0, tracks_ki[2], timeout_ms_);
-    rear_left_drive->Config_kD(0, tracks_kd[2], timeout_ms_);
-    front_right_drive->ConfigMaxIntegralAccumulator(0, tracks_i_max[2], timeout_ms_);
-    front_right_drive->Config_IntegralZone(0, tracks_i_zone[2], timeout_ms_);
-    front_right_drive->ConfigSelectedFeedbackCoefficient(tracks_fb_coeff[2], 0, timeout_ms_);
+    front_right_drive->Config_kP(0, tracks_kp[1], timeout_ms_);
+    front_right_drive->Config_kI(0, tracks_ki[1], timeout_ms_);
+    front_right_drive->Config_kD(0, tracks_kd[1], timeout_ms_);
+    front_right_drive->ConfigMaxIntegralAccumulator(0, tracks_i_max[1], timeout_ms_);
+    front_right_drive->Config_IntegralZone(0, tracks_i_zone[1], timeout_ms_);
+    front_right_drive->ConfigSelectedFeedbackCoefficient(tracks_fb_coeff[1], 0, timeout_ms_);
 
     ctre::phoenix::unmanaged::FeedEnable(timeout_ms_);
     front_right_drive->Set(ControlMode::Velocity, 0);
+  }
+  if (nh.getParam("/markhor/tracks/markhor_tracks_node/rear_left", drive_rl_id) == true)
+  {
+    rear_left_drive = std::make_unique<TalonSRX>(drive_rl_id);
+    rear_left_drive->SetNeutralMode(NeutralMode::Coast);
+    rear_left_drive->ConfigFactoryDefault();
+    rear_left_drive->ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Relative, 0, timeout_ms_);
+    rear_left_drive->SetSensorPhase(true);
+    rear_left_drive->ConfigSupplyCurrentLimit(current_limit_config);
+    rear_left_drive->ConfigNominalOutputForward(0, timeout_ms_);
+    rear_left_drive->ConfigNominalOutputReverse(0, timeout_ms_);
+    rear_left_drive->ConfigAllowableClosedloopError(0, allowable_closedloop_error, timeout_ms_);
+    rear_left_drive->SelectProfileSlot(0, 0);
+    rear_left_drive->Config_kF(0, 0, timeout_ms_);
+    rear_left_drive->Config_kP(0, tracks_kp[2], timeout_ms_);
+    rear_left_drive->Config_kI(0, tracks_ki[2], timeout_ms_);
+    rear_left_drive->Config_kD(0, tracks_kd[2], timeout_ms_);
+    rear_left_drive->ConfigMaxIntegralAccumulator(0, tracks_i_max[2], timeout_ms_);
+    rear_left_drive->Config_IntegralZone(0, tracks_i_zone[2], timeout_ms_);
+    rear_left_drive->ConfigSelectedFeedbackCoefficient(tracks_fb_coeff[2], 0, timeout_ms_);
+
+    ctre::phoenix::unmanaged::FeedEnable(timeout_ms_);
+    rear_left_drive->Set(ControlMode::Velocity, 0);
   }
   if (nh.getParam("/markhor/tracks/markhor_tracks_node/rear_right", drive_rr_id) == true)
   {

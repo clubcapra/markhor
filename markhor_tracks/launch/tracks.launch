@@ -11,22 +11,37 @@
         <param name="rear_left" type="int" value="13" />
         <param name="rear_right" type="int" value="14" />
         
-        <param name="flipper_fl_motor_j/kp" type="double" value="0.005" />
-        <param name="flipper_fr_motor_j/kp" type="double" value="0.007" />
-        <param name="flipper_rl_motor_j/kp" type="double" value="0.008" />
-        <param name="flipper_rr_motor_j/kp" type="double" value="0.015" />
-
+        <param name="flipper_fl_motor_j/kp" type="double" value="0.005" /> <!--0.005-->
         <param name="flipper_fl_motor_j/ki" type="double" value="0.0" />
-        <param name="flipper_fr_motor_j/ki" type="double" value="0.0" />
-        <param name="flipper_rl_motor_j/ki" type="double" value="0.0" />
-        <param name="flipper_rr_motor_j/ki" type="double" value="0.0" />
+        <param name="flipper_fl_motor_j/kd" type="double" value="0.002" />
+        <param name="flipper_fl_motor_j/integral_max" type="double" value="100000" />
+        <param name="flipper_fl_motor_j/integral_zone" type="double" value="150000" />
+        <param name="flipper_fl_motor_j/fb_coeff" type="double" value="1" />
 
-        <param name="flipper_fl_motor_j/kd" type="double" value="0.0" />
+        <param name="flipper_fr_motor_j/kp" type="double" value="0.015" /> <!--0.015-->
+        <param name="flipper_fr_motor_j/ki" type="double" value="0.000" />
         <param name="flipper_fr_motor_j/kd" type="double" value="0.0" />
-        <param name="flipper_rl_motor_j/kd" type="double" value="0.0" />
-        <param name="flipper_rr_motor_j/kd" type="double" value="0.0" />
+        <param name="flipper_fr_motor_j/integral_max" type="double" value="100000" />
+        <param name="flipper_fr_motor_j/integral_zone" type="double" value="150000" />
+        <param name="flipper_fr_motor_j/fb_coeff" type="double" value="1" />
 
-        <!-- ... other parameters ... -->
+        <param name="flipper_rl_motor_j/kp" type="double" value="0.007" /> <!--0.007-->
+        <param name="flipper_rl_motor_j/ki" type="double" value="0.0" />
+        <param name="flipper_rl_motor_j/kd" type="double" value="0.0" />
+        <param name="flipper_rl_motor_j/integral_max" type="double" value="100000" />
+        <param name="flipper_rl_motor_j/integral_zone" type="double" value="150000" />
+        <param name="flipper_rl_motor_j/fb_coeff" type="double" value="1" />
+
+        <param name="flipper_rr_motor_j/kp" type="double" value="0.011" />
+        <param name="flipper_rr_motor_j/ki" type="double" value="0.0" />
+        <param name="flipper_rr_motor_j/kd" type="double" value="0.0" />
+        <param name="flipper_rr_motor_j/integral_max" type="double" value="100000" />
+        <param name="flipper_rr_motor_j/integral_zone" type="double" value="150000" />
+        <param name="flipper_rr_motor_j/fb_coeff" type="double" value="1" />
+
+
+        <param name="track_encoder_reduction_coeff" type="double" value="320" />
+        <param name="allowable_closedloop_error" type="int" value="0"/>
     </node>
 
     <!-- Load controller config -->
