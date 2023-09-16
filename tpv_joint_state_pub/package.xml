@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>tpv_joint_state_pub</name>
+  <version>0.0.0</version>
+  <description>Package that takes in 2 float64 joint angle values and outputs jointState message for those 2 axis</description>
+
+  <maintainer email="capra@clubcapra.com">Capra</maintainer>
+
+  <license>MIT</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>roscpp</build_depend>
+  <build_depend>sensor_msgs</build_depend>
+  <build_depend>std_msgs</build_depend>
+  <build_export_depend>roscpp</build_export_depend>
+  <build_export_depend>sensor_msgs</build_export_depend>
+  <build_export_depend>std_msgs</build_export_depend>
+  <exec_depend>roscpp</exec_depend>
+  <exec_depend>sensor_msgs</exec_depend>
+  <exec_depend>std_msgs</exec_depend>
+
+  <export>
+
+  </export>
+</package>

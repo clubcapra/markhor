@@ -1,6 +1,8 @@
 <launch>
     <node name="microcontroller_command_node" pkg="rosserial_python" type="serial_node.py">
-    <param name="port" type="string" value="/dev/ttyACM0"/>
-    <param name="baud" type="int" value="57600"/>
+        <param name="port" type="string" value="/dev/ttyACM0"/>
+        <param name="baud" type="int" value="57600"/>
     </node>
+    
+    <node name="tpv_joint_state_pub" pkg="tpv_joint_state_pub" type="tpv_joint_state_pub"/>
 </launch>
