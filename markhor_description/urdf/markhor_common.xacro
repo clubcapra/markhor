@@ -7,7 +7,7 @@
     <xacro:property name="flipper_lower_limit" value="${-pi}"/>
     <xacro:property name="flipper_upper_limit" value="0" />
     <xacro:property name="flipper_velocity_limit" value="16.75" />
-    <xacro:property name="flipper_torque_limit" value="184" />
+    <xacro:property name="flipper_torque_limit" value="1000" />
 
     <xacro:property name="track_velocity_limit" value="5.34" />
     <xacro:property name="track_torque_limit" value="94.5" />
