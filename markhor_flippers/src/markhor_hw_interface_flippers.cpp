@@ -2,6 +2,7 @@
 #include <unistd.h>
 #include <string>
 #include <std_msgs/Float64.h>
+#include <std_msgs/Float64MultiArray.h>
 
 #include "markhor_hw_interface_flippers.hpp"
 
@@ -31,6 +32,19 @@ MarkhorHWInterfaceFlippers::MarkhorHWInterfaceFlippers()
   nh_.getParam("/markhor/flippers/markhor_flippers_node/config_file_1", config_file_1_);
   nh_.getParam("/markhor/flippers/markhor_flippers_node/config_file_2", config_file_2_);
 
+  if(nh_.getParam("/markhor/flippers/markhor_flippers_node/temp_model_k", temp_model_k)==false){
+    ROS_WARN("Missing temp_model_k, assuming 1");
+  }
+  
+  if(nh_.getParam("/markhor/flippers/markhor_flippers_node/temp_model_tau", temp_model_tau) ==false){
+    ROS_WARN("Missing temp_model_tau, assuming 1");
+  }
+
+  if(nh_.getParam("/markhor/flippers/markhor_flippers_node/temp_model_base_temp", temp_model_base_temp) == false)
+  {
+    ROS_WARN("Missing temp_model_base_temp, assuming 23");
+  }
+
   fr_target_pub_ = nh_.advertise<std_msgs::Float64>("flipper_fr_position_target", 1000);
   fl_target_pub_ = nh_.advertise<std_msgs::Float64>("flipper_fl_position_target", 1000);
   rr_target_pub_ = nh_.advertise<std_msgs::Float64>("flipper_rr_position_target", 1000);
@@ -45,6 +59,8 @@ MarkhorHWInterfaceFlippers::MarkhorHWInterfaceFlippers()
   fl_motor_bus_voltage_pub_ = nh_.advertise<std_msgs::Float64>("flipper_fl_bus_voltage", 1000);
   rr_motor_bus_voltage_pub_ = nh_.advertise<std_msgs::Float64>("flipper_rr_bus_voltage", 1000);
   rl_motor_bus_voltage_pub_ = nh_.advertise<std_msgs::Float64>("flipper_rl_bus_voltage", 1000);
+
+  motor_temp_estimate_pub_ = nh_.advertise<std_msgs::Float64MultiArray>("motor_temp_estimate", 1);
 
   loadDrivePosition();
 }
@@ -92,6 +108,7 @@ void MarkhorHWInterfaceFlippers::setupCtreDrive()
   {
     ROS_WARN("Missing flipper_encoder_to_rad_coeff, assuming 1");
   }
+  
 
 
   if (nh_.getParam("/markhor/flippers/markhor_flippers_node/front_left", drive_fl_id_) == true)
@@ -283,13 +300,14 @@ void MarkhorHWInterfaceFlippers::write()
   saveDrivePosition();
 }
 
-void MarkhorHWInterfaceFlippers::read()
+void MarkhorHWInterfaceFlippers::read(float period)
 {
   // Read from the motor API, going to read from the TalonSRX objects
 
   publishTarget();
   publishMotorCurrent();
   publishMotorBusVoltage();
+  publishMotorTempEstimate(period);
 
   joint_position_[0] = -front_left_drive_->GetSensorCollection().GetPulseWidthPosition() / (double)flipper_encoder_to_rad_coeff - 1.5707;
   joint_position_[1] = -front_right_drive_->GetSensorCollection().GetPulseWidthPosition()/ (double)flipper_encoder_to_rad_coeff - 1.5707;
@@ -667,6 +685,30 @@ bool MarkhorHWInterfaceFlippers::publishMotorBusVoltage()
   rl_motor_bus_voltage_pub_.publish(createMessage(rear_left_drive_->GetBusVoltage()));
   rr_motor_bus_voltage_pub_.publish(createMessage(rear_right_drive_->GetBusVoltage()));
   return true;
+}
+
+
+bool MarkhorHWInterfaceFlippers::publishMotorTempEstimate(float period){
+  float motor_current[4];
+  motor_current[0] = abs(front_left_drive_->GetOutputCurrent());
+  motor_current[1] = abs(front_right_drive_->GetOutputCurrent());
+  motor_current[2] = abs(rear_left_drive_->GetOutputCurrent());
+  motor_current[3] = abs(rear_right_drive_->GetOutputCurrent());
+
+  float dt = period;
+  float tau = temp_model_tau;
+  float k = temp_model_k;
+  float base_temp = temp_model_base_temp;
+  std_msgs::Float64MultiArray msg;
+  msg.data.clear();
+  for(int i = 0; i < 4 ; i++){
+    temp_estimate[i] = temp_estimate[i] + (dt / tau) * (k*motor_current[i] - temp_estimate[i]);
+    msg.data.push_back(temp_estimate[i]+base_temp);
+  }
+  
+  motor_temp_estimate_pub_.publish(msg);
+
+  return(true);
 }
 
 std_msgs::Float64 MarkhorHWInterfaceFlippers::createMessage(float value)

@@ -40,7 +40,7 @@ class MarkhorHWInterfaceFlippers : public hardware_interface::RobotHW
 public:
   MarkhorHWInterfaceFlippers();
   void write();
-  void read();
+  void read(float period);
 
   ros::NodeHandle nh_;
   int num_joints_ = 0;
@@ -68,6 +68,7 @@ private:
   bool publishTarget();
   bool publishMotorCurrent();
   bool publishMotorBusVoltage();
+  bool publishMotorTempEstimate(float period);
 
   const int timeout_ms_ = 30;
 
@@ -120,6 +121,12 @@ private:
   float target_rl_ = 0;
   float target_rr_ = 0;
 
+  float temp_model_tau = 1;
+  float temp_model_k = 1;
+  float temp_model_base_temp = 23;
+
+  float temp_estimate[4] = {25,25,25,25};
+
   int allowable_closedloop_error = 100000;
 
   int flipper_encoder_to_rad_coeff = 1;
@@ -138,5 +145,7 @@ private:
   ros::Publisher fr_motor_bus_voltage_pub_;
   ros::Publisher rl_motor_bus_voltage_pub_;
   ros::Publisher rr_motor_bus_voltage_pub_;
+
+  ros::Publisher motor_temp_estimate_pub_;
 };
 #endif  // MARKHOR_HW_INTERFACE_H
